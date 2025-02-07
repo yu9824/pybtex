@@ -22,49 +22,18 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-import sys
 import os
-from setuptools import setup, find_packages
-from distutils.command.sdist import sdist
-from distutils.dep_util import newer
 
-progname = "pybtex"
+from setuptools import find_packages, setup
+
 from pybtex.__version__ import version
 
-
-class Sdist(sdist):
-    def run(self):
-        from pybtex.database.convert import convert
-
-        bibtex_yaml = os.path.join("examples", "xampl.yaml")
-        bibtexml = os.path.join("examples", "xampl.bibtexml")
-        bibtex = os.path.join("examples", "xampl.bib")
-        if not os.path.exists(bibtex_yaml) or newer(bibtex, bibtex_yaml):
-            convert(bibtex, bibtex_yaml)
-        if not os.path.exists(bibtexml) or newer(bibtex, bibtexml):
-            convert(bibtex, bibtexml)
-
-        from pybtex.docgen import generate_docs
-
-        generate_docs(os.path.join(ROOT, "docs"), ("html", "manpages"))
-
-        sdist.run(self)
-
+progname = "pybtex"
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(ROOT, "README")).read()
 
-if sys.version_info >= (3, 0):
-    extra = {
-        "use_2to3": True,
-        "use_2to3_fixers": ["custom_fixers"],
-    }
-else:
-    extra = {}
-
 install_requires = ["PyYAML>=3.01"]
-if sys.version_info < (2, 7):
-    install_requires += ["Counter>=1.0.0"]
 
 setup(
     name=progname,
@@ -83,7 +52,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Topic :: Text Processing :: Markup :: LaTeX",
         "Topic :: Text Processing :: Markup :: XML",
@@ -97,7 +65,6 @@ setup(
         os.path.join("scripts", progname + "-format"),
     ],
     include_package_data=True,
-    cmdclass={"sdist": Sdist},
     entry_points={
         "pybtex.database.input": [
             "bibtex = pybtex.database.input.bibtex:Parser",
@@ -165,5 +132,4 @@ setup(
         ],
     },
     zip_safe=True,
-    **extra,
 )
