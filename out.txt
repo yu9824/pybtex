@@ -1,6 +1,6 @@
 /Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/site-packages/setuptools/dist.py:484: UserWarning: Normalizing '0.19.0-beta.0' to '0.19.0b0'
   warnings.warn(tmpl.format(**locals()))
-........F.FF........F.F.......F.FF.......F....F....F.........FFFF.F.........E.FF.F.....................
+........F.FF..........F.......F.FF.......F....F....F.........FFFF.F.........E.FF.F.....................
 ======================================================================
 ERROR: test_repr (pybtex.tests.database_test.DatabaseIOTest)
 ----------------------------------------------------------------------
@@ -28,7 +28,7 @@ Failed example:
 Expected:
     1973b1973
 Got:
-    pybtexbibtexutilsBibTeXStringobjectat0x102ba7b501973
+    pybtexbibtexutilsBibTeXStringobjectat0x106e89f401973
 ----------------------------------------------------------------------
 File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 356, in pybtex.bibtex.utils.bibtex_purify
 Failed example:
@@ -36,7 +36,7 @@ Failed example:
 Expected:
     1973a901968
 Got:
-    pybtexbibtexutilsBibTeXStringobjectat0x102ba75b0pybtexbibtexutilsBibTeXStringobjectat0x102ba7130pybtexbibtexutilsBibTeXStringobjectat0x102ba7250
+    pybtexbibtexutilsBibTeXStringobjectat0x106e890d0pybtexbibtexutilsBibTeXStringobjectat0x106e89160pybtexbibtexutilsBibTeXStringobjectat0x106e89d90
 
 
 ======================================================================
@@ -55,7 +55,7 @@ Failed example:
 Expected:
     1500
 Got:
-    26612
+    26500
 ----------------------------------------------------------------------
 File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 269, in pybtex.bibtex.utils.bibtex_width
 Failed example:
@@ -63,7 +63,7 @@ Failed example:
 Expected:
     1500
 Got:
-    26862
+    26556
 ----------------------------------------------------------------------
 File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 271, in pybtex.bibtex.utils.bibtex_width
 Failed example:
@@ -71,7 +71,7 @@ Failed example:
 Expected:
     2056
 Got:
-    26612
+    26500
 
 
 ======================================================================
@@ -90,62 +90,7 @@ Failed example:
 Expected:
     and {\Now: {booo}!!!}
 Got:
-    and {\Now: <pybtex.bibtex.utils.bibtexstring object at 0x102ba7fd0>!!!}
-
-
-======================================================================
-FAIL: Doctest: pybtex.database.Person
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
-    raise self.failureException(self.format_failure(new.getvalue()))
-AssertionError: Failed doctest test for pybtex.database.Person
-  File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 346, in Person
-
-----------------------------------------------------------------------
-File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 360, in pybtex.database.Person
-Failed example:
-    print(unicode(p))
-Exception raised:
-    Traceback (most recent call last):
-      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest pybtex.database.Person[6]>", line 1, in <module>
-        print(unicode(p))
-    NameError: name 'unicode' is not defined
-----------------------------------------------------------------------
-File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 362, in pybtex.database.Person
-Failed example:
-    p == Person(unicode(p))
-Exception raised:
-    Traceback (most recent call last):
-      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest pybtex.database.Person[7]>", line 1, in <module>
-        p == Person(unicode(p))
-    NameError: name 'unicode' is not defined
-----------------------------------------------------------------------
-File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 375, in pybtex.database.Person
-Failed example:
-    print(unicode(p))
-Exception raised:
-    Traceback (most recent call last):
-      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest pybtex.database.Person[14]>", line 1, in <module>
-        print(unicode(p))
-    NameError: name 'unicode' is not defined
-----------------------------------------------------------------------
-File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 377, in pybtex.database.Person
-Failed example:
-    p == Person(unicode(p))
-Exception raised:
-    Traceback (most recent call last):
-      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest pybtex.database.Person[15]>", line 1, in <module>
-        p == Person(unicode(p))
-    NameError: name 'unicode' is not defined
+    and {\Now: <pybtex.bibtex.utils.bibtexstring object at 0x106e89f70>!!!}
 
 
 ======================================================================
@@ -398,31 +343,28 @@ AssertionError: ---
 
 +++ 
 
-@@ -24,12 +24,8 @@
+@@ -24,12 +24,37 @@
 
  \newblock The entire issue is devoted to gnats and gnus (this entry is a
    cross-referenced ARTICLE (journal)).
  
--\bibitem{whole-set}
--Donald~E. Knuth.
--\newblock {\em The Art of Computer Programming}.
--\newblock Four volumes. Addison-Wesley,
--  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
--\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
 +\bibitem{booklet-minimal}
 +The programming of computer art.
- 
- \bibitem{inbook-minimal}
- Donald~E. Knuth.
-@@ -44,17 +40,24 @@
-
-   {\noopsort{1973b}}1973.
- \newblock This is a full INBOOK entry.
- 
-+\bibitem{book-minimal}
++
++\bibitem{book-full}
 +Donald~E. Knuth.
-+\newblock {\em Seminumerical Algorithms}.
-+\newblock Addison-Wesley, {\noopsort{1973c}}1981.
++\newblock {\em Seminumerical Algorithms}, volume~2 of {\em The Art of Computer
++  Programming}.
++\newblock Addison-Wesley, Reading, Massachusetts, second edition, 10~January
++  {\noopsort{1973c}}1981.
++\newblock This is a full BOOK entry.
++
+ \bibitem{whole-set}
+ Donald~E. Knuth.
+ \newblock {\em The Art of Computer Programming}.
+ \newblock Four volumes. Addison-Wesley,
+   {\noopsort{1973a}}{\switchargs{--90}{1968}}.
+ \newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
 +
 +\bibitem{book-crossref}
 +Donald~E. Knuth.
@@ -431,25 +373,40 @@ AssertionError: ---
 +  second edition, {\noopsort{1973c}}1981.
 +\newblock This is a cross-referencing BOOK entry.
 +
- \bibitem{inbook-crossref}
- Donald~E. Knuth.
- \newblock {\em Fundamental Algorithms}, section 1.2.
- \newblock Volume~1 of {\em The Art of Computer Programming\/} \cite{whole-set},
-   second edition, {\noopsort{1973b}}1973.
- \newblock This is a cross-referencing INBOOK entry.
--
--\bibitem{book-minimal}
--Donald~E. Knuth.
--\newblock {\em Seminumerical Algorithms}.
--\newblock Addison-Wesley, {\noopsort{1973c}}1981.
++\bibitem{inbook-crossref}
++Donald~E. Knuth.
++\newblock {\em Fundamental Algorithms}, section 1.2.
++\newblock Volume~1 of {\em The Art of Computer Programming\/} \cite{whole-set},
++  second edition, {\noopsort{1973b}}1973.
++\newblock This is a cross-referencing INBOOK entry.
  
- \bibitem{book-full}
+ \bibitem{inbook-minimal}
  Donald~E. Knuth.
-@@ -64,15 +67,12 @@
+@@ -44,35 +69,10 @@
 
-   {\noopsort{1973c}}1981.
- \newblock This is a full BOOK entry.
+   {\noopsort{1973b}}1973.
+ \newblock This is a full INBOOK entry.
  
+-\bibitem{inbook-crossref}
+-Donald~E. Knuth.
+-\newblock {\em Fundamental Algorithms}, section 1.2.
+-\newblock Volume~1 of {\em The Art of Computer Programming\/} \cite{whole-set},
+-  second edition, {\noopsort{1973b}}1973.
+-\newblock This is a cross-referencing INBOOK entry.
+-
+ \bibitem{book-minimal}
+ Donald~E. Knuth.
+ \newblock {\em Seminumerical Algorithms}.
+ \newblock Addison-Wesley, {\noopsort{1973c}}1981.
+-
+-\bibitem{book-full}
+-Donald~E. Knuth.
+-\newblock {\em Seminumerical Algorithms}, volume~2 of {\em The Art of Computer
+-  Programming}.
+-\newblock Addison-Wesley, Reading, Massachusetts, second edition, 10~January
+-  {\noopsort{1973c}}1981.
+-\newblock This is a full BOOK entry.
+-
 -\bibitem{book-crossref}
 -Donald~E. Knuth.
 -\newblock {\em Seminumerical Algorithms}.
@@ -459,12 +416,6 @@ AssertionError: ---
 -
 -\bibitem{booklet-minimal}
 -The programming of computer art.
-+\bibitem{whole-set}
-+Donald~E. Knuth.
-+\newblock {\em The Art of Computer Programming}.
-+\newblock Four volumes. Addison-Wesley,
-+  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
-+\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
  
  \bibitem{booklet-full}
  Jill~C. Knvth.
@@ -473,16 +424,16 @@ AssertionError: ---
    June-August 1988.
  \newblock This is a full PHDTHESIS entry.
  
++\bibitem{unpublished-minimal}
++Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
++\newblock Lower bounds for wishful research results.
++\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
++
 +\bibitem{unpublished-full}
 +Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
 +\newblock Lower bounds for wishful research results.
 +\newblock Talk at Fanstord University (this is a full UNPUBLISHED entry),
 +  November, December 1988.
-+
-+\bibitem{unpublished-minimal}
-+Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
-+\newblock Lower bounds for wishful research results.
-+\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
 +
  \bibitem{techreport-minimal}
  Tom Terrific.
@@ -525,7 +476,7 @@ AssertionError: ---
    \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
 -\begin{thebibliography}{OX{\singleletter{stoc}}83b}
 +\begin{thebibliography}{Kn{\printfirst<pybtex.bibtex.utils.BibTeXString object
-+  at 0x102e52b50><pybtex.bibtex.utils.BibTeXString object at 0x102e52b20>}}
++  at 0x107131340><pybtex.bibtex.utils.BibTeXString object at 0x1071313a0>}}
  
  \bibitem[Aam86a]{article-minimal}
  L[eslie]~A. Aamport.
@@ -541,8 +492,8 @@ AssertionError: ---
 -  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
 -\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
 +\bibitem[Kn{\printfirst<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52b50><pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52b20>}]{booklet-minimal}
++  0x107131340><pybtex.bibtex.utils.BibTeXString object at
++  0x1071313a0>}]{booklet-minimal}
 +The programming of computer art.
  
  \bibitem[Knu73a]{inbook-minimal}
@@ -554,7 +505,7 @@ AssertionError: ---
  
 -\bibitem[Kn{\printfirst{v}{1987}}]{booklet-minimal}
 -The programming of computer art.
-+\bibitem[Knu50]{whole-set}
++\bibitem[Knud0]{whole-set}
 +Donald~E. Knuth.
 +\newblock {\em The Art of Computer Programming}.
 +\newblock Four volumes. Addison-Wesley,
@@ -563,31 +514,6 @@ AssertionError: ---
  
  \bibitem[Knv88]{booklet-full}
  Jill~C. Knvth.
-@@ -117,17 +120,17 @@
-
- \newblock Chips-R-Us, Silicon Valley, silver edition, April-May 1986.
- \newblock This is a full MANUAL entry.
- 
--\bibitem[Mas88a]{mastersthesis-minimal}
--{\'{E}}douard Masterly.
--\newblock Mastering thesis writing.
--\newblock Master's thesis, Stanford University, 1988.
--
--\bibitem[Mas88b]{mastersthesis-full}
-+\bibitem[Mas88a]{mastersthesis-full}
- {\'{E}}douard Masterly.
- \newblock Mastering thesis writing.
- \newblock Master's project, Stanford University, English Department,
-   June-August 1988.
- \newblock This is a full MASTERSTHESIS entry.
-+
-+\bibitem[Mas88b]{mastersthesis-minimal}
-+{\'{E}}douard Masterly.
-+\newblock Mastering thesis writing.
-+\newblock Master's thesis, Stanford University, 1988.
- 
- \bibitem[Mis]{misc-minimal}
- This is a minimal MISC entry.
 @@ -159,13 +162,15 @@
 
  \newblock In OX{\singleletter{stoc}} \cite{whole-proceedings}, pages 133--139.
@@ -595,7 +521,7 @@ AssertionError: ---
  
 -\bibitem[OX{\singleletter{stoc}}83a]{whole-proceedings}
 +\bibitem[OX{\singleletter<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52a90>}83]{whole-proceedings}
++  0x107134310>}83]{whole-proceedings}
  The OX Association for Computing Machinery.
  \newblock {\em Proc. Fifteenth Annual Symposium on the Theory of Computing},
    Boston, 1983.
@@ -603,7 +529,7 @@ AssertionError: ---
  
 -\bibitem[OX{\singleletter{stoc}}83b]{proceedings-minimal}
 +\bibitem[OX{\singleletter<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52ca0>}83]{proceedings-minimal}
++  0x107134340>}83]{proceedings-minimal}
  {\em Proc. Fifteenth Annual Symposium on the Theory of Computing}, 1983.
  
  \bibitem[OY83]{proceedings-full}
@@ -614,15 +540,15 @@ AssertionError: ---
  
 -\bibitem[Ter88a]{techreport-minimal}
 +\bibitem[{\"<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52c10>}{\~N}{\=<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52fd0>}]{unpublished-minimal}
++  0x107135760>}{\~N}{\=<pybtex.bibtex.utils.BibTeXString object at
++  0x107135850>}]{unpublished-minimal}
 +Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
 +\newblock Lower bounds for wishful research results.
 +\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
 +
 +\bibitem[{\"<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52c10>}{\~N}{\=<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52fd0>}88]{unpublished-full}
++  0x107135760>}{\~N}{\=<pybtex.bibtex.utils.BibTeXString object at
++  0x107135850>}88]{unpublished-full}
 +Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
 +\newblock Lower bounds for wishful research results.
 +\newblock Talk at Fanstord University (this is a full UNPUBLISHED entry),
@@ -635,7 +561,7 @@ AssertionError: ---
  
 -\bibitem[T{\'{e}}r88b]{techreport-full}
 +\bibitem[T{\'<pybtex.bibtex.utils.BibTeXString object at
-+  0x102e52a60>}r88]{techreport-full}
++  0x107135400>}r88]{techreport-full}
  Tom T{\'{e}}rrific.
  \newblock An {$O(n \log n / \! \log\log n)$} sorting algorithm.
  \newblock Wishful Research Result~7, Fanstord University, Computer Science
@@ -679,6 +605,6 @@ AssertionError: ---
  First~Middle de~Last, Jr.
 
 ----------------------------------------------------------------------
-Ran 103 tests in 0.551s
+Ran 103 tests in 0.567s
 
-FAILED (errors=1, failures=19)
+FAILED (errors=1, failures=18)

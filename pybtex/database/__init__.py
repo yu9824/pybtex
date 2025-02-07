@@ -357,9 +357,9 @@ class Person(object):
     ['Dixit']
     >>> print(p.lineage())
     []
-    >>> print(unicode(p))
+    >>> print(str(p))
     Dixit, Avinash K.
-    >>> p == Person(unicode(p))
+    >>> p == Person(str(p))
     True
     >>> p = Person('Dixit, Jr, Avinash K. ')
     >>> print(p.first())
@@ -372,9 +372,9 @@ class Person(object):
     ['Dixit']
     >>> print(p.lineage())
     ['Jr']
-    >>> print(unicode(p))
+    >>> print(str(p))
     Dixit, Jr, Avinash K.
-    >>> p == Person(unicode(p))
+    >>> p == Person(str(p))
     True
 
     >>> p = Person('abc')
