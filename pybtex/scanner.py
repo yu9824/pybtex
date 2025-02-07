@@ -148,8 +148,8 @@ class PybtexSyntaxError(PybtexError):
         self.parser = parser
         self.error_context_info = parser.get_error_context_info()
 
-    def __unicode__(self):
-        base_message = super(PybtexSyntaxError, self).__unicode__()
+    def __str__(self):
+        base_message = super(PybtexSyntaxError, self).__str__()
         pos = (
             " in line {0}".format(self.lineno)
             if self.lineno is not None

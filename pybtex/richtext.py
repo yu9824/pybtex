@@ -363,7 +363,7 @@ class Symbol(object):
     def __repr__(self):
         return "Symbol('%s')" % self.name
 
-    def __unicode__(self):
+    def __str__(self):
         return "<%s>" % self.name
 
     def render(self, backend):

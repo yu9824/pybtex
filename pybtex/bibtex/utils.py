@@ -102,7 +102,7 @@ class BibTeXString(object):
         if close is not None and self.level > 0 and self.is_closed:
             yield close(self)
 
-    def __unicode__(self):
+    def __str__(self):
         return "".join(
             self.traverse(open=lambda string: "{", close=lambda string: "}")
         )
@@ -510,3 +510,8 @@ def bibtex_abbreviate(string, delimiter=None, separator="-"):
     if delimiter is None:
         delimiter = ".-"
     return delimiter.join(_bibtex_abbreviate())
+
+
+if __name__ == "__main__":
+    print(r"{\noopsort{1973b}}1973")
+    print(bibtex_purify(r"{\noopsort{1973b}}1973"))
