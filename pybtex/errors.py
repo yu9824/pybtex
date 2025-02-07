@@ -19,7 +19,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from StringIO import StringIO
+from io import StringIO
 from contextlib import contextmanager
 
 import pybtex.io
@@ -53,18 +53,18 @@ def format_error(exception, prefix='ERROR: '):
     context = exception.get_context()
     if context:
         lines += (context.splitlines())
-    lines.append(u'{0}{1}'.format(prefix, unicode(exception)))
+    lines.append('{0}{1}'.format(prefix, str(exception)))
     filename = exception.get_filename()
     if filename:
         lines = (
-            u'{0}: {1}'.format(filename, line)
+            '{0}: {1}'.format(filename, line)
             for line in lines
         )
     return '\n'.join(lines)
 
 
 def print_error(exception, prefix='ERROR: '):
-    print >>pybtex.io.stderr, format_error(exception, prefix)
+    print(format_error(exception, prefix), file=pybtex.io.stderr)
 
 
 def report_error(exception):

@@ -33,7 +33,7 @@ def deprecated(since, reason=None):
         @wraps(f)
         def new_f(*args, **kwargs):
             import warnings
-            message = u'{0}() is deprecated since {1}'.format(f.__name__, since)
+            message = '{0}() is deprecated since {1}'.format(f.__name__, since)
             if reason:
                 message += ': {0}'.format(reason)
             warnings.warn(message, DeprecationWarning)
@@ -116,14 +116,14 @@ class CaseInsensitiveDict(MutableMapping):
 
     def __init__(self, *args, **kwargs):
         initial = dict(*args, **kwargs)
-        self._dict = dict((key.lower(), value) for key, value in initial.iteritems())
+        self._dict = dict((key.lower(), value) for key, value in initial.items())
         self._keys = dict((key.lower(), key) for key in initial)
 
     def __len__(self):
         return len(self._dict)
 
     def __iter__(self):
-        return iter(self._keys.values())
+        return iter(list(self._keys.values()))
 
     def __setitem__(self, key, value):
         """To implement lowercase keys."""
@@ -145,7 +145,7 @@ class CaseInsensitiveDict(MutableMapping):
     def __deepcopy__(self, memo):
         from copy import deepcopy
         return CaseInsensitiveDict(
-            (key, deepcopy(value, memo)) for key, value in self.iteritems()
+            (key, deepcopy(value, memo)) for key, value in self.items()
         )
 
     def __repr__(self):
@@ -156,7 +156,7 @@ class CaseInsensitiveDict(MutableMapping):
         )
 
     def iteritems_lower(self):
-        return ((key.lower(), value) for key, value in self.iteritems())
+        return ((key.lower(), value) for key, value in self.items())
 
     def lower(self):
         return type(self)(self.iteritems_lower())
@@ -266,7 +266,7 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
         if isinstance(data, Sequence):
             self.order = [key for key, value in data]
         else:
-            self.order = data.keys()
+            self.order = list(data.keys())
         super(OrderedCaseInsensitiveDict, self).__init__(data)
 
     def __setitem__(self, key, value):
@@ -283,7 +283,7 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
     def __deepcopy__(self, memo):
         from copy import deepcopy
         return OrderedCaseInsensitiveDict(
-            (key, deepcopy(value, memo)) for key, value in self.iteritems()
+            (key, deepcopy(value, memo)) for key, value in self.items()
         )
 
     def iterkeys(self):
@@ -308,7 +308,7 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
 
     def __repr__(self):
         return '{0}({1})'.format(
-            type(self).__name__, repr(self.items())
+            type(self).__name__, repr(list(self.items()))
         )
 
 

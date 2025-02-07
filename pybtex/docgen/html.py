@@ -97,7 +97,7 @@ def pygments_directive(name, arguments, options, content, lineno,
     except ValueError:
         # no lexer found
         lexer = get_lexer_by_name('text')
-    parsed = highlight(u'\n'.join(content), lexer, PYGMENTS_FORMATTER)
+    parsed = highlight('\n'.join(content), lexer, PYGMENTS_FORMATTER)
     return [nodes.raw('', parsed, format="html")]
 pygments_directive.arguments = (1, 0, 1)
 pygments_directive.content = 1
@@ -263,7 +263,7 @@ def run(src_dir, dst_dir, for_site, sources=(), handle_file=handle_file):
     for fn in sources:
         if not os.path.isfile(fn):
             continue
-        print 'Processing %s' % fn
+        print('Processing %s' % fn)
         f = open(fn)
         try:
             handle_file(fn, f, dst_dir, for_site)

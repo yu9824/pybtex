@@ -25,7 +25,7 @@ from pybtex.utils import deprecated
 
 
 class BaseBackend(Plugin):
-    RenderType = basestring  #: the result of render and render_sequence
+    RenderType = str  #: the result of render and render_sequence
     default_suffix = None  #: the default suffix for an output file
 
     def __init__(self, encoding=None):

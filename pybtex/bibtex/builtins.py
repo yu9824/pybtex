@@ -122,7 +122,7 @@ def call_type(i):
     try:
         func = i.vars[entry_type]
     except KeyError:
-        print_warning(u'entry type for "{0}" isn\'t style-file defined'.format(
+        print_warning('entry type for "{0}" isn\'t style-file defined'.format(
             i.current_entry_key,
         ))
         try:
@@ -207,7 +207,7 @@ def if_(i):
 def int_to_chr(i):
     n = i.pop()
     try:
-        char = unichr(n)
+        char = chr(n)
     except ValueError:
         raise BibTeXError('%i passed to int.to.chr$', n)
     i.push(char)
@@ -264,7 +264,7 @@ def substring(i):
 @builtin('stack$')
 def stack(i):
     while i.stack:
-        print >>pybtex.io.stdout, i.pop()
+        print(i.pop(), file=pybtex.io.stdout)
 
 @builtin('swap$')
 def swap(i):
@@ -286,7 +286,7 @@ def text_prefix(i):
 
 @builtin('top$')
 def top(i):
-    print >>pybtex.io.stdout, i.pop()
+    print(i.pop(), file=pybtex.io.stdout)
 
 @builtin('type$')
 def type_(i):

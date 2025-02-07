@@ -112,7 +112,7 @@ class Node(object):
         if args_repr:
             params.append(args_repr)
         kwargs_repr = ', '.join('%s=%s' % (key, repr(value))
-                for (key, value) in self.kwargs.iteritems())
+                for (key, value) in self.kwargs.items())
         if kwargs_repr:
             params.append(kwargs_repr)
         if params:
@@ -145,7 +145,7 @@ def _format_data(node, data):
     try:
         f = node.format_data
     except AttributeError:
-        return unicode(node)
+        return str(node)
     else:
         return f(data)
 
@@ -242,7 +242,7 @@ class FieldIsMissing(PybtexError):
     def __init__(self, field_name, entry):
         self.field_name = field_name
         super(FieldIsMissing, self).__init__(
-            u'missing {0} in {1}'.format(field_name, getattr(entry, 'key', '<unnamed>'))
+            'missing {0} in {1}'.format(field_name, getattr(entry, 'key', '<unnamed>'))
         )
 
 @node

@@ -31,7 +31,7 @@ class Parser(BaseParser):
         t = yaml.safe_load(stream)
 
         entries = ((key, self.process_entry(entry))
-                for (key, entry) in t['entries'].iteritems())
+                for (key, entry) in t['entries'].items())
 
         try:
             self.data.add_to_preamble(t['preamble'])
@@ -43,7 +43,7 @@ class Parser(BaseParser):
 
     def process_entry(self, entry):
         bib_entry = Entry(entry['type']) 
-        for (key, value) in entry.iteritems():
+        for (key, value) in entry.items():
             key_lower = key.lower()
             if key_lower in Person.valid_roles:
                 for names in value:
@@ -51,5 +51,5 @@ class Parser(BaseParser):
             elif key_lower == 'type':
                 pass
             else:
-                bib_entry.fields[key] = unicode(value)
+                bib_entry.fields[key] = str(value)
         return bib_entry

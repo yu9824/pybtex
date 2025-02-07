@@ -46,7 +46,7 @@ _DEFAULT_PLUGINS = {
 class PluginGroupNotFound(PybtexError):
 
     def __init__(self, group_name):
-        message = u'plugin group {group_name} not found'.format(
+        message = 'plugin group {group_name} not found'.format(
             group_name=group_name,
         )
         super(PluginGroupNotFound, self).__init__(message)
@@ -56,14 +56,14 @@ class PluginNotFound(PybtexError):
 
     def __init__(self, plugin_group, name):
         if not name.startswith('.'):
-            message = u'plugin {plugin_group}.{name} not found'.format(
+            message = 'plugin {plugin_group}.{name} not found'.format(
                 plugin_group=plugin_group,
                 name=name,
             )
         else:
             assert plugin_group.endswith('.suffixes')
             message = (
-                u'plugin {plugin_group} for suffix {suffix} not found'.format(
+                'plugin {plugin_group} for suffix {suffix} not found'.format(
                     plugin_group=plugin_group,
                     suffix=name,
                 )

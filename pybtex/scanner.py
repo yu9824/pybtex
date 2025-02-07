@@ -48,7 +48,7 @@ class Pattern(object):
 class Literal(Pattern):
     def __init__(self, literal):
         pattern = re.compile(re.escape(literal))
-        description = u"'{0}'".format(literal)
+        description = "'{0}'".format(literal)
         super(Literal, self).__init__(pattern, description)
 
 
@@ -56,8 +56,8 @@ class Scanner(object):
     text = None
     lineno = 1
     pos = 0
-    WHITESPACE = Pattern(ur'\s+', 'whitespace')
-    NEWLINE = Pattern(ur'[\r\n]', 'newline')
+    WHITESPACE = Pattern(r'\s+', 'whitespace')
+    NEWLINE = Pattern(r'[\r\n]', 'newline')
 
     def __init__(self, text, filename=None):
         self.text = text
@@ -147,8 +147,8 @@ class PybtexSyntaxError(PybtexError):
 
     def __unicode__(self):
         base_message = super(PybtexSyntaxError, self).__unicode__()
-        pos = u' in line {0}'.format(self.lineno) if self.lineno is not None else ''
-        return u'{error_type}{pos}: {message}'.format(
+        pos = ' in line {0}'.format(self.lineno) if self.lineno is not None else ''
+        return '{error_type}{pos}: {message}'.format(
             error_type=self.error_type,
             pos=pos,
             message=base_message,
@@ -163,7 +163,7 @@ class PrematureEOF(PybtexSyntaxError):
 
 class TokenRequired(PybtexSyntaxError):
     def __init__(self, description, parser):
-        message = u'{0} expected'.format(description)
+        message = '{0} expected'.format(description)
         super(TokenRequired, self).__init__(message, parser)
 
     def get_context(self):

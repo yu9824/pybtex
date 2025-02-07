@@ -24,7 +24,7 @@
 """Generate man pages for pybtex and pybtex-convert.
 """
 
-from __future__ import with_statement
+
 
 import os
 import sys

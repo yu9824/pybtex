@@ -84,12 +84,12 @@ class Writer(BaseWriter):
         bibtex_file = w.start('bibtex:file', {'xmlns:bibtex': 'http://bibtexml.sf.net/'})
         w.newline()
 
-        for key, entry in bib_data.entries.iteritems():
+        for key, entry in bib_data.entries.items():
             w.start('bibtex:entry', dict(id=key))
             w.start('bibtex:' + entry.original_type)
-            for field_name, field_value in entry.fields.iteritems():
+            for field_name, field_value in entry.fields.items():
                 w.element('bibtex:' + field_name, field_value)
-            for role, persons in entry.persons.iteritems():
+            for role, persons in entry.persons.items():
                 write_persons(persons, role)
             w.end()
             w.end()

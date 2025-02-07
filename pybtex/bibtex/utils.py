@@ -105,7 +105,7 @@ class BibTeXString(object):
         return ''.join(self.traverse(open=lambda string: '{', close=lambda string: '}'))
 
     def inner_string(self):
-        return ''.join(unicode(child) for child in self.contents)
+        return ''.join(str(child) for child in self.contents)
 
 
 def change_case(string, mode):
@@ -206,7 +206,7 @@ def bibtex_substring(string, start, length):
         end0 = len(string) + start + 1
         start0 = end0 - length
     else: # start == 0:
-        return u''
+        return ''
     return string[start0:end0]
 
 
@@ -476,7 +476,7 @@ def bibtex_first_letter(string):
 
     for char in BibTeXString(string):
         if char.startswith('\\') and char != '\\':
-            return u'{{{0}}}'.format(char)
+            return '{{{0}}}'.format(char)
         elif char.isalpha():
             return char
     return ''

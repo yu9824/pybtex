@@ -36,9 +36,9 @@ def copy_files(filenames):
 
 def write_aux(aux_name, bib_name, bst_name):
     with io.open_unicode(aux_name, 'w') as aux_file:
-        aux_file.write(u'\\citation{*}\n')
-        aux_file.write(u'\\bibstyle{{{0}}}\n'.format(bst_name))
-        aux_file.write(u'\\bibdata{{{0}}}\n'.format(bib_name))
+        aux_file.write('\\citation{*}\n')
+        aux_file.write('\\bibstyle{{{0}}}\n'.format(bst_name))
+        aux_file.write('\\bibdata{{{0}}}\n'.format(bib_name))
 
 
 def check_make_bibliography(engine, filenames):

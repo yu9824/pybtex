@@ -37,7 +37,7 @@ from pybtex.style.labels import BaseLabelStyle
 _nonalnum_pattern = re.compile('[^A-Za-z0-9]+', re.UNICODE)
 
 def _strip_accents(s):
-   return u''.join(
+   return ''.join(
        (c for c in unicodedata.normalize('NFD', s)
         if not unicodedata.combining(c)))
 
@@ -47,8 +47,8 @@ def _strip_nonalnum(parts):
     >>> print _strip_nonalnum([u"ÅA. B. Testing 12+}[.@~_", u" 3%"])
     AABTesting123
     """
-    s = u''.join(parts)
-    return _nonalnum_pattern.sub(u'', _strip_accents(s))
+    s = ''.join(parts)
+    return _nonalnum_pattern.sub('', _strip_accents(s))
 
 class LabelStyle(BaseLabelStyle):
 
@@ -151,7 +151,7 @@ class LabelStyle(BaseLabelStyle):
             while namesleft:
                 person = persons[nameptr - 1]
                 if nameptr == numnames:
-                    if unicode(person) == "others":
+                    if str(person) == "others":
                         result += "+"
                     else:
                         result += _strip_nonalnum(

@@ -109,20 +109,20 @@ class UndefinedMacro(PybtexSyntaxError):
     error_type = 'undefined string'
 
 class BibTeXEntryIterator(Scanner):
-    NAME_CHARS = ascii_letters + u'@!$&*+-./:;<>?[\\]^_`|~\x7f'
-    NAME = Pattern(ur'[{0}][{1}]*'.format(re.escape(NAME_CHARS), re.escape(NAME_CHARS + digits)), 'a valid name')
-    KEY_PAREN = Pattern(ur'[^\s\,]+', 'entry key')
-    KEY_BRACE = Pattern(ur'[^\s\,}]+', 'entry key')
-    NUMBER = Pattern(ur'[{0}]+'.format(digits), 'a number')
-    LBRACE = Literal(u'{')
-    RBRACE = Literal(u'}')
-    LPAREN = Literal(u'(')
-    RPAREN = Literal(u')')
-    QUOTE = Literal(u'"')
-    COMMA = Literal(u',')
-    EQUALS = Literal(u'=')
-    HASH = Literal(u'#')
-    AT = Literal(u'@')
+    NAME_CHARS = ascii_letters + '@!$&*+-./:;<>?[\\]^_`|~\x7f'
+    NAME = Pattern(r'[{0}][{1}]*'.format(re.escape(NAME_CHARS), re.escape(NAME_CHARS + digits)), 'a valid name')
+    KEY_PAREN = Pattern(r'[^\s\,]+', 'entry key')
+    KEY_BRACE = Pattern(r'[^\s\,}]+', 'entry key')
+    NUMBER = Pattern(r'[{0}]+'.format(digits), 'a number')
+    LBRACE = Literal('{')
+    RBRACE = Literal('}')
+    LPAREN = Literal('(')
+    RPAREN = Literal(')')
+    QUOTE = Literal('"')
+    COMMA = Literal(',')
+    EQUALS = Literal('=')
+    HASH = Literal('#')
+    AT = Literal('@')
 
     command_start = None
     current_command = None
@@ -205,7 +205,7 @@ class BibTeXEntryIterator(Scanner):
         try:
             parse_body(body_end)
             self.required([body_end])
-        except PybtexSyntaxError, error:
+        except PybtexSyntaxError as error:
             self.handle_error(error)
         return make_result()
 

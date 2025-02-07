@@ -49,7 +49,7 @@ class BaseStyle(Plugin):
         sorted_entries = self.sort(entries)
         labels = self.format_labels(sorted_entries)
         for label, entry in zip(labels, sorted_entries):
-            for persons in entry.persons.itervalues():
+            for persons in entry.persons.values():
                 for person in persons:
                     person.text = self.format_name(person, self.abbreviate_names)
 
@@ -59,7 +59,7 @@ class BaseStyle(Plugin):
 
     def format_bibliography(self, bib_data, citations=None):
         if citations is None:
-            citations = bib_data.entries.keys()
+            citations = list(bib_data.entries.keys())
         citations = bib_data.add_extra_citations(citations, self.min_crossrefs)
         entries = [bib_data.entries[key] for key in citations]
         formatted_entries = self.format_entries(entries)

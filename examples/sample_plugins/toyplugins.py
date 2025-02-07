@@ -37,7 +37,7 @@ class PythonWriter(BaseWriter):
     """Bibliography output plugin which formats the data as Python code."""
 
     def write_stream(self, bib_data, stream):
-        print >>stream, repr(bib_data)
+        print(repr(bib_data), file=stream)
 
 
 class PythonParser(BaseParser):

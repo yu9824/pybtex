@@ -21,7 +21,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from __future__ import with_statement
+
 
 import sys
 import re
@@ -58,7 +58,7 @@ def write_bst(filename, style):
 
 def run_bibtex(style, database, citations=None):
     if citations is None:
-        citations = database.entries.keys()
+        citations = list(database.entries.keys())
     tmpdir = mkdtemp(prefix='pybtex_test_')
     try:
         write_bib(path.join(tmpdir, 'test.bib'), database)
@@ -107,10 +107,10 @@ def parse_name(name):
 def main():
     args = sys.argv[1:2]
     if len(args) != 1:
-        print "usage: run_bibtex 'some bibtex code'"
+        print("usage: run_bibtex 'some bibtex code'")
         sys.exit(1)
     code = args[0]
-    print execute(code)
+    print(execute(code))
 
 
 if __name__ == '__main__':

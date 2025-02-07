@@ -29,7 +29,7 @@ class Writer(BaseWriter):
 
     def write_stream(self, bib_data, stream):
         def process_person_roles(entry):
-            for role, persons in entry.persons.iteritems():
+            for role, persons in entry.persons.items():
                 yield role, list(process_persons(persons))
 
         def process_person(person):
@@ -43,7 +43,7 @@ class Writer(BaseWriter):
                 yield dict(process_person(person))
                 
         def process_entries(bib_data):
-            for key, entry in bib_data.iteritems():
+            for key, entry in bib_data.items():
                 fields = dict(entry.fields)
                 fields['type'] = entry.original_type
                 fields.update(process_person_roles(entry))

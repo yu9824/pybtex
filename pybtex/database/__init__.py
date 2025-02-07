@@ -51,7 +51,7 @@ class BibliographyData(object):
             self.citations = CaseInsensitiveSet()
         if entries:
             if isinstance(entries, Mapping):
-                entries = entries.iteritems()
+                entries = iter(entries.items())
             for (key, entry) in entries:
                 self.add_entry(key, entry)
         if preamble:
@@ -220,7 +220,7 @@ class BibliographyData(object):
         return expanded_citations + crossrefs
 
     def lower(self):
-        u"""
+        """
         Return another BibliographyData with all identifiers converted to lowercase.
 
         >>> data = BibliographyData([
@@ -242,7 +242,7 @@ class BibliographyData(object):
 
         """
 
-        entries_lower = ((key.lower(), entry.lower()) for key, entry in self.entries.iteritems())
+        entries_lower = ((key.lower(), entry.lower()) for key, entry in self.entries.items())
         return type(self)(
             entries=entries_lower,
             preamble=self._preamble,
@@ -262,7 +262,7 @@ class FieldDict(OrderedCaseInsensitiveDict):
         except KeyError:
             if key in self.parent.persons:
                 persons = self.parent.persons[key]
-                return ' and '.join(unicode(person) for person in persons)
+                return ' and '.join(str(person) for person in persons)
             elif 'crossref' in self:
                 return self.parent.get_crossref().fields[key]
             else:
@@ -465,7 +465,7 @@ class Person(object):
         return ', '.join(part for part in (von_last, jr, first) if part)
 
     def __repr__(self):
-        return 'Person({0})'.format(repr(unicode(self)))
+        return 'Person({0})'.format(repr(str(self)))
 
     def get_part_as_text(self, type):
         names = getattr(self, '_' + type)

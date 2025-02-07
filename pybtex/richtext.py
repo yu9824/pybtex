@@ -93,7 +93,7 @@ class Text(list):
     def __init__(self, *parts):
         """Create a Text consisting of one or more parts."""
 
-        if not all(isinstance(part, (basestring, Text, Symbol))
+        if not all(isinstance(part, (str, Text, Symbol))
                    for part in parts):
             raise TypeError(
                 "parts must be str, Text or Symbol")
@@ -116,7 +116,7 @@ class Text(list):
         a
         """
 
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             other = [other]
         return self.from_list(super(Text, self).__add__(other))
 
@@ -139,7 +139,7 @@ class Text(list):
 
         rendered_list = []
         for item in self:
-            if isinstance(item, basestring):
+            if isinstance(item, str):
                 rendered_list.append(backend.format_str(item))
             else:
                 assert isinstance(item, (Text, Symbol))
@@ -189,7 +189,7 @@ class Text(list):
 
     def get_beginning(self):
         try:
-            l, i = self.enumerate().next()
+            l, i = next(self.enumerate())
         except StopIteration:
             pass
         else:
@@ -197,7 +197,7 @@ class Text(list):
 
     def get_end(self):
         try:
-            l, i = self.reversed().next()
+            l, i = next(self.reversed())
         except StopIteration:
             pass
         else:
@@ -223,7 +223,7 @@ class Text(list):
         return joined
 
     def plaintext(self):
-        return ''.join(unicode(l[i]) for l, i in self.enumerate())
+        return ''.join(str(l[i]) for l, i in self.enumerate())
 
     def capfirst(self):
         """Capitalize the first letter of the text.
@@ -290,7 +290,7 @@ class Tag(Text):
         return Tag(self.name, *lst)
 
     def __init__(self, name, *args):
-        if not isinstance(name, (basestring, Text)):
+        if not isinstance(name, (str, Text)):
             raise TypeError(
                 "name must be str or Text (got %s)" % name.__class__.__name__)
         if isinstance(name, Text):
@@ -317,7 +317,7 @@ class HRef(Text):
     """
 
     def __init__(self, url, *args):
-        if not isinstance(url, (basestring, Text)):
+        if not isinstance(url, (str, Text)):
             raise TypeError(
                 "url must be str or Text (got %s)" % url.__class__.__name__)
         if isinstance(url, Text):
@@ -352,7 +352,7 @@ class Symbol(object):
         return "Symbol('%s')" % self.name
 
     def __unicode__(self):
-        return u'<%s>' % self.name
+        return '<%s>' % self.name
 
     def render(self, backend):
         return backend.symbols[self.name]

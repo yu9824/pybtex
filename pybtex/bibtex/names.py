@@ -62,7 +62,7 @@ class Text(object):
         self.text = text
 
     def __repr__(self):
-        return u'{0}({1})'.format(type(self).__name__, repr(self.text))
+        return '{0}({1})'.format(type(self).__name__, repr(self.text))
 
     def __eq__(self, other):
         return type(self) == type(other) and self.text == other.text
@@ -108,7 +108,7 @@ class NamePart(object):
     def __repr__(self):
         format_chars = self.format_char * (1 if self.abbreviate else 2)
         format_list = [self.pre_text, format_chars, self.delimiter, self.post_text]
-        return u'{0}({1})'.format(type(self).__name__, repr(format_list))
+        return '{0}({1})'.format(type(self).__name__, repr(format_list))
 
     def __eq__(self, other):
         return (
@@ -286,16 +286,16 @@ def format(name, format):
 
 class UnbalancedBraceError(PybtexSyntaxError):
     def __init__(self, parser):
-        message = u'name format string "{0}" has unbalanced braces'.format(parser.text)
+        message = 'name format string "{0}" has unbalanced braces'.format(parser.text)
         super(UnbalancedBraceError, self).__init__(message, parser)
 
 
 class NameFormatParser(Scanner):
-    LBRACE = Literal(u'{')
-    RBRACE = Literal(u'}')
-    TEXT = Pattern(ur'[^{}]+', 'text')
-    NON_LETTERS = Pattern(ur'[^{}\w]|\d+', 'non-letter characters', flags=re.IGNORECASE | re.UNICODE)
-    FORMAT_CHARS = Pattern(ur'[^\W\d_]+', 'format chars', flags=re.IGNORECASE | re.UNICODE)
+    LBRACE = Literal('{')
+    RBRACE = Literal('}')
+    TEXT = Pattern(r'[^{}]+', 'text')
+    NON_LETTERS = Pattern(r'[^{}\w]|\d+', 'non-letter characters', flags=re.IGNORECASE | re.UNICODE)
+    FORMAT_CHARS = Pattern(r'[^\W\d_]+', 'format chars', flags=re.IGNORECASE | re.UNICODE)
 
     lineno = None
 
@@ -327,7 +327,7 @@ class NameFormatParser(Scanner):
             elif token.pattern is self.RBRACE:
                 break
             elif token.pattern is self.LBRACE:
-                yield u'{{{0}}}'.format(''.join(self.parse_braced_string()))
+                yield '{{{0}}}'.format(''.join(self.parse_braced_string()))
             else:
                 raise ValueError(token)
 
@@ -346,7 +346,7 @@ class NameFormatParser(Scanner):
                 or value[0] != value[-1]
                 or value[0] not in 'flvj'
             ):
-                raise PybtexSyntaxError(u'name format string "{0}" has illegal brace-level-1 letters: {1}'.format(self.text, token.value), self)
+                raise PybtexSyntaxError('name format string "{0}" has illegal brace-level-1 letters: {1}'.format(self.text, token.value), self)
 
         while True:
             try:
@@ -355,7 +355,7 @@ class NameFormatParser(Scanner):
                 raise UnbalancedBraceError(self)
 
             if token.pattern is self.LBRACE:
-                verbatim.append(u'{{{0}}}'.format(''.join(self.parse_braced_string())))
+                verbatim.append('{{{0}}}'.format(''.join(self.parse_braced_string())))
             elif token.pattern is self.FORMAT_CHARS:
                 check_format_chars(token.value)
                 format_chars = token.value

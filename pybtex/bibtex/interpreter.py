@@ -52,7 +52,7 @@ class Variable(object):
         return self._value
 
     def __repr__(self):
-        return u'{0}({1})'.format(type(self).__name__, repr(self.value()))
+        return '{0}({1})'.format(type(self).__name__, repr(self.value()))
 
     def __eq__(self, other):
         return type(self) == type(other) and self._value == other._value
@@ -84,7 +84,7 @@ class EntryInteger(Integer, EntryVariable):
 
 
 class String(Variable):
-    value_type = basestring
+    value_type = str
     default = ''
 
 
@@ -97,7 +97,7 @@ class MissingField(str):
         self = str.__new__(cls)
         self.name = name
         return self
-    def __nonzero__(self):
+    def __bool__(self):
         return False
 
 
@@ -130,7 +130,7 @@ class Crossref(Field):
 
 
 class Identifier(Variable):
-    value_type = basestring
+    value_type = str
     def execute(self, interpreter):
         try:
             f = interpreter.vars[self.value()]
@@ -140,7 +140,7 @@ class Identifier(Variable):
 
 
 class QuotedVar(Variable):
-    value_type = basestring
+    value_type = str
     def execute(self, interpreter):
         try:
             var = interpreter.vars[self.value()]
@@ -156,7 +156,7 @@ class Function(object):
         self.body = body
 
     def __repr__(self):
-        return u'{0}({1})'.format(type(self).__name__, repr(self.body))
+        return '{0}({1})'.format(type(self).__name__, repr(self.body))
 
     def __eq__(self, other):
         return type(self) == type(other) and self.body == other.body
@@ -199,7 +199,7 @@ class Interpreter(object):
         return value
 
     def get_token(self):
-        return self.bst_script.next()
+        return next(self.bst_script)
 
     def add_variable(self, name, value):
         if name in self.vars:
@@ -210,9 +210,9 @@ class Interpreter(object):
         self.output_buffer.append(string)
 
     def newline(self):
-        output = wrap(u''.join(self.output_buffer))
+        output = wrap(''.join(self.output_buffer))
         self.output_lines.append(output)
-        self.output_lines.append(u'\n')
+        self.output_lines.append('\n')
         self.output_buffer = []
 
     def run(self, bst_script, citations, bib_files, min_crossrefs):
@@ -230,9 +230,9 @@ class Interpreter(object):
             if hasattr(self, method):
                 getattr(self, method)(*args)
             else:
-                print 'Unknown command', name
+                print('Unknown command', name)
 
-        return u''.join(self.output_lines)
+        return ''.join(self.output_lines)
 
     def command_entry(self, fields, ints, strings):
         for id in fields:

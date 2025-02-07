@@ -19,7 +19,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from __future__ import with_statement
+
 
 from os import path
 
@@ -49,8 +49,8 @@ class BaseParser(Plugin):
         with open_file(filename, encoding=self.encoding) as f:
             try:
                 self.parse_stream(f)
-            except UnicodeDecodeError, e:
-                raise PybtexError(unicode(e), filename=self.filename)
+            except UnicodeDecodeError as e:
+                raise PybtexError(str(e), filename=self.filename)
         return self.data
 
     def parse_files(self, base_filenames, file_suffix=None):
