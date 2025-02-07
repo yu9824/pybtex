@@ -19,19 +19,19 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""bibliography processor
-"""
+"""bibliography processor"""
 
 
-def make_bibliography(aux_filename,
-        bib_format=None,
-        bib_encoding=None,
-        output_encoding=None,
-        output_backend=None,
-        min_crossrefs=2,
-        style=None,
-        **kwargs
-        ):
+def make_bibliography(
+    aux_filename,
+    bib_format=None,
+    bib_encoding=None,
+    output_encoding=None,
+    output_backend=None,
+    min_crossrefs=2,
+    style=None,
+    **kwargs,
+):
     """This functions extracts all nessessary information from .aux file
     and writes the bibliography.
     """
@@ -43,7 +43,7 @@ def make_bibliography(aux_filename,
     filename = path.splitext(aux_filename)[0]
     aux_data = auxfile.parse_file(aux_filename, output_encoding)
 
-    bib_parser = find_plugin('pybtex.database.input', bib_format)
+    bib_parser = find_plugin("pybtex.database.input", bib_format)
     bib_data = bib_parser(
         encoding=bib_encoding,
         wanted_entries=aux_data.citations,
@@ -52,16 +52,20 @@ def make_bibliography(aux_filename,
 
     if style is None:
         style = aux_data.style
-    style_cls = find_plugin('pybtex.style.formatting', style)
+    style_cls = find_plugin("pybtex.style.formatting", style)
     style = style_cls(
-            label_style=kwargs.get('label_style'),
-            name_style=kwargs.get('name_style'),
-            sorting_style=kwargs.get('sorting_style'),
-            abbreviate_names=kwargs.get('abbreviate_names'),
-            min_crossrefs=min_crossrefs,
+        label_style=kwargs.get("label_style"),
+        name_style=kwargs.get("name_style"),
+        sorting_style=kwargs.get("sorting_style"),
+        abbreviate_names=kwargs.get("abbreviate_names"),
+        min_crossrefs=min_crossrefs,
     )
-    formatted_bibliography = style.format_bibliography(bib_data, aux_data.citations)
+    formatted_bibliography = style.format_bibliography(
+        bib_data, aux_data.citations
+    )
 
-    output_backend = find_plugin('pybtex.backends', output_backend)
+    output_backend = find_plugin("pybtex.backends", output_backend)
     output_filename = filename + output_backend.default_suffix
-    output_backend(output_encoding).write_to_file(formatted_bibliography, output_filename)
+    output_backend(output_encoding).write_to_file(
+        formatted_bibliography, output_filename
+    )

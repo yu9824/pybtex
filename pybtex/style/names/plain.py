@@ -25,10 +25,9 @@ from pybtex.style.names import BaseNameStyle, name_part
 
 
 class NameStyle(BaseNameStyle):
-
     def format(self, person, abbr=False):
         r"""
-        Format names similarly to {ff~}{vv~}{ll}{, jj} in BibTeX.  
+        Format names similarly to {ff~}{vv~}{ll}{, jj} in BibTeX.
 
         >>> from pybtex.database import Person
         >>> name = Person(string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
@@ -46,10 +45,9 @@ class NameStyle(BaseNameStyle):
         >>> print plain(Person('de Last, Jr., First Middle')).format().plaintext()
         First<nbsp>Middle de<nbsp>Last, Jr.
         """
-        return join [
-            name_part(tie=True) [person.first(abbr) + person.middle(abbr)],
-            name_part(tie=True) [person.prelast()],
-            name_part [person.last()],
-            name_part(before=', ') [person.lineage()]
+        return join[
+            name_part(tie=True)[person.first(abbr) + person.middle(abbr)],
+            name_part(tie=True)[person.prelast()],
+            name_part[person.last()],
+            name_part(before=", ")[person.lineage()],
         ]
-

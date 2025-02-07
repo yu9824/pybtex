@@ -27,13 +27,14 @@ from .man import generate_manpages
 from .html import generate_html, generate_site
 
 generators = {
-    'manpages': generate_manpages,
-    'html': generate_html,
-    'site': generate_site,
+    "manpages": generate_manpages,
+    "html": generate_html,
+    "site": generate_site,
 }
+
 
 def generate_docs(doc_path, doc_types):
     for doc_type in doc_types:
         generate = generators[doc_type]
-        print('Generating', doc_type)
+        print("Generating", doc_type)
         generate(doc_path)

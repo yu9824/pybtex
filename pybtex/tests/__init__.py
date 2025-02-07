@@ -24,4 +24,4 @@ from difflib import unified_diff
 
 
 def diff(src, dst):
-    return '\n'.join(unified_diff(src.splitlines(), dst.splitlines()))
+    return "\n".join(unified_diff(src.splitlines(), dst.splitlines()))

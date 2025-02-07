@@ -20,7 +20,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-
 import pybtex.io
 from pybtex.plugin import Plugin
 
@@ -32,8 +31,10 @@ class BaseWriter(Plugin):
         self.encoding = encoding or pybtex.io.get_default_encoding()
 
     def write_file(self, bib_data, filename):
-        open_file = pybtex.io.open_unicode if self.unicode_io else pybtex.io.open_raw
-        mode = 'w' if self.unicode_io else 'wb'
+        open_file = (
+            pybtex.io.open_unicode if self.unicode_io else pybtex.io.open_raw
+        )
+        mode = "w" if self.unicode_io else "wb"
         with open_file(filename, mode, encoding=self.encoding) as stream:
             self.write_stream(bib_data, stream)
 

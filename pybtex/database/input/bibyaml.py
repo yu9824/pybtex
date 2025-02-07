@@ -25,16 +25,18 @@ from pybtex.database import Entry, Person
 
 
 class Parser(BaseParser):
-    default_suffix = '.yaml'
+    default_suffix = ".yaml"
 
     def parse_stream(self, stream):
         t = yaml.safe_load(stream)
 
-        entries = ((key, self.process_entry(entry))
-                for (key, entry) in t['entries'].items())
+        entries = (
+            (key, self.process_entry(entry))
+            for (key, entry) in t["entries"].items()
+        )
 
         try:
-            self.data.add_to_preamble(t['preamble'])
+            self.data.add_to_preamble(t["preamble"])
         except KeyError:
             pass
 
@@ -42,13 +44,13 @@ class Parser(BaseParser):
         return self.data
 
     def process_entry(self, entry):
-        bib_entry = Entry(entry['type']) 
-        for (key, value) in entry.items():
+        bib_entry = Entry(entry["type"])
+        for key, value in entry.items():
             key_lower = key.lower()
             if key_lower in Person.valid_roles:
                 for names in value:
                     bib_entry.add_person(Person(**names), key)
-            elif key_lower == 'type':
+            elif key_lower == "type":
                 pass
             else:
                 bib_entry.fields[key] = str(value)

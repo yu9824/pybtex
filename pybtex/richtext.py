@@ -64,6 +64,7 @@ from copy import deepcopy
 from pybtex import textutils
 import string
 
+
 class Text(list):
     """
     Rich text is basically a list of:
@@ -93,10 +94,8 @@ class Text(list):
     def __init__(self, *parts):
         """Create a Text consisting of one or more parts."""
 
-        if not all(isinstance(part, (str, Text, Symbol))
-                   for part in parts):
-            raise TypeError(
-                "parts must be str, Text or Symbol")
+        if not all(isinstance(part, (str, Text, Symbol)) for part in parts):
+            raise TypeError("parts must be str, Text or Symbol")
         list.__init__(self, [part for part in parts if part])
 
     def __len__(self):
@@ -144,8 +143,9 @@ class Text(list):
             else:
                 assert isinstance(item, (Text, Symbol))
                 rendered_list.append(item.render(backend))
-        assert all(isinstance(item, backend.RenderType)
-                   for item in rendered_list)
+        assert all(
+            isinstance(item, backend.RenderType) for item in rendered_list
+        )
         return backend.render_sequence(rendered_list)
 
     def enumerate(self):
@@ -167,13 +167,19 @@ class Text(list):
     def map(self, f, condition=None):
         if condition is None:
             condition = lambda index, length: True
+
         def iter_map_with_condition():
             length = len(self)
             for index, child in enumerate(self):
-                if hasattr(child, 'map'):
-                    yield child.map(f, condition) if condition(index, length) else child
+                if hasattr(child, "map"):
+                    yield (
+                        child.map(f, condition)
+                        if condition(index, length)
+                        else child
+                    )
                 else:
                     yield f(child) if condition(index, length) else child
+
         return self.from_list(iter_map_with_condition())
 
     def upper(self):
@@ -223,7 +229,7 @@ class Text(list):
         return joined
 
     def plaintext(self):
-        return ''.join(str(l[i]) for l, i in self.enumerate())
+        return "".join(str(l[i]) for l, i in self.enumerate())
 
     def capfirst(self):
         """Capitalize the first letter of the text.
@@ -234,7 +240,7 @@ class Text(list):
         """
         return self.apply_to_start(textutils.capfirst)
 
-    def add_period(self, period='.'):
+    def add_period(self, period="."):
         """Add a period to the end of text, if necessary.
 
         >>> import pybtex.backends.html
@@ -273,6 +279,7 @@ class Text(list):
         else:
             return self
 
+
 class Tag(Text):
     """A tag is somethins like <foo>some text</foo> in HTML
     or \\foo{some text} in LaTeX. 'foo' is the tag's name, and
@@ -292,7 +299,8 @@ class Tag(Text):
     def __init__(self, name, *args):
         if not isinstance(name, (str, Text)):
             raise TypeError(
-                "name must be str or Text (got %s)" % name.__class__.__name__)
+                "name must be str or Text (got %s)" % name.__class__.__name__
+            )
         if isinstance(name, Text):
             name = name.plaintext()
         self.name = name
@@ -301,6 +309,7 @@ class Tag(Text):
     def render(self, backend):
         text = super(Tag, self).render(backend)
         return backend.format_tag(self.name, text)
+
 
 class HRef(Text):
     """A href is somethins like <href url="URL">some text</href> in HTML
@@ -319,7 +328,8 @@ class HRef(Text):
     def __init__(self, url, *args):
         if not isinstance(url, (str, Text)):
             raise TypeError(
-                "url must be str or Text (got %s)" % url.__class__.__name__)
+                "url must be str or Text (got %s)" % url.__class__.__name__
+            )
         if isinstance(url, Text):
             url = url.plaintext()
         self.url = url
@@ -328,6 +338,7 @@ class HRef(Text):
     def render(self, backend):
         text = super(HRef, self).render(backend)
         return backend.format_href(self.url, text)
+
 
 class Symbol(object):
     """A special symbol.
@@ -352,9 +363,10 @@ class Symbol(object):
         return "Symbol('%s')" % self.name
 
     def __unicode__(self):
-        return '<%s>' % self.name
+        return "<%s>" % self.name
 
     def render(self, backend):
         return backend.symbols[self.name]
 
-nbsp = Symbol('nbsp')
+
+nbsp = Symbol("nbsp")

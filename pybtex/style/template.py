@@ -45,7 +45,7 @@ one two three four
 from pybtex import richtext
 from pybtex.exceptions import PybtexError
 
-__test__ = {} # for doctest
+__test__ = {}  # for doctest
 
 
 class Proto(object):
@@ -108,25 +108,28 @@ class Node(object):
 
         """
         params = []
-        args_repr = ', '.join(repr(arg) for arg in self.args)
+        args_repr = ", ".join(repr(arg) for arg in self.args)
         if args_repr:
             params.append(args_repr)
-        kwargs_repr = ', '.join('%s=%s' % (key, repr(value))
-                for (key, value) in self.kwargs.items())
+        kwargs_repr = ", ".join(
+            "%s=%s" % (key, repr(value))
+            for (key, value) in self.kwargs.items()
+        )
         if kwargs_repr:
             params.append(kwargs_repr)
         if params:
-            params_repr = '(%s)' % ', '.join(params)
+            params_repr = "(%s)" % ", ".join(params)
         else:
-            params_repr = ''
+            params_repr = ""
 
         if self.children:
-            children_repr = ' [%s]' % ', '.join(repr(child)
-                    for child in self.children)
+            children_repr = " [%s]" % ", ".join(
+                repr(child) for child in self.children
+            )
         else:
-            children_repr = ''
+            children_repr = ""
 
-        return ''.join([self.name, params_repr, children_repr])
+        return "".join([self.name, params_repr, children_repr])
 
     def format_data(self, data):
         """Format the given data into a piece of richtext.Text"""
@@ -161,7 +164,7 @@ def node(f):
 
 
 @node
-def join(children, data, sep='', sep2=None, last_sep=None):
+def join(children, data, sep="", sep2=None, last_sep=None):
     """Join text fragments together.
     >>> print join.format().plaintext()
     <BLANKLINE>
@@ -183,14 +186,16 @@ def join(children, data, sep='', sep2=None, last_sep=None):
     elif len(parts) == 2:
         return richtext.Text(sep2).join(parts)
     else:
-        return richtext.Text(last_sep).join([richtext.Text(sep).join(parts[:-1]), parts[-1]])
+        return richtext.Text(last_sep).join(
+            [richtext.Text(sep).join(parts[:-1]), parts[-1]]
+        )
 
 
 @node
-def words(children, data, sep=' '):
+def words(children, data, sep=" "):
     """Join text fragments with spaces or something else."""
 
-    return join(sep) [children].format_data(data)
+    return join(sep)[children].format_data(data)
 
 
 @node
@@ -204,8 +209,9 @@ def together(children, data, last_tie=True):
     a<nbsp>very long<nbsp>road
     """
     from pybtex.bibtex.names import tie_or_space
+
     tie = richtext.Text(richtext.nbsp)
-    space = richtext.Text(' ')
+    space = richtext.Text(" ")
     parts = [part for part in _format_list(children, data) if part]
     if not parts:
         return richtext.Text()
@@ -214,12 +220,17 @@ def together(children, data, last_tie=True):
         return tie2.join(parts)
     else:
         last_tie = tie if last_tie else tie_or_space(parts[-1], tie, space)
-        return richtext.Text(parts[0], tie_or_space(parts[0], tie, space),
-                space.join(parts[1:-1]), last_tie, parts[-1])
+        return richtext.Text(
+            parts[0],
+            tie_or_space(parts[0], tie, space),
+            space.join(parts[1:-1]),
+            last_tie,
+            parts[-1],
+        )
 
 
 @node
-def sentence(children, data, capfirst=True, add_period=True, sep=', '):
+def sentence(children, data, capfirst=True, add_period=True, sep=", "):
     """Join text fragments, capitalyze the first letter, add a period to the end.
 
     >>> print sentence.format().plaintext()
@@ -230,7 +241,7 @@ def sentence(children, data, capfirst=True, add_period=True, sep=', '):
     uno, dos, tres
     """
 
-    text = join(sep) [children].format_data(data)
+    text = join(sep)[children].format_data(data)
     if capfirst:
         text = text.capfirst()
     if add_period:
@@ -242,8 +253,11 @@ class FieldIsMissing(PybtexError):
     def __init__(self, field_name, entry):
         self.field_name = field_name
         super(FieldIsMissing, self).__init__(
-            'missing {0} in {1}'.format(field_name, getattr(entry, 'key', '<unnamed>'))
+            "missing {0} in {1}".format(
+                field_name, getattr(entry, "key", "<unnamed>")
+            )
         )
+
 
 @node
 def field(children, data, name, apply_func=None):
@@ -271,7 +285,9 @@ def names(children, data, role, **kwargs):
         # role is a bibtex field so it makes sense
         # to raise FieldIsMissing; optional will catch it
         raise FieldIsMissing(role, data)
-    return join(**kwargs) [[person.text for person in persons]].format_data(data)
+    return join(**kwargs)[[person.text for person in persons]].format_data(
+        data
+    )
 
 
 @node
@@ -291,10 +307,12 @@ def optional(children, data):
     except FieldIsMissing:
         return richtext.Text()
 
+
 @node
 def optional_field(children, data, *args, **kwargs):
     assert not children
-    return optional [field(*args, **kwargs)].format_data(data)
+    return optional[field(*args, **kwargs)].format_data(data)
+
 
 @node
 def tag(children, data, name):
@@ -310,6 +328,7 @@ def tag(children, data, name):
     parts = _format_list(children, data)
     return richtext.Tag(name, *_format_list(children, data))
 
+
 @node
 def href(children, data):
     """Wrap text into a href.
@@ -323,6 +342,7 @@ def href(children, data):
     """
     parts = _format_list(children, data)
     return richtext.HRef(*parts)
+
 
 @node
 def first_of(children, data):

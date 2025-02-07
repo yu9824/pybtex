@@ -29,6 +29,7 @@ doctype = """<!DOCTYPE bibtex:file PUBLIC
         "bibtexml.dtd" >
 """
 
+
 class PrettyTreeBuilder(object):
     def __init__(self):
         self.tree_builder = ET.TreeBuilder()
@@ -37,10 +38,10 @@ class PrettyTreeBuilder(object):
         self.stack = []
 
     def newline(self):
-        self.data('\n')
+        self.data("\n")
 
     def indent_line(self):
-        self.data(' ' * len(self.stack) * 4)
+        self.data(" " * len(self.stack) * 4)
 
     def start(self, tag, attrs=None, newline=True):
         if attrs is None:
@@ -70,25 +71,33 @@ class Writer(BaseWriter):
     def write_stream(self, bib_data, stream):
         def write_persons(persons, role):
             if persons:
-                w.start('bibtex:' + role)
+                w.start("bibtex:" + role)
                 for person in persons:
-                    w.start('bibtex:person')
-                    for type in ('first', 'middle', 'prelast', 'last', 'lineage'):
+                    w.start("bibtex:person")
+                    for type in (
+                        "first",
+                        "middle",
+                        "prelast",
+                        "last",
+                        "lineage",
+                    ):
                         name = person.get_part_as_text(type)
                         if name:
-                            w.element('bibtex:' + type, name)
+                            w.element("bibtex:" + type, name)
                     w.end()
                 w.end()
 
         w = PrettyTreeBuilder()
-        bibtex_file = w.start('bibtex:file', {'xmlns:bibtex': 'http://bibtexml.sf.net/'})
+        bibtex_file = w.start(
+            "bibtex:file", {"xmlns:bibtex": "http://bibtexml.sf.net/"}
+        )
         w.newline()
 
         for key, entry in bib_data.entries.items():
-            w.start('bibtex:entry', dict(id=key))
-            w.start('bibtex:' + entry.original_type)
+            w.start("bibtex:entry", dict(id=key))
+            w.start("bibtex:" + entry.original_type)
             for field_name, field_value in entry.fields.items():
-                w.element('bibtex:' + field_name, field_value)
+                w.element("bibtex:" + field_name, field_value)
             for role, persons in entry.persons.items():
                 write_persons(persons, role)
             w.end()
@@ -98,4 +107,4 @@ class Writer(BaseWriter):
 
         tree = ET.ElementTree(w.close())
         tree.write(stream, self.encoding)
-        stream.write(b'\n')
+        stream.write(b"\n")

@@ -23,28 +23,33 @@ from pybtex.style.sorting import BaseSortingStyle
 
 
 class SortingStyle(BaseSortingStyle):
-
     def sorting_key(self, entry):
-        if entry.type in ('book', 'inbook'):
+        if entry.type in ("book", "inbook"):
             author_key = self.author_editor_key(entry)
-        elif 'author' in entry.persons:
-            author_key = self.persons_key(entry.persons['author'])
+        elif "author" in entry.persons:
+            author_key = self.persons_key(entry.persons["author"])
         else:
             author_key = None
-        return (author_key, entry.fields.get('year', ''), entry.fields.get('title', ''))
+        return (
+            author_key,
+            entry.fields.get("year", ""),
+            entry.fields.get("title", ""),
+        )
 
     def persons_key(self, persons):
-        return '   '.join(self.person_key(person) for person in persons)
+        return "   ".join(self.person_key(person) for person in persons)
 
     def person_key(self, person):
-        return '  '.join((
-            ' '.join(person.prelast() + person.last()),
-            ' '.join(person.first() + person.middle()),
-            ' '.join(person.lineage()),
-        )).lower()
+        return "  ".join(
+            (
+                " ".join(person.prelast() + person.last()),
+                " ".join(person.first() + person.middle()),
+                " ".join(person.lineage()),
+            )
+        ).lower()
 
     def author_editor_key(self, entry):
-        if entry.persons.get('author'):
-            return self.persons_key(entry.persons['author'])
-        elif entry.persons.get('editor'):
-            return self.persons_key(entry.persons['editor'])
+        if entry.persons.get("author"):
+            return self.persons_key(entry.persons["author"])
+        elif entry.persons.get("editor"):
+            return self.persons_key(entry.persons["editor"])

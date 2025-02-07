@@ -22,8 +22,6 @@
 
 """Unicode-aware IO routines."""
 
-
-
 import io
 import sys
 from os import path, environ
@@ -33,11 +31,11 @@ from pybtex.kpathsea import kpsewhich
 
 
 def get_default_encoding():
-    return 'UTF-8'
+    return "UTF-8"
 
-    
+
 def get_stream_encoding(stream):
-    stream_encoding = getattr(stream, 'encoding', None)
+    stream_encoding = getattr(stream, "encoding", None)
     return stream_encoding or get_default_encoding()
 
 
@@ -53,8 +51,8 @@ def _open_or_create(opener, filename, mode, environ, **kwargs):
     try:
         return opener(filename, mode, **kwargs)
     except EnvironmentError as error:
-        if 'TEXMFOUTPUT' in environ:
-            new_filename = path.join(environ['TEXMFOUTPUT'], filename)
+        if "TEXMFOUTPUT" in environ:
+            new_filename = path.join(environ["TEXMFOUTPUT"], filename)
             try:
                 return opener(new_filename, mode, **kwargs)
             except EnvironmentError:
@@ -63,27 +61,29 @@ def _open_or_create(opener, filename, mode, environ, **kwargs):
 
 
 def _open(opener, filename, mode, **kwargs):
-    write_mode = 'w' in mode
+    write_mode = "w" in mode
     try:
         if write_mode:
             return _open_or_create(opener, filename, mode, environ, **kwargs)
         else:
-            return _open_existing(opener, filename, mode, locate=kpsewhich, **kwargs)
+            return _open_existing(
+                opener, filename, mode, locate=kpsewhich, **kwargs
+            )
     except EnvironmentError as error:
         raise PybtexError("unable to open %s. %s" % (filename, error.strerror))
 
 
-def open_raw(filename, mode='rb', encoding=None):
+def open_raw(filename, mode="rb", encoding=None):
     return _open(io.open, filename, mode)
 
 
-def open_unicode(filename, mode='r', encoding=None):
+def open_unicode(filename, mode="r", encoding=None):
     if encoding is None:
         encoding = get_default_encoding()
     return _open(io.open, filename, mode, encoding=encoding)
 
 
-def reader(stream, encoding=None, errors='strict'):
+def reader(stream, encoding=None, errors="strict"):
     if encoding is None:
         encoding = get_stream_encoding(stream)
     return io.TextIOWrapper(stream, encoding=encoding, errors=errors)

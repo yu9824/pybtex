@@ -25,7 +25,6 @@ from pybtex.style.names import BaseNameStyle, name_part
 
 
 class NameStyle(BaseNameStyle):
-
     def format(self, person, abbr=False):
         r"""
         Format names similarly to {vv~}{ll}{, jj}{, f.} in BibTeX.
@@ -45,10 +44,9 @@ class NameStyle(BaseNameStyle):
         Last, F.<nbsp>M.
 
         """
-        return join [
-            name_part(tie=True) [person.prelast()],
-            name_part [person.last()],
-            name_part(before=', ') [person.lineage()],
-            name_part(before=', ') [person.first(abbr) + person.middle(abbr)],
+        return join[
+            name_part(tie=True)[person.prelast()],
+            name_part[person.last()],
+            name_part(before=", ")[person.lineage()],
+            name_part(before=", ")[person.first(abbr) + person.middle(abbr)],
         ]
-

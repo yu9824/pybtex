@@ -20,7 +20,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-
 from os import path
 
 import pybtex.io
@@ -31,10 +30,12 @@ from pybtex.exceptions import PybtexError
 
 class BaseParser(Plugin):
     default_suffix = None
-    filename = '<INPUT>'
+    filename = "<INPUT>"
     unicode_io = False
 
-    def __init__(self, encoding=None, wanted_entries=None, min_crossrefs=2, **kwargs):
+    def __init__(
+        self, encoding=None, wanted_entries=None, min_crossrefs=2, **kwargs
+    ):
         self.encoding = encoding or pybtex.io.get_default_encoding()
         self.data = BibliographyData(
             wanted_entries=wanted_entries,
@@ -45,7 +46,9 @@ class BaseParser(Plugin):
         if file_suffix is not None:
             filename = filename + file_suffix
         self.filename = filename
-        open_file = pybtex.io.open_unicode if self.unicode_io else pybtex.io.open_raw
+        open_file = (
+            pybtex.io.open_unicode if self.unicode_io else pybtex.io.open_raw
+        )
         with open_file(filename, encoding=self.encoding) as f:
             try:
                 self.parse_stream(f)

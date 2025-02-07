@@ -20,19 +20,28 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import re
-from pybtex.bibtex.interpreter import (Integer, String, QuotedVar,
-        Identifier, FunctionLiteral, BibTeXError)
+from pybtex.bibtex.interpreter import (
+    Integer,
+    String,
+    QuotedVar,
+    Identifier,
+    FunctionLiteral,
+    BibTeXError,
+)
 import pybtex.io
 
-#ParserElement.enablePackrat()
+# ParserElement.enablePackrat()
+
 
 def process_int_literal(value):
-    return Integer(int(value.strip('#')))
+    return Integer(int(value.strip("#")))
+
 
 def process_string_literal(value):
     assert value.startswith('"')
     assert value.endswith('"')
     return String(value[1:-1])
+
 
 def process_identifier(name):
     if name[0] == "'":
@@ -40,11 +49,14 @@ def process_identifier(name):
     else:
         return Identifier(name)
 
+
 def process_function(toks):
     return FunctionLiteral(toks[0])
 
 
 quote_or_comment = re.compile(r'[%"]')
+
+
 def strip_comment(line):
     """Strip the commented part of the line."
 
@@ -71,8 +83,8 @@ def strip_comment(line):
         match = quote_or_comment.search(line, pos)
         if not match:
             break
-        if match.group() == '%' and not in_string:
-            return line[:match.start()]
+        if match.group() == "%" and not in_string:
+            return line[: match.start()]
         elif match.group() == '"':
             in_string = not in_string
         pos = match.end()
@@ -80,29 +92,32 @@ def strip_comment(line):
 
 
 from pybtex.scanner import (
-    Scanner, Pattern, Literal,
-    TokenRequired, PybtexSyntaxError,
+    Scanner,
+    Pattern,
+    Literal,
+    TokenRequired,
+    PybtexSyntaxError,
 )
 
 
 class BstParser(Scanner):
-    LBRACE = Literal('{')
-    RBRACE = Literal('}')
-    STRING = Pattern(r'"[^\"]*"', 'string')
-    INTEGER = Pattern(r'#-?\d+', 'integer')
-    NAME = Pattern(r'[^#\"\{\}\s]+', 'name')
+    LBRACE = Literal("{")
+    RBRACE = Literal("}")
+    STRING = Pattern(r'"[^\"]*"', "string")
+    INTEGER = Pattern(r"#-?\d+", "integer")
+    NAME = Pattern(r"[^#\"\{\}\s]+", "name")
 
     COMMANDS = {
-        'ENTRY': 3,
-        'EXECUTE': 1,
-        'FUNCTION': 2,
-        'INTEGERS': 1,
-        'ITERATE': 1,
-        'MACRO': 2,
-        'READ': 0,
-        'REVERSE': 1,
-        'SORT': 0,
-        'STRINGS': 1,
+        "ENTRY": 3,
+        "EXECUTE": 1,
+        "FUNCTION": 2,
+        "INTEGERS": 1,
+        "ITERATE": 1,
+        "MACRO": 2,
+        "READ": 0,
+        "REVERSE": 1,
+        "SORT": 0,
+        "STRINGS": 1,
     }
 
     LITERAL_TYPES = {
@@ -123,7 +138,15 @@ class BstParser(Scanner):
 
     def parse_group(self):
         while True:
-            token = self.required([self.LBRACE, self.RBRACE, self.STRING, self.INTEGER, self.NAME])
+            token = self.required(
+                [
+                    self.LBRACE,
+                    self.RBRACE,
+                    self.STRING,
+                    self.INTEGER,
+                    self.NAME,
+                ]
+            )
             if token.pattern is self.LBRACE:
                 yield FunctionLiteral(list(self.parse_group()))
             elif token.pattern is self.RBRACE:
@@ -132,11 +155,13 @@ class BstParser(Scanner):
                 yield self.LITERAL_TYPES[token.pattern](token.value)
 
     def parse_command(self):
-        command_name = self.required([self.NAME], 'BST command', allow_eof=True).value
+        command_name = self.required(
+            [self.NAME], "BST command", allow_eof=True
+        ).value
         try:
             arity = self.COMMANDS[command_name.upper()]
         except KeyError:
-            raise TokenRequired('BST command', self)
+            raise TokenRequired("BST command", self)
         yield command_name
         for i in range(arity):
             brace = self.optional([self.LBRACE])
@@ -150,12 +175,13 @@ def parse_file(filename, encoding=None):
     return parse_stream(bst_file, filename)
 
 
-def parse_stream(stream, filename='<INPUT>'):
-    bst = '\n'.join(strip_comment(line.rstrip()) for line in stream)
+def parse_stream(stream, filename="<INPUT>"):
+    bst = "\n".join(strip_comment(line.rstrip()) for line in stream)
     return list(BstParser(bst, filename=filename).parse())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
     from pprint import pprint
+
     pprint(parse_file(sys.argv[1]))

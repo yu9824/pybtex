@@ -19,6 +19,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 class PybtexError(Exception):
     def __init__(self, message, filename=None):
         super(PybtexError, self).__init__(message)
@@ -31,4 +32,3 @@ class PybtexError(Exception):
     def get_filename(self):
         """Return filename, if relevant."""
         return self.filename
-

@@ -21,5 +21,6 @@
 
 from pybtex.exceptions import PybtexError
 
+
 class BibTeXError(PybtexError):
     pass

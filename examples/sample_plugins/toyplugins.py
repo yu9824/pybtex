@@ -22,7 +22,6 @@
 
 """Sample Pybtex plugins."""
 
-
 import imp
 
 from pybtex.utils import OrderedCaseInsensitiveDict
@@ -45,10 +44,10 @@ class PythonParser(BaseParser):
 
     def parse_stream(self, stream):
         context = {
-            'BibliographyData': BibliographyData,
-            'OrderedCaseInsensitiveDict': OrderedCaseInsensitiveDict,
-            'Entry': Entry,
-            'Person': Person,
+            "BibliographyData": BibliographyData,
+            "OrderedCaseInsensitiveDict": OrderedCaseInsensitiveDict,
+            "Entry": Entry,
+            "Person": Person,
         }
         code = stream.read()
         self.data = eval(code, context)

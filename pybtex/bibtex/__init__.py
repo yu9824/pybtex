@@ -19,20 +19,19 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""BibTeX unnamed stack language interpreter and related stuff
-"""
+"""BibTeX unnamed stack language interpreter and related stuff"""
 
 
-def make_bibliography(aux_filename,
-        bib_format=None,
-        bib_encoding=None,
-        output_encoding=None,
-        bst_encoding=None,
-        min_crossrefs=2,
-        style=None,
-        **kwargs
-    ):
-
+def make_bibliography(
+    aux_filename,
+    bib_format=None,
+    bib_encoding=None,
+    output_encoding=None,
+    bst_encoding=None,
+    min_crossrefs=2,
+    style=None,
+    **kwargs,
+):
     from os import path
 
     import pybtex.io
@@ -40,18 +39,26 @@ def make_bibliography(aux_filename,
     from pybtex.bibtex.interpreter import Interpreter
     from pybtex import auxfile
 
-
     if bib_format is None:
         from pybtex.database.input.bibtex import Parser as bib_format
     aux_data = auxfile.parse_file(aux_filename, output_encoding)
     if style is None:
         style = aux_data.style
-    bst_filename = style + path.extsep + 'bst'
+    bst_filename = style + path.extsep + "bst"
     bst_script = bst.parse_file(bst_filename, bst_encoding)
     base_filename = path.splitext(aux_filename)[0]
-    bbl_filename = base_filename + path.extsep + 'bbl'
-    bib_filenames = [filename + bib_format.default_suffix for filename in aux_data.data]
+    bbl_filename = base_filename + path.extsep + "bbl"
+    bib_filenames = [
+        filename + bib_format.default_suffix for filename in aux_data.data
+    ]
     interpreter = Interpreter(bib_format, bib_encoding)
-    bbl_data = interpreter.run(bst_script, aux_data.citations, bib_filenames, min_crossrefs=min_crossrefs)
-    with pybtex.io.open_unicode(bbl_filename, 'w', encoding=output_encoding) as bbl_file:
+    bbl_data = interpreter.run(
+        bst_script,
+        aux_data.citations,
+        bib_filenames,
+        min_crossrefs=min_crossrefs,
+    )
+    with pybtex.io.open_unicode(
+        bbl_filename, "w", encoding=output_encoding
+    ) as bbl_file:
         bbl_file.write(bbl_data)

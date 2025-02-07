@@ -37,7 +37,7 @@ class BaseBackend(Plugin):
     def write_epilogue(self):
         pass
 
-    @deprecated('0.17', 'use format_str instead')
+    @deprecated("0.17", "use format_str instead")
     def format_text(self, text):
         return self.format_str(text)
 
@@ -88,6 +88,6 @@ class BaseBackend(Plugin):
             self.write_entry(entry.key, entry.label, entry.text.render(self))
         self.write_epilogue()
 
-    @deprecated('0.15', 'use write_to_file() instead')
+    @deprecated("0.15", "use write_to_file() instead")
     def write_bibliography(self, formatted_bibliography, filename):
         self.write_to_file(formatted_bibliography, filename)

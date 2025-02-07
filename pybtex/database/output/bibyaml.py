@@ -33,7 +33,7 @@ class Writer(BaseWriter):
                 yield role, list(process_persons(persons))
 
         def process_person(person):
-            for type in ('first', 'middle', 'prelast', 'last', 'lineage'):
+            for type in ("first", "middle", "prelast", "last", "lineage"):
                 name = person.get_part_as_text(type)
                 if name:
                     yield type, name
@@ -41,16 +41,23 @@ class Writer(BaseWriter):
         def process_persons(persons):
             for person in persons:
                 yield dict(process_person(person))
-                
+
         def process_entries(bib_data):
             for key, entry in bib_data.items():
                 fields = dict(entry.fields)
-                fields['type'] = entry.original_type
+                fields["type"] = entry.original_type
                 fields.update(process_person_roles(entry))
                 yield key, fields
 
-        data = {'entries': dict(process_entries(bib_data.entries))}
+        data = {"entries": dict(process_entries(bib_data.entries))}
         preamble = bib_data.get_preamble()
         if preamble:
-            data['preamble'] = preamble
-        yaml.safe_dump(data, stream, allow_unicode=True, encoding='UTF-8', default_flow_style=False, indent=4)
+            data["preamble"] = preamble
+        yaml.safe_dump(
+            data,
+            stream,
+            allow_unicode=True,
+            encoding="UTF-8",
+            default_flow_style=False,
+            indent=4,
+        )

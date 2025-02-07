@@ -19,8 +19,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""name formatting styles
-"""
+"""name formatting styles"""
 
 from pybtex.plugin import Plugin
 from pybtex.richtext import Symbol, Text, nbsp
@@ -32,19 +31,19 @@ class BaseNameStyle(Plugin):
         raise NotImplementedError
 
 
-def tie_or_space(word, tie='~', space = ' ', enough_chars=3):
+def tie_or_space(word, tie="~", space=" ", enough_chars=3):
     if len(word) < enough_chars:
         return tie
     else:
         return space
-    
+
 
 @node
-def name_part(children, data, before='', tie=False):
-    parts = together [children].format_data(data)
+def name_part(children, data, before="", tie=False):
+    parts = together[children].format_data(data)
     if not parts:
         return Text()
     if tie:
-        return Text(before, parts, tie_or_space(parts, nbsp, ' '))
+        return Text(before, parts, tie_or_space(parts, nbsp, " "))
     else:
         return Text(before, parts)

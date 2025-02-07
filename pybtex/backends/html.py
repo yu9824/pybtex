@@ -34,24 +34,21 @@ PROLOGUE = """<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <dl>
 """
 
+
 class Backend(BaseBackend):
-    default_suffix = '.html'
-    symbols = {
-        'ndash': '&ndash;',
-        'newblock': '\n',
-        'nbsp': '&nbsp;'
-    }
+    default_suffix = ".html"
+    symbols = {"ndash": "&ndash;", "newblock": "\n", "nbsp": "&nbsp;"}
     tags = {
-         'emph': 'em',
+        "emph": "em",
     }
-    
+
     def format_text(self, text):
         return escape(text)
 
     def format_tag(self, tag_name, text):
         tag = self.tags[tag_name]
-        return r'<%s>%s</%s>' % (tag, text, tag)
-    
+        return r"<%s>%s</%s>" % (tag, text, tag)
+
     def format_href(self, url, text):
         return r'<a href="%s">%s</a>' % (url, text)
 
@@ -60,8 +57,8 @@ class Backend(BaseBackend):
         self.output(PROLOGUE % encoding)
 
     def write_epilogue(self):
-        self.output('</dl></body></html>\n')
+        self.output("</dl></body></html>\n")
 
     def write_entry(self, key, label, text):
-        self.output('<dt>%s</dt>\n' % label)
-        self.output('<dd>%s</dd>\n' % text)
+        self.output("<dt>%s</dt>\n" % label)
+        self.output("<dd>%s</dd>\n" % text)

@@ -28,6 +28,7 @@ from .data import reference_data
 
 from pybtex.plugin import find_plugin
 
+
 class DatabaseIOTest(TestCase):
     def setUp(self):
         self.reference_data = deepcopy(reference_data)
@@ -35,41 +36,57 @@ class DatabaseIOTest(TestCase):
         self.assertTrue(self.reference_data.get_preamble())
 
     def _test_input(self, plugin):
-        parser = find_plugin('pybtex.database.input', plugin)(encoding='UTF-8')
-        writer = find_plugin('pybtex.database.output', plugin)(encoding='UTF-8')
+        parser = find_plugin("pybtex.database.input", plugin)(encoding="UTF-8")
+        writer = find_plugin("pybtex.database.output", plugin)(
+            encoding="UTF-8"
+        )
         stream = BytesIO()
-        writer_stream = TextIOWrapper(stream, 'UTF-8') if writer.unicode_io else stream
-        parser_stream = TextIOWrapper(stream, 'UTF-8') if parser.unicode_io else stream
+        writer_stream = (
+            TextIOWrapper(stream, "UTF-8") if writer.unicode_io else stream
+        )
+        parser_stream = (
+            TextIOWrapper(stream, "UTF-8") if parser.unicode_io else stream
+        )
         writer.write_stream(self.reference_data, writer_stream)
         writer_stream.flush()
         stream.seek(0)
         parser.parse_stream(parser_stream)
         loaded_data = parser.data
         self.assertEqual(loaded_data, self.reference_data)
-        self.assertEqual(pickle.loads(pickle.dumps(loaded_data, 0)), self.reference_data)
-        self.assertEqual(pickle.loads(pickle.dumps(loaded_data, 1)), self.reference_data)
-        self.assertEqual(pickle.loads(pickle.dumps(loaded_data, 2)), self.reference_data)
+        self.assertEqual(
+            pickle.loads(pickle.dumps(loaded_data, 0)), self.reference_data
+        )
+        self.assertEqual(
+            pickle.loads(pickle.dumps(loaded_data, 1)), self.reference_data
+        )
+        self.assertEqual(
+            pickle.loads(pickle.dumps(loaded_data, 2)), self.reference_data
+        )
 
     def test_bibtex_input(self):
-        self._test_input('bibtex')
+        self._test_input("bibtex")
 
     def test_bibyaml_input(self):
-        self._test_input('bibyaml')
+        self._test_input("bibyaml")
 
     def test_bibtexml_input(self):
         # BibTeXML does not support TeX preambles AFAIK
         self.reference_data._preamble = []
-        self._test_input('bibtexml')
+        self._test_input("bibtexml")
 
     def test_repr(self):
         from pybtex.utils import OrderedCaseInsensitiveDict
         from pybtex.database import BibliographyData
         from pybtex.database import Entry, Person
+
         data_repr = repr(self.reference_data)
-        data = eval(data_repr, {
-            'OrderedCaseInsensitiveDict': OrderedCaseInsensitiveDict,
-            'BibliographyData': BibliographyData,
-            'Entry': Entry,
-            'Person': Person,
-        })
+        data = eval(
+            data_repr,
+            {
+                "OrderedCaseInsensitiveDict": OrderedCaseInsensitiveDict,
+                "BibliographyData": BibliographyData,
+                "Entry": Entry,
+                "Person": Person,
+            },
+        )
         self.assertEqual(data, self.reference_data)

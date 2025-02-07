@@ -19,32 +19,43 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""convert bibliography database from one format to another
-"""
+"""convert bibliography database from one format to another"""
+
 from os import path
 from pybtex.exceptions import PybtexError
 from pybtex.plugin import find_plugin
+
 
 class ConvertError(PybtexError):
     pass
 
 
-def convert(from_filename, to_filename,
-        from_format=None, to_format=None,
-        input_encoding=None, output_encoding=None,
-        parser_options=None,
-        preserve_case=True,
-        **kwargs
-        ):
+def convert(
+    from_filename,
+    to_filename,
+    from_format=None,
+    to_format=None,
+    input_encoding=None,
+    output_encoding=None,
+    parser_options=None,
+    preserve_case=True,
+    **kwargs,
+):
     if parser_options is None:
         parser_options = {}
-    input_format = find_plugin('pybtex.database.input', name=from_format, filename=from_filename)
-    output_format = find_plugin('pybtex.database.output', name=to_format, filename=to_filename)
-    
-    if from_filename == to_filename:
-        raise ConvertError('input and output file can not be the same')
+    input_format = find_plugin(
+        "pybtex.database.input", name=from_format, filename=from_filename
+    )
+    output_format = find_plugin(
+        "pybtex.database.output", name=to_format, filename=to_filename
+    )
 
-    bib_data = input_format(input_encoding, **parser_options).parse_file(from_filename)
+    if from_filename == to_filename:
+        raise ConvertError("input and output file can not be the same")
+
+    bib_data = input_format(input_encoding, **parser_options).parse_file(
+        from_filename
+    )
     if not preserve_case:
         bib_data = bib_data.lower()
     output_format(output_encoding).write_file(bib_data, to_filename)
