@@ -1,6 +1,6 @@
 /Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/site-packages/setuptools/dist.py:484: UserWarning: Normalizing '0.19.0-beta.0' to '0.19.0b0'
   warnings.warn(tmpl.format(**locals()))
-..............................................F.............................E....F.....................
+............................................................................E....F.....................
 ======================================================================
 ERROR: test_repr (pybtex.tests.database_test.DatabaseIOTest)
 ----------------------------------------------------------------------
@@ -11,37 +11,6 @@ Traceback (most recent call last):
     BibliographyData(entries=OrderedCaseInsensitiveDict([('ruckenstein-diffusion', Entry('article', fields=OrderedCaseInsensitiveDict([('language', 'english'), ('title', 'Predicting the Diffusion Coefficient in Supercritical Fluids'), ('journal', 'Ind. Eng. Chem. Res.'), ('volume', '36'), ('year', '1997'), ('pages', '888-895')]), persons=OrderedCaseInsensitiveDict([('author', [Person(Liu, Hongquin), Person(Ruckenstein, Eli)])]))), ('test-booklet', Entry('booklet', fields=OrderedCaseInsensitiveDict([('language', 'english'), ('title', 'Just a booklet'), ('year', '2006'), ('month', 'January'), ('address', 'Moscow'), ('howpublished', 'Published by Foo')]), persons=OrderedCaseInsensitiveDict([('author', [Person(de Last, Jr., First Middle)])]))), ('test-inbook', Entry('inbook', fields=OrderedCaseInsensitiveDict([('publisher', 'Some Publisher'), ('language', 'english'), ('title', 'Some Title'), ('series', 'Some series'), ('booktitle', 'Some Good Book'), ('number', '3'), ('edition', 'Second'), ('year', '1933'), ('pages', '44--59')]), persons=OrderedCaseInsensitiveDict([('author', [Person(Jackson, Peter)])]))), ('viktorov-metodoj', Entry('book', fields=OrderedCaseInsensitiveDict([('publisher', 'Л.: <<Химия>>'), ('year', '1977'), ('language', 'russian'), ('title', 'Методы вычисления физико-химических величин и прикладные расчёты')]), persons=OrderedCaseInsensitiveDict([('author', [Person(Викторов, Михаил Маркович)])])))]), preamble=['%%% pybtex example file'])
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ^
 SyntaxError: invalid syntax
-
-======================================================================
-FAIL: Doctest: pybtex.utils.CaseInsensitiveDict
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
-    raise self.failureException(self.format_failure(new.getvalue()))
-AssertionError: Failed doctest test for pybtex.utils.CaseInsensitiveDict
-  File "/Users/yu9824/projects/pybtex/pybtex/utils.py", line 59, in CaseInsensitiveDict
-
-----------------------------------------------------------------------
-File "/Users/yu9824/projects/pybtex/pybtex/utils.py", line 85, in pybtex.utils.CaseInsensitiveDict
-Failed example:
-    print(d.keys())
-Expected:
-    ['Test']
-Got:
-    KeysView(CaseInsensitiveDict({'Test': 'passed again'}))
-----------------------------------------------------------------------
-File "/Users/yu9824/projects/pybtex/pybtex/utils.py", line 90, in pybtex.utils.CaseInsensitiveDict
-Failed example:
-    for key, value in d.iteritems():
-        print(key, value)
-Exception raised:
-    Traceback (most recent call last):
-      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest pybtex.utils.CaseInsensitiveDict[14]>", line 1, in <module>
-        for key, value in d.iteritems():
-    AttributeError: 'CaseInsensitiveDict' object has no attribute 'iteritems'
-
 
 ======================================================================
 FAIL: pybtex.tests.general_engine_test.test_bibtex_engine(<module 'pybtex.bibtex' from '/Users/yu9824/projects/pybtex/pybtex/bibtex/__init__.py'>, ('cyrillic.bib', 'alpha.bst'))
@@ -65,6 +34,6 @@ AssertionError: ---
  First~Middle de~Last, Jr.
 
 ----------------------------------------------------------------------
-Ran 103 tests in 0.538s
+Ran 103 tests in 0.542s
 
-FAILED (errors=1, failures=2)
+FAILED (errors=1, failures=1)

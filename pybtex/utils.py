@@ -82,7 +82,7 @@ class CaseInsensitiveDict(MutableMapping):
     True
     >>> 'Test' in d
     True
-    >>> print(d.keys())
+    >>> print(list(d.keys()))
     ['Test']
     >>> for key in d:
     ...     print(key)
@@ -162,6 +162,12 @@ class CaseInsensitiveDict(MutableMapping):
             type(self).__name__,
             repr(dct),
         )
+
+    def items_lower(self):
+        return ((key.lower(), value) for key, value in list(self.items()))
+
+    def iteritems(self):
+        return self.items()
 
     def iteritems_lower(self):
         return ((key.lower(), value) for key, value in list(self.items()))
