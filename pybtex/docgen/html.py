@@ -90,7 +90,7 @@ def get_last_bzr_revision(branch, file_id):
     current_sha1 = current_inventory[file_id].text_sha1
     for revision_id in history:
         inv = branch.repository.get_inventory(revision_id)
-        if not file_id in inv or inv[file_id].text_sha1 != current_sha1:
+        if file_id not in inv or inv[file_id].text_sha1 != current_sha1:
             return branch.repository.get_revision(last_revision_id)
         last_revision_id = revision_id
 

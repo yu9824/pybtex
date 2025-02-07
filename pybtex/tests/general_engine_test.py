@@ -58,7 +58,7 @@ def check_make_bibliography(engine, filenames):
         copy_files(filenames)
         bib_name = posixpath.splitext(filenames_by_ext[".bib"])[0]
         bst_name = posixpath.splitext(filenames_by_ext[".bst"])[0]
-        if not ".aux" in filenames_by_ext:
+        if ".aux" not in filenames_by_ext:
             write_aux("test.aux", bib_name, bst_name)
             filenames_by_ext[".aux"] = "test.aux"
         with errors.capture() as captured_errors:  # FIXME check error messages

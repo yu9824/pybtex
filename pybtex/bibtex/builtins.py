@@ -125,7 +125,7 @@ def operator_minus(i):
 @builtin("add.period$")
 def add_period(i):
     s = i.pop()
-    if s and not s.rstrip("}")[-1] in ".?!":
+    if s and s.rstrip("}")[-1] not in ".?!":
         s += "."
     i.push(s)
 
@@ -156,7 +156,7 @@ def change_case(i):
     if not mode:
         raise BibTeXError("empty mode string passed to change.case$")
     mode_letter = mode[0].lower()
-    if not mode_letter in ("l", "u", "t"):
+    if mode_letter not in ("l", "u", "t"):
         raise BibTeXError("incorrect change.case$ mode: %s" % mode)
 
     i.push(utils.change_case(string, mode_letter))
