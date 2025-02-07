@@ -21,6 +21,8 @@
 
 """bibliography processor"""
 
+__version__ = "0.19.0-beta.0"
+
 
 def make_bibliography(
     aux_filename,
@@ -37,6 +39,7 @@ def make_bibliography(
     """
 
     from os import path
+
     from pybtex import auxfile
     from pybtex.plugin import find_plugin
 

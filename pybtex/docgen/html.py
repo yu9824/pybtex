@@ -24,25 +24,24 @@
 """Generate HTML documentation"""
 
 import os
-import sys
 import re
 import shutil
-from datetime import datetime
+import sys
 from cgi import escape
+from datetime import datetime
 from glob import glob
 
 from docutils import nodes
-from docutils.parsers.rst import directives, Directive
 from docutils.core import publish_parts
+from docutils.parsers.rst import Directive, directives
 from docutils.writers import html4css1
-
 from jinja2 import Environment, PackageLoader
-
 from pygments import highlight
-from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_lexer_by_name
 
-from pybtex.__version__ import version
+from pybtex import __version__
+
 from .mystyle import MyHiglightStyle
 
 e = Environment(loader=PackageLoader("pybtex", "docgen"))
@@ -125,14 +124,14 @@ class DownloadLinks(Directive):
     def run(self):
         tarball_uri = (
             "http://pypi.python.org/packages/source/p/pybtex/pybtex-%s.tar.bz2"
-            % version
+            % __version__
         )
 
         current_version_is = nodes.Text("Current version is ")
         pybtex_xx = nodes.reference(
             "",
-            "Pybtex %s" % version,
-            name="Pybtex %s" % version,
+            "Pybtex %s" % __version__,
+            name="Pybtex %s" % __version__,
             refuri=tarball_uri,
         )
         download = nodes.reference(

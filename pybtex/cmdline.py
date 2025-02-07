@@ -21,14 +21,12 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import sys
 import optparse
+import sys
 
-from pybtex.__version__ import version
-
-from pybtex import errors
-from pybtex.textutils import capfirst, add_period
-from pybtex.plugin import find_plugin, enumerate_plugin_names
+from pybtex import __version__, errors
+from pybtex.plugin import enumerate_plugin_names, find_plugin
+from pybtex.textutils import add_period, capfirst
 
 
 def check_plugin(option, option_string, value):
@@ -195,8 +193,8 @@ class CommandLine(object):
         self.opt_parser = self.make_option_parser()
 
     def __call__(self):
-        from pybtex.exceptions import PybtexError
         import pybtex.io
+        from pybtex.exceptions import PybtexError
 
         try:
             self.main()
@@ -211,7 +209,7 @@ class CommandLine(object):
             formatter=PybtexHelpFormatter(),
             usage="%prog " + self.args,
             description=capfirst(add_period(self.description)),
-            version="%%prog-%s" % version,
+            version="%%prog-%s" % __version__,
         )
         for option_group, option_list in self.options:
             if option_group is None:

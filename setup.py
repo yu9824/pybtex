@@ -26,7 +26,7 @@ import os
 
 from setuptools import find_packages, setup
 
-from pybtex.__version__ import version
+from pybtex import __version__
 
 progname = "pybtex"
 
@@ -37,7 +37,7 @@ install_requires = ["PyYAML>=3.01"]
 
 setup(
     name=progname,
-    version=version,
+    version=__version__,
     description="A BibTeX-compatible bibliography processor in Python",
     long_description=README,
     author="Andrey Golovizin",
