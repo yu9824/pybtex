@@ -28,12 +28,13 @@ Make a table of character widths to use with bibtex width$ function.
 
 
 def make_table(font_filename, output):
-    import sys
     import pprint
-    from os import path
+    import sys
     from datetime import datetime
-    from freetype import Face
+    from os import path
     from pprint import pformat
+
+    from freetype import Face
 
     font_face = Face(font_filename)
     date = datetime.now().strftime("%Y-%m-%d")

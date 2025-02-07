@@ -20,8 +20,8 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-from pybtex.style.template import join
 from pybtex.style.names import BaseNameStyle, name_part
+from pybtex.style.template import join
 
 
 class NameStyle(BaseNameStyle):
@@ -32,15 +32,15 @@ class NameStyle(BaseNameStyle):
         >>> from pybtex.database import Person
         >>> name = Person(string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
         >>> lastfirst = NameStyle().format
-        >>> print lastfirst(name).format().plaintext()
+        >>> print(lastfirst(name).format().plaintext())
         de<nbsp>la Vall{\'e}e<nbsp>Poussin, Charles Louis Xavier<nbsp>Joseph
-        >>> print lastfirst(name, abbr=True).format().plaintext()
+        >>> print(lastfirst(name, abbr=True).format().plaintext())
         de<nbsp>la Vall{\'e}e<nbsp>Poussin, C.<nbsp>L. X.<nbsp>J.
 
         >>> name = Person(first='First', last='Last', middle='Middle')
-        >>> print lastfirst(name).format().plaintext()
+        >>> print(lastfirst(name).format().plaintext())
         Last, First<nbsp>Middle
-        >>> print lastfirst(name, abbr=True).format().plaintext()
+        >>> print(lastfirst(name, abbr=True).format().plaintext())
         Last, F.<nbsp>M.
 
         """

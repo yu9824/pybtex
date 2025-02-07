@@ -55,7 +55,7 @@ True
 >>> rief97b = bib_data.entries['rief97b']
 >>> authors = rief97b.persons['author']
 >>> for author in authors:
-...     print unicode(author)
+...     print(author)
 Rief, Matthias
 Gautel, Mathias
 Oesterhelt, Filipp
@@ -63,30 +63,30 @@ Fernandez, Julio M.
 Gaub, Hermann E.
 
 # field names are case-insensitive
->>> print rief97b.fields['URL']
+>>> print(rief97b.fields['URL'])
 http://www.sciencemag.org/cgi/content/abstract/276/5315/1109
->>> print rief97b.fields['url']
+>>> print(rief97b.fields['url'])
 http://www.sciencemag.org/cgi/content/abstract/276/5315/1109
 
 """
 
+import re
 from string import ascii_letters, digits
 
-import re
 import pybtex.io
-from pybtex.utils import CaseInsensitiveDict, CaseInsensitiveSet
+from pybtex import textutils
+from pybtex.bibtex.utils import split_name_list
 from pybtex.database import Entry, Person
 from pybtex.database.input import BaseParser
-from pybtex.bibtex.utils import split_name_list
 from pybtex.exceptions import PybtexError
-from pybtex import textutils
 from pybtex.scanner import (
-    Scanner,
-    Pattern,
     Literal,
+    Pattern,
     PrematureEOF,
     PybtexSyntaxError,
+    Scanner,
 )
+from pybtex.utils import CaseInsensitiveDict, CaseInsensitiveSet
 
 month_names = {
     "jan": "January",

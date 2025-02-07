@@ -1,0 +1,684 @@
+/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/site-packages/setuptools/dist.py:484: UserWarning: Normalizing '0.19.0-beta.0' to '0.19.0b0'
+  warnings.warn(tmpl.format(**locals()))
+........F.FF........F.F.......F.FF.......F....F....F.........FFFF.F.........E.FF.F.....................
+======================================================================
+ERROR: test_repr (pybtex.tests.database_test.DatabaseIOTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/database_test/__init__.py", line 82, in test_repr
+    data = eval(
+  File "<string>", line 1
+    BibliographyData(entries=OrderedCaseInsensitiveDict([('ruckenstein-diffusion', Entry('article', fields=OrderedCaseInsensitiveDict([('language', 'english'), ('title', 'Predicting the Diffusion Coefficient in Supercritical Fluids'), ('journal', 'Ind. Eng. Chem. Res.'), ('volume', '36'), ('year', '1997'), ('pages', '888-895')]), persons=OrderedCaseInsensitiveDict([('author', [Person(Liu, Hongquin), Person(Ruckenstein, Eli)])]))), ('test-booklet', Entry('booklet', fields=OrderedCaseInsensitiveDict([('language', 'english'), ('title', 'Just a booklet'), ('year', '2006'), ('month', 'January'), ('address', 'Moscow'), ('howpublished', 'Published by Foo')]), persons=OrderedCaseInsensitiveDict([('author', [Person(de Last, Jr., First Middle)])]))), ('test-inbook', Entry('inbook', fields=OrderedCaseInsensitiveDict([('publisher', 'Some Publisher'), ('language', 'english'), ('title', 'Some Title'), ('series', 'Some series'), ('booktitle', 'Some Good Book'), ('number', '3'), ('edition', 'Second'), ('year', '1933'), ('pages', '44--59')]), persons=OrderedCaseInsensitiveDict([('author', [Person(Jackson, Peter)])]))), ('viktorov-metodoj', Entry('book', fields=OrderedCaseInsensitiveDict([('publisher', 'Л.: <<Химия>>'), ('year', '1977'), ('language', 'russian'), ('title', 'Методы вычисления физико-химических величин и прикладные расчёты')]), persons=OrderedCaseInsensitiveDict([('author', [Person(Викторов, Михаил Маркович)])])))]), preamble=['%%% pybtex example file'])
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+SyntaxError: invalid syntax
+
+======================================================================
+FAIL: Doctest: pybtex.bibtex.utils.bibtex_purify
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.bibtex.utils.bibtex_purify
+  File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 327, in bibtex_purify
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 350, in pybtex.bibtex.utils.bibtex_purify
+Failed example:
+    print(bibtex_purify(r'{\noopsort{1973b}}1973'))
+Expected:
+    1973b1973
+Got:
+    pybtexbibtexutilsBibTeXStringobjectat0x102ba7b501973
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 356, in pybtex.bibtex.utils.bibtex_purify
+Failed example:
+    print(bibtex_purify(r'{\noopsort{1973a}}{\switchargs{--90}{1968}}'))
+Expected:
+    1973a901968
+Got:
+    pybtexbibtexutilsBibTeXStringobjectat0x102ba75b0pybtexbibtexutilsBibTeXStringobjectat0x102ba7130pybtexbibtexutilsBibTeXStringobjectat0x102ba7250
+
+
+======================================================================
+FAIL: Doctest: pybtex.bibtex.utils.bibtex_width
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.bibtex.utils.bibtex_width
+  File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 255, in bibtex_width
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 267, in pybtex.bibtex.utils.bibtex_width
+Failed example:
+    bibtex_width(r"ab{\'c{}}")
+Expected:
+    1500
+Got:
+    26612
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 269, in pybtex.bibtex.utils.bibtex_width
+Failed example:
+    bibtex_width(r"ab{\'c{}")
+Expected:
+    1500
+Got:
+    26862
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 271, in pybtex.bibtex.utils.bibtex_width
+Failed example:
+    bibtex_width(r"ab{\'c{d}}")
+Expected:
+    2056
+Got:
+    26612
+
+
+======================================================================
+FAIL: Doctest: pybtex.bibtex.utils.change_case
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.bibtex.utils.change_case
+  File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 114, in change_case
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/bibtex/utils.py", line 132, in pybtex.bibtex.utils.change_case
+Failed example:
+    print(change_case(r'And {\Now: {BOOO}!!!}', 'l'))
+Expected:
+    and {\Now: {booo}!!!}
+Got:
+    and {\Now: <pybtex.bibtex.utils.bibtexstring object at 0x102ba7fd0>!!!}
+
+
+======================================================================
+FAIL: Doctest: pybtex.database.Person
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.database.Person
+  File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 346, in Person
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 360, in pybtex.database.Person
+Failed example:
+    print(unicode(p))
+Exception raised:
+    Traceback (most recent call last):
+      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest pybtex.database.Person[6]>", line 1, in <module>
+        print(unicode(p))
+    NameError: name 'unicode' is not defined
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 362, in pybtex.database.Person
+Failed example:
+    p == Person(unicode(p))
+Exception raised:
+    Traceback (most recent call last):
+      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest pybtex.database.Person[7]>", line 1, in <module>
+        p == Person(unicode(p))
+    NameError: name 'unicode' is not defined
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 375, in pybtex.database.Person
+Failed example:
+    print(unicode(p))
+Exception raised:
+    Traceback (most recent call last):
+      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest pybtex.database.Person[14]>", line 1, in <module>
+        print(unicode(p))
+    NameError: name 'unicode' is not defined
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/database/__init__.py", line 377, in pybtex.database.Person
+Failed example:
+    p == Person(unicode(p))
+Exception raised:
+    Traceback (most recent call last):
+      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest pybtex.database.Person[15]>", line 1, in <module>
+        p == Person(unicode(p))
+    NameError: name 'unicode' is not defined
+
+
+======================================================================
+FAIL: Doctest: pybtex.richtext
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.richtext
+  File "/Users/yu9824/projects/pybtex/pybtex/richtext.py", line 21, in richtext
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/richtext.py", line 59, in pybtex.richtext
+Failed example:
+    print(t.plaintext())
+Expected:
+    one<nbsp>two<nbsp>three
+Got:
+    oneSymbol('nbsp')twoSymbol('nbsp')three
+
+
+======================================================================
+FAIL: Doctest: pybtex.richtext.Text.join
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.richtext.Text.join
+  File "/Users/yu9824/projects/pybtex/pybtex/richtext.py", line 213, in join
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/richtext.py", line 220, in pybtex.richtext.Text.join
+Failed example:
+    print(Text(nbsp).join(['a', 'b', 'c']).plaintext())
+Expected:
+    a<nbsp>b<nbsp>c
+Got:
+    aSymbol('nbsp')bSymbol('nbsp')c
+
+
+======================================================================
+FAIL: Doctest: pybtex.style.names.lastfirst.NameStyle.format
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.style.names.lastfirst.NameStyle.format
+  File "/Users/yu9824/projects/pybtex/pybtex/style/names/lastfirst.py", line 28, in format
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/lastfirst.py", line 35, in pybtex.style.names.lastfirst.NameStyle.format
+Failed example:
+    print(lastfirst(name).format().plaintext())
+Expected:
+    de<nbsp>la Vall{\'e}e<nbsp>Poussin, Charles Louis Xavier<nbsp>Joseph
+Got:
+    deSymbol('nbsp')la Vall{\'e}eSymbol('nbsp')Poussin, Charles Louis XavierSymbol('nbsp')Joseph
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/lastfirst.py", line 37, in pybtex.style.names.lastfirst.NameStyle.format
+Failed example:
+    print(lastfirst(name, abbr=True).format().plaintext())
+Expected:
+    de<nbsp>la Vall{\'e}e<nbsp>Poussin, C.<nbsp>L. X.<nbsp>J.
+Got:
+    deSymbol('nbsp')la Vall{\'e}eSymbol('nbsp')Poussin, C.Symbol('nbsp')L. X.Symbol('nbsp')J.
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/lastfirst.py", line 41, in pybtex.style.names.lastfirst.NameStyle.format
+Failed example:
+    print(lastfirst(name).format().plaintext())
+Expected:
+    Last, First<nbsp>Middle
+Got:
+    Last, FirstSymbol('nbsp')Middle
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/lastfirst.py", line 43, in pybtex.style.names.lastfirst.NameStyle.format
+Failed example:
+    print(lastfirst(name, abbr=True).format().plaintext())
+Expected:
+    Last, F.<nbsp>M.
+Got:
+    Last, F.Symbol('nbsp')M.
+
+
+======================================================================
+FAIL: Doctest: pybtex.style.names.plain.NameStyle.format
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.style.names.plain.NameStyle.format
+  File "/Users/yu9824/projects/pybtex/pybtex/style/names/plain.py", line 28, in format
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/plain.py", line 35, in pybtex.style.names.plain.NameStyle.format
+Failed example:
+    print(plain(name).format().plaintext())
+Expected:
+    Charles Louis Xavier<nbsp>Joseph de<nbsp>la Vall{\'e}e<nbsp>Poussin
+Got:
+    Charles Louis XavierSymbol('nbsp')Joseph deSymbol('nbsp')la Vall{\'e}eSymbol('nbsp')Poussin
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/plain.py", line 37, in pybtex.style.names.plain.NameStyle.format
+Failed example:
+    print(plain(name, abbr=True).format().plaintext())
+Expected:
+    C.<nbsp>L. X.<nbsp>J. de<nbsp>la Vall{\'e}e<nbsp>Poussin
+Got:
+    C.Symbol('nbsp')L. X.Symbol('nbsp')J. deSymbol('nbsp')la Vall{\'e}eSymbol('nbsp')Poussin
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/plain.py", line 41, in pybtex.style.names.plain.NameStyle.format
+Failed example:
+    print(plain(name).format().plaintext())
+Expected:
+    First<nbsp>Middle Last
+Got:
+    FirstSymbol('nbsp')Middle Last
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/plain.py", line 43, in pybtex.style.names.plain.NameStyle.format
+Failed example:
+    print(plain(name, abbr=True).format().plaintext())
+Expected:
+    F.<nbsp>M. Last
+Got:
+    F.Symbol('nbsp')M. Last
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/names/plain.py", line 45, in pybtex.style.names.plain.NameStyle.format
+Failed example:
+    print(plain(Person('de Last, Jr., First Middle')).format().plaintext())
+Expected:
+    First<nbsp>Middle de<nbsp>Last, Jr.
+Got:
+    FirstSymbol('nbsp')Middle deSymbol('nbsp')Last, Jr.
+
+
+======================================================================
+FAIL: Doctest: pybtex.style.template.__test__.together
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.style.template.__test__.together
+  File "/Users/yu9824/projects/pybtex/pybtex/style/template.py", line 202, in together
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/template.py", line 206, in pybtex.style.template.__test__.together
+Failed example:
+    print(together ['very', 'long', 'road'].format().plaintext())
+Expected:
+    very long<nbsp>road
+Got:
+    very longSymbol('nbsp')road
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/style/template.py", line 208, in pybtex.style.template.__test__.together
+Failed example:
+    print(together ['a', 'very', 'long', 'road'].format().plaintext())
+Expected:
+    a<nbsp>very long<nbsp>road
+Got:
+    aSymbol('nbsp')very longSymbol('nbsp')road
+
+
+======================================================================
+FAIL: Doctest: pybtex.utils.CaseInsensitiveDict
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 2205, in runTest
+    raise self.failureException(self.format_failure(new.getvalue()))
+AssertionError: Failed doctest test for pybtex.utils.CaseInsensitiveDict
+  File "/Users/yu9824/projects/pybtex/pybtex/utils.py", line 59, in CaseInsensitiveDict
+
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/utils.py", line 85, in pybtex.utils.CaseInsensitiveDict
+Failed example:
+    print(d.keys())
+Expected:
+    ['Test']
+Got:
+    KeysView(CaseInsensitiveDict({'Test': 'passed again'}))
+----------------------------------------------------------------------
+File "/Users/yu9824/projects/pybtex/pybtex/utils.py", line 90, in pybtex.utils.CaseInsensitiveDict
+Failed example:
+    for key, value in d.iteritems():
+        print(key, value)
+Exception raised:
+    Traceback (most recent call last):
+      File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/doctest.py", line 1334, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest pybtex.utils.CaseInsensitiveDict[14]>", line 1, in <module>
+        for key, value in d.iteritems():
+    AttributeError: 'CaseInsensitiveDict' object has no attribute 'iteritems'
+
+
+======================================================================
+FAIL: test_parser (pybtex.tests.bibtex_parser_test.AtTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/bibtex_parser_test.py", line 70, in test_parser
+    assert actual_error == correct_error
+AssertionError
+
+======================================================================
+FAIL: test_parser (pybtex.tests.bibtex_parser_test.EntryTypesTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/bibtex_parser_test.py", line 70, in test_parser
+    assert actual_error == correct_error
+AssertionError
+
+======================================================================
+FAIL: test_parser (pybtex.tests.bibtex_parser_test.FieldNamesTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/bibtex_parser_test.py", line 70, in test_parser
+    assert actual_error == correct_error
+AssertionError
+
+======================================================================
+FAIL: test_parser (pybtex.tests.bibtex_parser_test.InlineCommentTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/bibtex_parser_test.py", line 70, in test_parser
+    assert actual_error == correct_error
+AssertionError
+
+======================================================================
+FAIL: test_parser (pybtex.tests.bibtex_parser_test.KeyParsingTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/bibtex_parser_test.py", line 70, in test_parser
+    assert actual_error == correct_error
+AssertionError
+
+======================================================================
+FAIL: test_parser (pybtex.tests.bibtex_parser_test.MacrosTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/bibtex_parser_test.py", line 70, in test_parser
+    assert actual_error == correct_error
+AssertionError
+
+======================================================================
+FAIL: pybtex.tests.general_engine_test.test_bibtex_engine(<module 'pybtex.bibtex' from '/Users/yu9824/projects/pybtex/pybtex/bibtex/__init__.py'>, ('xampl.bib', 'plain.bst'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/site-packages/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/general_engine_test.py", line 75, in check_make_bibliography
+    assert result == correct_result, diff(correct_result, result)
+AssertionError: --- 
+
++++ 
+
+@@ -24,12 +24,8 @@
+
+ \newblock The entire issue is devoted to gnats and gnus (this entry is a
+   cross-referenced ARTICLE (journal)).
+ 
+-\bibitem{whole-set}
+-Donald~E. Knuth.
+-\newblock {\em The Art of Computer Programming}.
+-\newblock Four volumes. Addison-Wesley,
+-  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
+-\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
++\bibitem{booklet-minimal}
++The programming of computer art.
+ 
+ \bibitem{inbook-minimal}
+ Donald~E. Knuth.
+@@ -44,17 +40,24 @@
+
+   {\noopsort{1973b}}1973.
+ \newblock This is a full INBOOK entry.
+ 
++\bibitem{book-minimal}
++Donald~E. Knuth.
++\newblock {\em Seminumerical Algorithms}.
++\newblock Addison-Wesley, {\noopsort{1973c}}1981.
++
++\bibitem{book-crossref}
++Donald~E. Knuth.
++\newblock {\em Seminumerical Algorithms}.
++\newblock Volume~2 of {\em The Art of Computer Programming\/} \cite{whole-set},
++  second edition, {\noopsort{1973c}}1981.
++\newblock This is a cross-referencing BOOK entry.
++
+ \bibitem{inbook-crossref}
+ Donald~E. Knuth.
+ \newblock {\em Fundamental Algorithms}, section 1.2.
+ \newblock Volume~1 of {\em The Art of Computer Programming\/} \cite{whole-set},
+   second edition, {\noopsort{1973b}}1973.
+ \newblock This is a cross-referencing INBOOK entry.
+-
+-\bibitem{book-minimal}
+-Donald~E. Knuth.
+-\newblock {\em Seminumerical Algorithms}.
+-\newblock Addison-Wesley, {\noopsort{1973c}}1981.
+ 
+ \bibitem{book-full}
+ Donald~E. Knuth.
+@@ -64,15 +67,12 @@
+
+   {\noopsort{1973c}}1981.
+ \newblock This is a full BOOK entry.
+ 
+-\bibitem{book-crossref}
+-Donald~E. Knuth.
+-\newblock {\em Seminumerical Algorithms}.
+-\newblock Volume~2 of {\em The Art of Computer Programming\/} \cite{whole-set},
+-  second edition, {\noopsort{1973c}}1981.
+-\newblock This is a cross-referencing BOOK entry.
+-
+-\bibitem{booklet-minimal}
+-The programming of computer art.
++\bibitem{whole-set}
++Donald~E. Knuth.
++\newblock {\em The Art of Computer Programming}.
++\newblock Four volumes. Addison-Wesley,
++  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
++\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
+ 
+ \bibitem{booklet-full}
+ Jill~C. Knvth.
+@@ -187,6 +187,17 @@
+
+   June-August 1988.
+ \newblock This is a full PHDTHESIS entry.
+ 
++\bibitem{unpublished-full}
++Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
++\newblock Lower bounds for wishful research results.
++\newblock Talk at Fanstord University (this is a full UNPUBLISHED entry),
++  November, December 1988.
++
++\bibitem{unpublished-minimal}
++Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
++\newblock Lower bounds for wishful research results.
++\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
++
+ \bibitem{techreport-minimal}
+ Tom Terrific.
+ \newblock An {$O(n \log n / \! \log\log n)$} sorting algorithm.
+@@ -199,17 +210,6 @@
+
+   Department, Fanstord, California, October 1988.
+ \newblock This is a full TECHREPORT entry.
+ 
+-\bibitem{unpublished-minimal}
+-Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
+-\newblock Lower bounds for wishful research results.
+-\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
+-
+-\bibitem{unpublished-full}
+-Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
+-\newblock Lower bounds for wishful research results.
+-\newblock Talk at Fanstord University (this is a full UNPUBLISHED entry),
+-  November, December 1988.
+-
+ \bibitem{random-note-crossref}
+ Volume~2 is listed under Knuth \cite{book-full}.
+ 
+
+======================================================================
+FAIL: pybtex.tests.general_engine_test.test_bibtex_engine(<module 'pybtex.bibtex' from '/Users/yu9824/projects/pybtex/pybtex/bibtex/__init__.py'>, ('xampl.bib', 'alpha.bst'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/site-packages/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/general_engine_test.py", line 75, in check_make_bibliography
+    assert result == correct_result, diff(correct_result, result)
+AssertionError: --- 
+
++++ 
+
+@@ -1,6 +1,7 @@
+
+ \newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
+   \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
+-\begin{thebibliography}{OX{\singleletter{stoc}}83b}
++\begin{thebibliography}{Kn{\printfirst<pybtex.bibtex.utils.BibTeXString object
++  at 0x102e52b50><pybtex.bibtex.utils.BibTeXString object at 0x102e52b20>}}
+ 
+ \bibitem[Aam86a]{article-minimal}
+ L[eslie]~A. Aamport.
+@@ -24,12 +25,10 @@
+
+ \newblock The entire issue is devoted to gnats and gnus (this entry is a
+   cross-referenced ARTICLE (journal)).
+ 
+-\bibitem[Knu68]{whole-set}
+-Donald~E. Knuth.
+-\newblock {\em The Art of Computer Programming}.
+-\newblock Four volumes. Addison-Wesley,
+-  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
+-\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
++\bibitem[Kn{\printfirst<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52b50><pybtex.bibtex.utils.BibTeXString object at
++  0x102e52b20>}]{booklet-minimal}
++The programming of computer art.
+ 
+ \bibitem[Knu73a]{inbook-minimal}
+ Donald~E. Knuth.
+@@ -71,8 +70,12 @@
+
+   second edition, {\noopsort{1973c}}1981.
+ \newblock This is a cross-referencing BOOK entry.
+ 
+-\bibitem[Kn{\printfirst{v}{1987}}]{booklet-minimal}
+-The programming of computer art.
++\bibitem[Knu50]{whole-set}
++Donald~E. Knuth.
++\newblock {\em The Art of Computer Programming}.
++\newblock Four volumes. Addison-Wesley,
++  {\noopsort{1973a}}{\switchargs{--90}{1968}}.
++\newblock Seven volumes planned (this is a cross-referenced set of BOOKs).
+ 
+ \bibitem[Knv88]{booklet-full}
+ Jill~C. Knvth.
+@@ -117,17 +120,17 @@
+
+ \newblock Chips-R-Us, Silicon Valley, silver edition, April-May 1986.
+ \newblock This is a full MANUAL entry.
+ 
+-\bibitem[Mas88a]{mastersthesis-minimal}
+-{\'{E}}douard Masterly.
+-\newblock Mastering thesis writing.
+-\newblock Master's thesis, Stanford University, 1988.
+-
+-\bibitem[Mas88b]{mastersthesis-full}
++\bibitem[Mas88a]{mastersthesis-full}
+ {\'{E}}douard Masterly.
+ \newblock Mastering thesis writing.
+ \newblock Master's project, Stanford University, English Department,
+   June-August 1988.
+ \newblock This is a full MASTERSTHESIS entry.
++
++\bibitem[Mas88b]{mastersthesis-minimal}
++{\'{E}}douard Masterly.
++\newblock Mastering thesis writing.
++\newblock Master's thesis, Stanford University, 1988.
+ 
+ \bibitem[Mis]{misc-minimal}
+ This is a minimal MISC entry.
+@@ -159,13 +162,15 @@
+
+ \newblock In OX{\singleletter{stoc}} \cite{whole-proceedings}, pages 133--139.
+ \newblock This is a cross-referencing INPROCEEDINGS entry.
+ 
+-\bibitem[OX{\singleletter{stoc}}83a]{whole-proceedings}
++\bibitem[OX{\singleletter<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52a90>}83]{whole-proceedings}
+ The OX Association for Computing Machinery.
+ \newblock {\em Proc. Fifteenth Annual Symposium on the Theory of Computing},
+   Boston, 1983.
+ \newblock This is a cross-referenced PROCEEDINGS.
+ 
+-\bibitem[OX{\singleletter{stoc}}83b]{proceedings-minimal}
++\bibitem[OX{\singleletter<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52ca0>}83]{proceedings-minimal}
+ {\em Proc. Fifteenth Annual Symposium on the Theory of Computing}, 1983.
+ 
+ \bibitem[OY83]{proceedings-full}
+@@ -187,29 +192,34 @@
+
+   June-August 1988.
+ \newblock This is a full PHDTHESIS entry.
+ 
+-\bibitem[Ter88a]{techreport-minimal}
++\bibitem[{\"<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52c10>}{\~N}{\=<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52fd0>}]{unpublished-minimal}
++Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
++\newblock Lower bounds for wishful research results.
++\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
++
++\bibitem[{\"<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52c10>}{\~N}{\=<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52fd0>}88]{unpublished-full}
++Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
++\newblock Lower bounds for wishful research results.
++\newblock Talk at Fanstord University (this is a full UNPUBLISHED entry),
++  November, December 1988.
++
++\bibitem[Ter88]{techreport-minimal}
+ Tom Terrific.
+ \newblock An {$O(n \log n / \! \log\log n)$} sorting algorithm.
+ \newblock Technical report, Fanstord University, 1988.
+ 
+-\bibitem[T{\'{e}}r88b]{techreport-full}
++\bibitem[T{\'<pybtex.bibtex.utils.BibTeXString object at
++  0x102e52a60>}r88]{techreport-full}
+ Tom T{\'{e}}rrific.
+ \newblock An {$O(n \log n / \! \log\log n)$} sorting algorithm.
+ \newblock Wishful Research Result~7, Fanstord University, Computer Science
+   Department, Fanstord, California, October 1988.
+ \newblock This is a full TECHREPORT entry.
+ 
+-\bibitem[{\"{U}}{\~N}{\={P}}]{unpublished-minimal}
+-Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
+-\newblock Lower bounds for wishful research results.
+-\newblock Talk at Fanstord University (this is a minimal UNPUBLISHED entry).
+-
+-\bibitem[{\"{U}}{\~N}{\={P}}88]{unpublished-full}
+-Ulrich {\"{U}}nderwood, Ned {\~N}et, and Paul {\={P}}ot.
+-\newblock Lower bounds for wishful research results.
+-\newblock Talk at Fanstord University (this is a full UNPUBLISHED entry),
+-  November, December 1988.
+-
+ \bibitem[Vol]{random-note-crossref}
+ Volume~2 is listed under Knuth \cite{book-full}.
+ 
+
+======================================================================
+FAIL: pybtex.tests.general_engine_test.test_bibtex_engine(<module 'pybtex.bibtex' from '/Users/yu9824/projects/pybtex/pybtex/bibtex/__init__.py'>, ('cyrillic.bib', 'alpha.bst'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/yu9824/miniforge3/envs/pybtex39/lib/python3.9/site-packages/nose/case.py", line 197, in runTest
+    self.test(*self.arg)
+  File "/Users/yu9824/projects/pybtex/pybtex/tests/general_engine_test.py", line 75, in check_make_bibliography
+    assert result == correct_result, diff(correct_result, result)
+AssertionError: --- 
+
++++ 
+
+@@ -1,5 +1,5 @@
+
+ %%% pybtex example file
+-\begin{thebibliography}{Вик77}
++\begin{thebibliography}{Jac33}
+ 
+ \bibitem[dL06]{test-booklet}
+ First~Middle de~Last, Jr.
+
+----------------------------------------------------------------------
+Ran 103 tests in 0.551s
+
+FAILED (errors=1, failures=19)

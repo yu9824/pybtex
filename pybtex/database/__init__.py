@@ -21,18 +21,17 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import re
-
 from collections import Mapping
 
-from pybtex.exceptions import PybtexError
-from pybtex.utils import (
-    deprecated,
-    OrderedCaseInsensitiveDict,
-    CaseInsensitiveDefaultDict,
-    CaseInsensitiveSet,
-)
 from pybtex.bibtex.utils import split_tex_string
 from pybtex.errors import report_error
+from pybtex.exceptions import PybtexError
+from pybtex.utils import (
+    CaseInsensitiveDefaultDict,
+    CaseInsensitiveSet,
+    OrderedCaseInsensitiveDict,
+    deprecated,
+)
 
 
 class BibliographyDataError(PybtexError):
@@ -55,7 +54,7 @@ class BibliographyData(object):
             self.citations = CaseInsensitiveSet()
         if entries:
             if isinstance(entries, Mapping):
-                entries = iter(entries.items())
+                entries = iter(list(entries.items()))
             for key, entry in entries:
                 self.add_entry(key, entry)
         if preamble:
@@ -260,7 +259,8 @@ class BibliographyData(object):
         """
 
         entries_lower = (
-            (key.lower(), entry.lower()) for key, entry in self.entries.items()
+            (key.lower(), entry.lower())
+            for key, entry in list(self.entries.items())
         )
         return type(self)(
             entries=entries_lower,
@@ -347,41 +347,41 @@ class Person(object):
     """Represents a person (usually human).
 
     >>> p = Person('Avinash K. Dixit')
-    >>> print p.first()
+    >>> print(p.first())
     ['Avinash']
-    >>> print p.middle()
+    >>> print(p.middle())
     ['K.']
-    >>> print p.prelast()
+    >>> print(p.prelast())
     []
-    >>> print p.last()
+    >>> print(p.last())
     ['Dixit']
-    >>> print p.lineage()
+    >>> print(p.lineage())
     []
-    >>> print unicode(p)
+    >>> print(unicode(p))
     Dixit, Avinash K.
     >>> p == Person(unicode(p))
     True
     >>> p = Person('Dixit, Jr, Avinash K. ')
-    >>> print p.first()
+    >>> print(p.first())
     ['Avinash']
-    >>> print p.middle()
+    >>> print(p.middle())
     ['K.']
-    >>> print p.prelast()
+    >>> print(p.prelast())
     []
-    >>> print p.last()
+    >>> print(p.last())
     ['Dixit']
-    >>> print p.lineage()
+    >>> print(p.lineage())
     ['Jr']
-    >>> print unicode(p)
+    >>> print(unicode(p))
     Dixit, Jr, Avinash K.
     >>> p == Person(unicode(p))
     True
 
     >>> p = Person('abc')
-    >>> print p.first(), p.middle(), p.prelast(), p.last(), p.lineage()
+    >>> print(p.first(), p.middle(), p.prelast(), p.last(), p.lineage())
     [] [] [] ['abc'] []
     >>> p = Person('Viktorov, Michail~Markovitch')
-    >>> print p.first(), p.middle(), p.prelast(), p.last(), p.lineage()
+    >>> print(p.first(), p.middle(), p.prelast(), p.last(), p.lineage())
     ['Michail'] ['Markovitch'] [] ['Viktorov'] []
     """
 
@@ -481,7 +481,7 @@ class Person(object):
             and self._lineage == other._lineage
         )
 
-    def __unicode__(self):
+    def __str__(self):
         # von Last, Jr, First
         von_last = " ".join(self._prelast + self._last)
         jr = " ".join(self._lineage)
@@ -489,7 +489,7 @@ class Person(object):
         return ", ".join(part for part in (von_last, jr, first) if part)
 
     def __repr__(self):
-        return "Person({0})".format(repr(str(self)))
+        return "Person({0})".format(self)
 
     def get_part_as_text(self, type):
         names = getattr(self, "_" + type)

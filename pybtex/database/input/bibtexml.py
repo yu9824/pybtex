@@ -20,9 +20,9 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from xml.etree import cElementTree as ET
+
 from pybtex.database import Entry, Person
 from pybtex.database.input import BaseParser
-
 
 bibtexns = "{http://bibtexml.sf.net/}"
 
@@ -53,15 +53,15 @@ class Parser(BaseParser):
                     e.add_person(Person(text), role)
                 else:
                     names = {}
-                    for name in person_entry.getchildren():
+                    for name in list(person_entry):
                         names[remove_ns(name.tag)] = name.text
                     e.add_person(Person(**names), role)
 
         id_ = entry.get("id")
-        item = entry.getchildren()[0]
+        item = list(entry)[0]
         type = remove_ns(item.tag)
         e = Entry(type)
-        for field in item.getchildren():
+        for field in list(item):
             field_name = remove_ns(field.tag)
             if field_name in Person.valid_roles:
                 process_person(field, field_name)

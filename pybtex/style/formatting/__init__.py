@@ -63,7 +63,7 @@ class BaseStyle(Plugin):
         sorted_entries = self.sort(entries)
         labels = self.format_labels(sorted_entries)
         for label, entry in zip(labels, sorted_entries):
-            for persons in entry.persons.values():
+            for persons in list(entry.persons.values()):
                 for person in persons:
                     person.text = self.format_name(
                         person, self.abbreviate_names

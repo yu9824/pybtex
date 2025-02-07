@@ -58,6 +58,10 @@ setup(
         "Topic :: Utilities",
     ],
     install_requires=install_requires,
+    extras_require={
+        "docs": ["docutils", "jinja2", "pygments"],
+        "test": ["python <3.10", "setuptools <58.0.0", "nose"],
+    },
     packages=find_packages(exclude=["docs"]),
     scripts=[
         os.path.join("scripts", progname),

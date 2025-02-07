@@ -116,7 +116,7 @@ def main():
         print("usage: run_bibtex 'some bibtex code'")
         sys.exit(1)
     code = args[0]
-    print(execute(code))
+    print((execute(code)))
 
 
 if __name__ == "__main__":

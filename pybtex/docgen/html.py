@@ -27,9 +27,9 @@ import os
 import re
 import shutil
 import sys
-from cgi import escape
 from datetime import datetime
 from glob import glob
+from html import escape
 
 from docutils import nodes
 from docutils.core import publish_parts
@@ -173,7 +173,7 @@ def mark_tail(phrase, keyword, pattern='%s<span class="tail"> %s</span>'):
 
     A tail consists of several lowercase words and a keyword.
 
-    >>> print mark_tail('The Manual of Pybtex', 'Pybtex')
+    >>> print(mark_tail('The Manual of Pybtex', 'Pybtex'))
     The Manual<span class="tail"> of Pybtex</span>
 
     Look at the generated documentation for further explanation.
@@ -304,7 +304,7 @@ def run(src_dir, dst_dir, for_site, sources=(), handle_file=handle_file):
     for fn in sources:
         if not os.path.isfile(fn):
             continue
-        print("Processing %s" % fn)
+        print(("Processing %s" % fn))
         f = open(fn)
         try:
             handle_file(fn, f, dst_dir, for_site)

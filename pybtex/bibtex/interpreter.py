@@ -253,7 +253,7 @@ class Interpreter(object):
             if hasattr(self, method):
                 getattr(self, method)(*args)
             else:
-                print("Unknown command", name)
+                print(("Unknown command", name))
 
         return "".join(self.output_lines)
 

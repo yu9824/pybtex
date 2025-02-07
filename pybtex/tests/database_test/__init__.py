@@ -19,14 +19,14 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from copy import deepcopy
-from unittest import TestCase
-from io import BytesIO, TextIOWrapper, BufferedWriter
 import pickle
-
-from .data import reference_data
+from copy import deepcopy
+from io import BufferedWriter, BytesIO, TextIOWrapper
+from unittest import TestCase
 
 from pybtex.plugin import find_plugin
+
+from .data import reference_data
 
 
 class DatabaseIOTest(TestCase):
@@ -75,9 +75,8 @@ class DatabaseIOTest(TestCase):
         self._test_input("bibtexml")
 
     def test_repr(self):
+        from pybtex.database import BibliographyData, Entry, Person
         from pybtex.utils import OrderedCaseInsensitiveDict
-        from pybtex.database import BibliographyData
-        from pybtex.database import Entry, Person
 
         data_repr = repr(self.reference_data)
         data = eval(

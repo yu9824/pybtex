@@ -36,5 +36,5 @@ generators = {
 def generate_docs(doc_path, doc_types):
     for doc_type in doc_types:
         generate = generators[doc_type]
-        print("Generating", doc_type)
+        print(("Generating", doc_type))
         generate(doc_path)

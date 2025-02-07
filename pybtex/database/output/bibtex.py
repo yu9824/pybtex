@@ -33,16 +33,16 @@ class Writer(BaseWriter):
     def quote(self, s):
         """
         >>> w = Writer()
-        >>> print w.quote('The World')
+        >>> print(w.quote('The World'))
         "The World"
-        >>> print w.quote(r'The \emph{World}')
+        >>> print(w.quote(r'The \emph{World}'))
         "The \emph{World}"
-        >>> print w.quote(r'The "World"')
+        >>> print(w.quote(r'The "World"'))
         {The "World"}
         >>> try:
-        ...     print w.quote(r'The {World')
-        ... except BibTeXError, error:
-        ...     print error
+        ...     print(w.quote(r'The {World'))
+        ... except BibTeXError as error:
+        ...     print(error)
         String has unmatched braces: The {World
         """
 
@@ -64,14 +64,14 @@ class Writer(BaseWriter):
         >>> w.check_braces('end}')
         >>> try:
         ...     w.check_braces('{')
-        ... except BibTeXError, error:
-        ...     print error
+        ... except BibTeXError as error:
+        ...     print(error)
         String has unmatched braces: {
         >>> w.check_braces('{test}}')
         >>> try:
         ...     w.check_braces('{{test}')
-        ... except BibTeXError, error:
-        ...     print error
+        ... except BibTeXError as error:
+        ...     print(error)
         String has unmatched braces: {{test}
 
         """
@@ -118,12 +118,12 @@ class Writer(BaseWriter):
                 stream.write("@preamble{%s}\n\n" % self.quote(preamble))
 
         write_preamble(bib_data.get_preamble())
-        for key, entry in bib_data.entries.items():
+        for key, entry in list(bib_data.entries.items()):
             stream.write("@%s" % entry.original_type)
             stream.write("{%s" % key)
             #            for role in ('author', 'editor'):
-            for role, persons in entry.persons.items():
+            for role, persons in list(entry.persons.items()):
                 write_persons(persons, role)
-            for type, value in entry.fields.items():
+            for type, value in list(entry.fields.items()):
                 write_field(type, value)
             stream.write("\n}\n\n")

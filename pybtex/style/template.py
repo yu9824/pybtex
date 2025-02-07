@@ -36,9 +36,9 @@ Inspired by Brevé -- http://breve.twisty-industries.com/
 >>> book_format = sentence(sep=', ') [
 ...     field('title'), field('year'), optional [field('sdf')]
 ... ]
->>> print book_format.format_data(e).plaintext()
+>>> print(book_format.format_data(e).plaintext())
 The Book, 2000.
->>> print words ['one', 'two', words ['three', 'four']].format_data(e).plaintext()
+>>> print(words ['one', 'two', words ['three', 'four']].format_data(e).plaintext())
 one two three four
 """
 
@@ -113,7 +113,7 @@ class Node(object):
             params.append(args_repr)
         kwargs_repr = ", ".join(
             "%s=%s" % (key, repr(value))
-            for (key, value) in self.kwargs.items()
+            for (key, value) in list(self.kwargs.items())
         )
         if kwargs_repr:
             params.append(kwargs_repr)
@@ -166,13 +166,13 @@ def node(f):
 @node
 def join(children, data, sep="", sep2=None, last_sep=None):
     """Join text fragments together.
-    >>> print join.format().plaintext()
+    >>> print(join.format().plaintext())
     <BLANKLINE>
-    >>> print join ['a', 'b', 'c', 'd', 'e'].format().plaintext()
+    >>> print(join ['a', 'b', 'c', 'd', 'e'].format().plaintext())
     abcde
-    >>> print join(sep=', ', sep2=' and ', last_sep=', and ') ['Tom', 'Jerry'].format().plaintext()
+    >>> print(join(sep=', ', sep2=' and ', last_sep=', and ') ['Tom', 'Jerry'].format().plaintext())
     Tom and Jerry
-    >>> print join(sep=', ', sep2=' and ', last_sep=', and ') ['Billy', 'Willy', 'Dilly'].format().plaintext()
+    >>> print(join(sep=', ', sep2=' and ', last_sep=', and ') ['Billy', 'Willy', 'Dilly'].format().plaintext())
     Billy, Willy, and Dilly
     """
 
@@ -203,9 +203,9 @@ def together(children, data, last_tie=True):
     """
     Try to keep words together, like BibTeX does.
 
-    >>> print together ['very', 'long', 'road'].format().plaintext()
+    >>> print(together ['very', 'long', 'road'].format().plaintext())
     very long<nbsp>road
-    >>> print together ['a', 'very', 'long', 'road'].format().plaintext()
+    >>> print(together ['a', 'very', 'long', 'road'].format().plaintext())
     a<nbsp>very long<nbsp>road
     """
     from pybtex.bibtex.names import tie_or_space
@@ -233,11 +233,11 @@ def together(children, data, last_tie=True):
 def sentence(children, data, capfirst=True, add_period=True, sep=", "):
     """Join text fragments, capitalyze the first letter, add a period to the end.
 
-    >>> print sentence.format().plaintext()
+    >>> print(sentence.format().plaintext())
     <BLANKLINE>
-    >>> print sentence(sep=' ') ['mary', 'had', 'a', 'little', 'lamb'].format().plaintext()
+    >>> print(sentence(sep=' ') ['mary', 'had', 'a', 'little', 'lamb'].format().plaintext())
     Mary had a little lamb.
-    >>> print sentence(capfirst=False, add_period=False) ['uno', 'dos', 'tres'].format().plaintext()
+    >>> print(sentence(capfirst=False, add_period=False) ['uno', 'dos', 'tres'].format().plaintext())
     uno, dos, tres
     """
 
@@ -297,7 +297,7 @@ def optional(children, data):
 
     >>> from pybtex.database import Entry
     >>> template = optional [field('volume'), optional['(', field('number'), ')']]
-    >>> print template.format_data(Entry('article'))
+    >>> print(template.format_data(Entry('article')))
     []
 
     """
@@ -320,9 +320,9 @@ def tag(children, data, name):
 
     >>> import pybtex.backends.html
     >>> html = pybtex.backends.html.Backend()
-    >>> print tag('emph') ['important'].format().render(html)
+    >>> print(tag('emph') ['important'].format().render(html))
     <em>important</em>
-    >>> print sentence ['ready', 'set', tag('emph') ['go']].format().render(html)
+    >>> print(sentence ['ready', 'set', tag('emph') ['go']].format().render(html))
     Ready, set, <em>go</em>.
     """
     parts = _format_list(children, data)
@@ -335,9 +335,9 @@ def href(children, data):
 
     >>> import pybtex.backends.html
     >>> html = pybtex.backends.html.Backend()
-    >>> print href ['www.test.org', 'important'].format().render(html)
+    >>> print(href ['www.test.org', 'important'].format().render(html))
     <a href="www.test.org">important</a>
-    >>> print sentence ['ready', 'set', href ['www.test.org', 'go']].format().render(html)
+    >>> print(sentence ['ready', 'set', href ['www.test.org', 'go']].format().render(html))
     Ready, set, <a href="www.test.org">go</a>.
     """
     parts = _format_list(children, data)

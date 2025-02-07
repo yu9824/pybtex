@@ -69,19 +69,19 @@ def normalize_whitespace(string):
     r"""
     Replace every sequence of whitespace characters with a single space.
 
-    >>> print normalize_whitespace('abc')
+    >>> print(normalize_whitespace('abc'))
     abc
-    >>> print normalize_whitespace('Abc def.')
+    >>> print(normalize_whitespace('Abc def.'))
     Abc def.
-    >>> print normalize_whitespace(' Abc def.')
+    >>> print(normalize_whitespace(' Abc def.'))
     Abc def.
-    >>> print normalize_whitespace('Abc\ndef.')
+    >>> print(normalize_whitespace('Abc\ndef.'))
     Abc def.
-    >>> print normalize_whitespace('Abc\r\ndef.')
+    >>> print(normalize_whitespace('Abc\r\ndef.'))
     Abc def.
-    >>> print normalize_whitespace('Abc    \r\n\tdef.')
+    >>> print(normalize_whitespace('Abc    \r\n\tdef.'))
     Abc def.
-    >>> print normalize_whitespace('   \nAbc\r\ndef.')
+    >>> print(normalize_whitespace('   \nAbc\r\ndef.'))
     Abc def.
     """
 

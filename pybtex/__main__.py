@@ -118,7 +118,7 @@ It is also possible to define bibliography formatting styles in Python.
             for (
                 option,
                 what_is_not_supported,
-            ) in not_supported_by_bibtex.items():
+            ) in list(not_supported_by_bibtex.items()):
                 if options[option]:
                     self.opt_parser.error(
                         "%s are only supported by the Pythonic style engine (-l python)"

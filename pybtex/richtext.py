@@ -26,43 +26,44 @@ Usage:
 >>> from pybtex.backends import latex
 >>> backend = latex.Backend()
 >>> t = Text('this ', 'is a ', Tag('emph', 'very'), Text(' rich', ' text'))
->>> print t.render(backend)
+>>> print(t.render(backend))
 this is a \emph{very} rich text
->>> print t.plaintext()
+>>> print(t.plaintext())
 this is a very rich text
 >>> t = t.capfirst().add_period()
->>> print t.render(backend)
+>>> print(t.render(backend))
 This is a \emph{very} rich text.
->>> print t.plaintext()
+>>> print(t.plaintext())
 This is a very rich text.
->>> print Symbol('ndash').render(backend)
+>>> print(Symbol('ndash').render(backend))
 --
 >>> t = Text('Some ', Tag('emph', Text('nested ', Tag('texttt', 'Text', Text(' objects')))), '.')
->>> print t.render(backend)
+>>> print(t.render(backend))
 Some \emph{nested \texttt{Text objects}}.
->>> print t.plaintext()
+>>> print(t.plaintext())
 Some nested Text objects.
 >>> t = t.map(lambda string: string.upper())
->>> print t.render(backend)
+>>> print(t.render(backend))
 SOME \emph{NESTED \texttt{TEXT OBJECTS}}.
->>> print t.plaintext()
+>>> print(t.plaintext())
 SOME NESTED TEXT OBJECTS.
 
 >>> t = Text(', ').join(['one', 'two', Tag('emph', 'three')])
->>> print t.render(backend)
+>>> print(t.render(backend))
 one, two, \emph{three}
->>> print t.plaintext()
+>>> print(t.plaintext())
 one, two, three
 >>> t = Text(Symbol('nbsp')).join(['one', 'two', Tag('emph', 'three')])
->>> print t.render(backend)
+>>> print(t.render(backend))
 one~two~\emph{three}
->>> print t.plaintext()
+>>> print(t.plaintext())
 one<nbsp>two<nbsp>three
 """
 
-from copy import deepcopy
-from pybtex import textutils
 import string
+from copy import deepcopy
+
+from pybtex import textutils
 
 
 class Text(list):
@@ -107,11 +108,11 @@ class Text(list):
         Concatenate this Text with another Text or string.
 
         >>> t = Text('a')
-        >>> print (t + 'b').plaintext()
+        >>> print((t + 'b').plaintext())
         ab
-        >>> print (t + t).plaintext()
+        >>> print((t + t).plaintext())
         aa
-        >>> print t.plaintext()
+        >>> print(t.plaintext())
         a
         """
 
@@ -212,11 +213,11 @@ class Text(list):
     def join(self, parts):
         """Join a list using this text (like string.join)
 
-        >>> print Text(' ').join([]).plaintext()
+        >>> print(Text(' ').join([]).plaintext())
         <BLANKLINE>
-        >>> print Text(' ').join(['a', 'b', 'c']).plaintext()
+        >>> print(Text(' ').join(['a', 'b', 'c']).plaintext())
         a b c
-        >>> print Text(nbsp).join(['a', 'b', 'c']).plaintext()
+        >>> print(Text(nbsp).join(['a', 'b', 'c']).plaintext())
         a<nbsp>b<nbsp>c
         """
 
@@ -247,29 +248,29 @@ class Text(list):
         >>> html = pybtex.backends.html.Backend()
 
         >>> text = Text("That's all, folks")
-        >>> print text.add_period().plaintext()
+        >>> print(text.add_period().plaintext())
         That's all, folks.
 
         >>> text = Tag('emph', Text("That's all, folks"))
-        >>> print text.add_period().render(html)
+        >>> print(text.add_period().render(html))
         <em>That's all, folks.</em>
-        >>> print text.add_period().add_period().render(html)
+        >>> print(text.add_period().add_period().render(html))
         <em>That's all, folks.</em>
 
         >>> text = Text("That's all, ", Tag('emph', 'folks'))
-        >>> print text.add_period().render(html)
+        >>> print(text.add_period().render(html))
         That's all, <em>folks</em>.
-        >>> print text.add_period().add_period().render(html)
+        >>> print(text.add_period().add_period().render(html))
         That's all, <em>folks</em>.
 
         >>> text = Text("That's all, ", Tag('emph', 'folks.'))
-        >>> print text.add_period().render(html)
+        >>> print(text.add_period().render(html))
         That's all, <em>folks.</em>
 
         >>> text = Text("That's all, ", Tag('emph', 'folks'))
-        >>> print text.add_period('!').render(html)
+        >>> print(text.add_period('!').render(html))
         That's all, <em>folks</em>!
-        >>> print text.add_period('!').add_period('.').render(html)
+        >>> print(text.add_period('!').add_period('.').render(html))
         That's all, <em>folks</em>!
         """
 
@@ -287,9 +288,9 @@ class Tag(Text):
 
     >>> emph = Tag('emph', 'emphasized text')
     >>> from pybtex.backends import latex, html
-    >>> print emph.render(latex.Backend())
+    >>> print(emph.render(latex.Backend()))
     \emph{emphasized text}
-    >>> print emph.render(html.Backend())
+    >>> print(emph.render(html.Backend()))
     <em>emphasized text</em>
     """
 
@@ -317,11 +318,11 @@ class HRef(Text):
 
     >>> href = HRef('http://www.example.com', 'hyperlinked text')
     >>> from pybtex.backends import latex, html, plaintext
-    >>> print href.render(latex.Backend())
+    >>> print(href.render(latex.Backend()))
     \href{http://www.example.com}{hyperlinked text}
-    >>> print href.render(html.Backend())
+    >>> print(href.render(html.Backend()))
     <a href="http://www.example.com">hyperlinked text</a>
-    >>> print href.render(plaintext.Backend())
+    >>> print(href.render(plaintext.Backend()))
     hyperlinked text
     """
 
@@ -347,9 +348,9 @@ class Symbol(object):
 
     >>> nbsp = Symbol('nbsp')
     >>> from pybtex.backends import latex, html
-    >>> print nbsp.render(latex.Backend())
+    >>> print(nbsp.render(latex.Backend()))
     ~
-    >>> print nbsp.render(html.Backend())
+    >>> print(nbsp.render(html.Backend()))
     &nbsp;
     """
 

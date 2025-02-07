@@ -19,12 +19,11 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from io import StringIO
 from contextlib import contextmanager
+from io import StringIO
 
 import pybtex.io
-from pybtex.textutils import capfirst, add_period
-
+from pybtex.textutils import add_period, capfirst
 
 strict = True
 error_code = 0
