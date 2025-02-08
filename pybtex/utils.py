@@ -22,9 +22,8 @@
 
 """Miscellaneous small utils."""
 
-
+from collections import MutableMapping, MutableSet, Sequence
 from functools import wraps
-from collections import Sequence, MutableMapping, MutableSet
 from types import GeneratorType
 
 
@@ -33,22 +32,27 @@ def deprecated(since, reason=None):
         @wraps(f)
         def new_f(*args, **kwargs):
             import warnings
-            message = u'{0}() is deprecated since {1}'.format(f.__name__, since)
+
+            message = "{0}() is deprecated since {1}".format(f.__name__, since)
             if reason:
-                message += ': {0}'.format(reason)
+                message += ": {0}".format(reason)
             warnings.warn(message, DeprecationWarning)
             return f(*args, **kwargs)
+
         return new_f
+
     return decorator
 
 
 def memoize(f):
     memory = {}
+
     @wraps(f)
     def new_f(*args):
         if args not in memory:
             memory[args] = f(*args)
         return memory[args]
+
     return new_f
 
 
@@ -60,31 +64,31 @@ class CaseInsensitiveDict(MutableMapping):
     CaseInsensitiveDict({'TesT': 'passed'})
     >>> d.lower()
     CaseInsensitiveDict({'test': 'passed'})
-    >>> print d['TesT']
+    >>> print(d['TesT'])
     passed
-    >>> print d['test']
+    >>> print(d['test'])
     passed
-    >>> print d['Test']
+    >>> print(d['Test'])
     passed
-    >>> print d.get('test')
+    >>> print(d.get('test'))
     passed
-    >>> print d.get('Test')
+    >>> print(d.get('Test'))
     passed
 
     >>> d['Test'] = 'passed again'
-    >>> print d['test']
+    >>> print(d['test'])
     passed again
     >>> 'test' in d
     True
     >>> 'Test' in d
     True
-    >>> print d.keys()
+    >>> print(list(d.keys()))
     ['Test']
     >>> for key in d:
-    ...     print key
+    ...     print(key)
     Test
     >>> for key, value in d.iteritems():
-    ...     print key, value
+    ...     print(key, value)
     Test passed again
     >>> bool(d)
     True
@@ -100,11 +104,11 @@ class CaseInsensitiveDict(MutableMapping):
     False
     >>> 'Test' in d
     False
-    >>> print d.get('test')
+    >>> print(d.get('test'))
     None
-    >>> print d.get('Test')
+    >>> print(d.get('Test'))
     None
-    >>> print d.get('Test', 'failed')
+    >>> print(d.get('Test', 'failed'))
     failed
 
     >>> CaseInsensitiveDict(
@@ -116,14 +120,16 @@ class CaseInsensitiveDict(MutableMapping):
 
     def __init__(self, *args, **kwargs):
         initial = dict(*args, **kwargs)
-        self._dict = dict((key.lower(), value) for key, value in initial.iteritems())
+        self._dict = dict(
+            (key.lower(), value) for key, value in list(initial.items())
+        )
         self._keys = dict((key.lower(), key) for key in initial)
 
     def __len__(self):
         return len(self._dict)
 
     def __iter__(self):
-        return iter(self._keys.values())
+        return iter(list(self._keys.values()))
 
     def __setitem__(self, key, value):
         """To implement lowercase keys."""
@@ -144,19 +150,27 @@ class CaseInsensitiveDict(MutableMapping):
 
     def __deepcopy__(self, memo):
         from copy import deepcopy
+
         return CaseInsensitiveDict(
-            (key, deepcopy(value, memo)) for key, value in self.iteritems()
+            (key, deepcopy(value, memo)) for key, value in self.items()
         )
 
     def __repr__(self):
-        """A caselessDict version of __repr__ """
+        """A caselessDict version of __repr__"""
         dct = dict((key, self[key]) for key in self)
-        return '{0}({1})'.format(
-            type(self).__name__, repr(dct),
+        return "{0}({1})".format(
+            type(self).__name__,
+            repr(dct),
         )
 
+    def items_lower(self):
+        return ((key.lower(), value) for key, value in self.items())
+
+    def iteritems(self):
+        return self.items()
+
     def iteritems_lower(self):
-        return ((key.lower(), value) for key, value in self.iteritems())
+        return ((key.lower(), value) for key, value in list(self.items()))
 
     def lower(self):
         return type(self)(self.iteritems_lower())
@@ -164,7 +178,7 @@ class CaseInsensitiveDict(MutableMapping):
 
 class CaseInsensitiveDefaultDict(CaseInsensitiveDict):
     """CaseInseisitiveDict with default factory, like collections.defaultdict
-    
+
     >>> d = CaseInsensitiveDefaultDict(int)
     >>> d['a']
     0
@@ -181,6 +195,7 @@ class CaseInsensitiveDefaultDict(CaseInsensitiveDict):
     10
 
     """
+
     def __init__(self, default_factory):
         super(CaseInsensitiveDefaultDict, self).__init__()
         self.default_factory = default_factory
@@ -193,7 +208,7 @@ class CaseInsensitiveDefaultDict(CaseInsensitiveDict):
 
 
 class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
-    """ An (incomplete) ordered case-insensitive dict.
+    """An (incomplete) ordered case-insensitive dict.
 
     >>> d = OrderedCaseInsensitiveDict([
     ...     ('Uno', 1),
@@ -266,7 +281,7 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
         if isinstance(data, Sequence):
             self.order = [key for key, value in data]
         else:
-            self.order = data.keys()
+            self.order = list(data.keys())
         super(OrderedCaseInsensitiveDict, self).__init__(data)
 
     def __setitem__(self, key, value):
@@ -282,8 +297,9 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
 
     def __deepcopy__(self, memo):
         from copy import deepcopy
+
         return OrderedCaseInsensitiveDict(
-            (key, deepcopy(value, memo)) for key, value in self.iteritems()
+            (key, deepcopy(value, memo)) for key, value in self.items()
         )
 
     def iterkeys(self):
@@ -307,9 +323,7 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
         return [(key, self[key]) for key in self.order]
 
     def __repr__(self):
-        return '{0}({1})'.format(
-            type(self).__name__, repr(self.items())
-        )
+        return "{0}({1})".format(type(self).__name__, repr(list(self.items())))
 
 
 class CaseInsensitiveSet(MutableSet):
@@ -379,8 +393,8 @@ class CaseInsensitiveSet(MutableSet):
         return len(self._set)
 
     def __repr__(self):
-        """A caselessDict version of __repr__ """
-        return '{0}({1})'.format(
+        """A caselessDict version of __repr__"""
+        return "{0}({1})".format(
             type(self).__name__, repr(sorted(self._keys.values()))
         )
 

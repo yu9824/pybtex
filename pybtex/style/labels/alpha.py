@@ -23,10 +23,11 @@
 
 
 import sys
+
 if sys.version_info < (2, 7):
-   from counter import Counter
+    from counter import Counter
 else:
-   from collections import Counter
+    from collections import Counter
 
 import re
 import string
@@ -34,24 +35,30 @@ import unicodedata
 
 from pybtex.style.labels import BaseLabelStyle
 
-_nonalnum_pattern = re.compile('[^A-Za-z0-9]+', re.UNICODE)
+_nonalnum_pattern = re.compile("[^A-Za-z0-9]+", re.UNICODE)
+
 
 def _strip_accents(s):
-   return u''.join(
-       (c for c in unicodedata.normalize('NFD', s)
-        if not unicodedata.combining(c)))
+    return "".join(
+        (
+            c
+            for c in unicodedata.normalize("NFD", s)
+            if not unicodedata.combining(c)
+        )
+    )
+
 
 def _strip_nonalnum(parts):
     """Strip all non-alphanumerical characters from a list of strings.
 
-    >>> print _strip_nonalnum([u"ÅA. B. Testing 12+}[.@~_", u" 3%"])
+    >>> print(_strip_nonalnum([u"ÅA. B. Testing 12+}[.@~_", u" 3%"]))
     AABTesting123
     """
-    s = u''.join(parts)
-    return _nonalnum_pattern.sub(u'', _strip_accents(s))
+    s = "".join(parts)
+    return _nonalnum_pattern.sub("", _strip_accents(s))
+
 
 class LabelStyle(BaseLabelStyle):
-
     def format_labels(self, sorted_entries):
         labels = [self.format_label(entry) for entry in sorted_entries]
         count = Counter(labels)
@@ -60,7 +67,7 @@ class LabelStyle(BaseLabelStyle):
             if count[label] == 1:
                 yield label
             else:
-                yield label + chr(ord('a') + counted[label])
+                yield label + chr(ord("a") + counted[label])
                 counted.update([label])
 
     # note: this currently closely follows the alpha.bst code
@@ -84,9 +91,9 @@ class LabelStyle(BaseLabelStyle):
 
     def author_key_label(self, entry):
         # see alpha.bst author.key.label
-        if not "author" in entry.persons:
-            if not "key" in entry.fields:
-                return entry.key[:3] # entry.key is bst cite$
+        if "author" not in entry.persons:
+            if "key" not in entry.fields:
+                return entry.key[:3]  # entry.key is bst cite$
             else:
                 # for entry.key, bst actually uses text.prefix$
                 return entry.fields["key"][:3]
@@ -95,10 +102,10 @@ class LabelStyle(BaseLabelStyle):
 
     def author_editor_key_label(self, entry):
         # see alpha.bst author.editor.key.label
-        if not "author" in entry.persons:
-            if not "editor" in entry.persons:
-                if not "key" in entry.fields:
-                    return entry.key[:3] # entry.key is bst cite$
+        if "author" not in entry.persons:
+            if "editor" not in entry.persons:
+                if "key" not in entry.fields:
+                    return entry.key[:3]  # entry.key is bst cite$
                 else:
                     # for entry.key, bst actually uses text.prefix$
                     return entry.fields["key"][:3]
@@ -108,10 +115,10 @@ class LabelStyle(BaseLabelStyle):
             return self.format_lab_names(entry.persons["author"])
 
     def author_key_organization_label(self, entry):
-        if not "author" in entry.persons:
-            if not "key" in entry.fields:
-                if not "organization" in entry.fields:
-                    return entry.key[:3] # entry.key is bst cite$
+        if "author" not in entry.persons:
+            if "key" not in entry.fields:
+                if "organization" not in entry.fields:
+                    return entry.key[:3]  # entry.key is bst cite$
                 else:
                     result = entry.fields["organization"]
                     if result.startswith("The "):
@@ -123,10 +130,10 @@ class LabelStyle(BaseLabelStyle):
             return self.format_lab_names(entry.persons["author"])
 
     def editor_key_organization_label(self, entry):
-        if not "editor" in entry.persons:
-            if not "key" in entry.fields:
-                if not "organization" in entry.fields:
-                    return entry.key[:3] # entry.key is bst cite$
+        if "editor" not in entry.persons:
+            if "key" not in entry.fields:
+                if "organization" not in entry.fields:
+                    return entry.key[:3]  # entry.key is bst cite$
                 else:
                     result = entry.fields["organization"]
                     if result.startswith("The "):
@@ -151,14 +158,16 @@ class LabelStyle(BaseLabelStyle):
             while namesleft:
                 person = persons[nameptr - 1]
                 if nameptr == numnames:
-                    if unicode(person) == "others":
+                    if str(person) == "others":
                         result += "+"
                     else:
                         result += _strip_nonalnum(
-                            person.prelast(abbr=True) + person.last(abbr=True))
+                            person.prelast(abbr=True) + person.last(abbr=True)
+                        )
                 else:
                     result += _strip_nonalnum(
-                        person.prelast(abbr=True) + person.last(abbr=True))
+                        person.prelast(abbr=True) + person.last(abbr=True)
+                    )
                 nameptr += 1
                 namesleft -= 1
             if numnames > 4:
@@ -166,7 +175,8 @@ class LabelStyle(BaseLabelStyle):
         else:
             person = persons[0]
             result = _strip_nonalnum(
-                person.prelast(abbr=True) + person.last(abbr=True))
+                person.prelast(abbr=True) + person.last(abbr=True)
+            )
             if len(result) < 2:
                 result = _strip_nonalnum(person.last(abbr=False))[:3]
         return result

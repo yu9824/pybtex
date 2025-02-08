@@ -23,20 +23,16 @@ from pybtex.backends import BaseBackend
 
 
 class Backend(BaseBackend):
-    default_suffix = '.txt'
-    symbols = {
-        'ndash': u'-',
-        'newblock': u' ',
-        'nbsp': u' '
-    }
-    
+    default_suffix = ".txt"
+    symbols = {"ndash": "-", "newblock": " ", "nbsp": " "}
+
     def format_tag(self, tag_name, text):
         return text
 
     def format_href(self, url, text):
         return text
-    
+
     def write_entry(self, key, label, text):
-        self.output(u"[%s] " % label)
+        self.output("[%s] " % label)
         self.output(text)
-        self.output(u'\n')
+        self.output("\n")

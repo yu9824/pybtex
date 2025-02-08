@@ -33,16 +33,16 @@ class Writer(BaseWriter):
     def quote(self, s):
         """
         >>> w = Writer()
-        >>> print w.quote('The World')
+        >>> print(w.quote('The World'))
         "The World"
-        >>> print w.quote(r'The \emph{World}')
+        >>> print(w.quote(r'The \emph{World}'))
         "The \emph{World}"
-        >>> print w.quote(r'The "World"')
+        >>> print(w.quote(r'The "World"'))
         {The "World"}
         >>> try:
-        ...     print w.quote(r'The {World')
-        ... except BibTeXError, error:
-        ...     print error
+        ...     print(w.quote(r'The {World'))
+        ... except BibTeXError as error:
+        ...     print(error)
         String has unmatched braces: The {World
         """
 
@@ -50,7 +50,7 @@ class Writer(BaseWriter):
         if '"' not in s:
             return '"%s"' % s
         else:
-            return '{%s}' % s
+            return "{%s}" % s
 
     def check_braces(self, s):
         """
@@ -64,14 +64,14 @@ class Writer(BaseWriter):
         >>> w.check_braces('end}')
         >>> try:
         ...     w.check_braces('{')
-        ... except BibTeXError, error:
-        ...     print error
+        ... except BibTeXError as error:
+        ...     print(error)
         String has unmatched braces: {
         >>> w.check_braces('{test}}')
         >>> try:
         ...     w.check_braces('{{test}')
-        ... except BibTeXError, error:
-        ...     print error
+        ... except BibTeXError as error:
+        ...     print(error)
         String has unmatched braces: {{test}
 
         """
@@ -80,43 +80,50 @@ class Writer(BaseWriter):
         if tokens:
             end_brace_level = tokens[-1][1]
             if end_brace_level != 0:
-                raise BibTeXError('String has unmatched braces: %s' % s)
+                raise BibTeXError("String has unmatched braces: %s" % s)
 
     def write_stream(self, bib_data, stream):
         def write_field(type, value):
-            stream.write(u',\n    %s = %s' % (type, self.quote(value)))
+            stream.write(",\n    %s = %s" % (type, self.quote(value)))
+
         def format_name(person):
             def join(l):
-                return ' '.join([name for name in l if name])
-            first = person.get_part_as_text('first')
-            middle = person.get_part_as_text('middle')
-            prelast = person.get_part_as_text('prelast')
-            last = person.get_part_as_text('last')
-            lineage = person.get_part_as_text('lineage')
-            s = '' 
+                return " ".join([name for name in l if name])
+
+            first = person.get_part_as_text("first")
+            middle = person.get_part_as_text("middle")
+            prelast = person.get_part_as_text("prelast")
+            last = person.get_part_as_text("last")
+            lineage = person.get_part_as_text("lineage")
+            s = ""
             if last:
                 s += join([prelast, last])
             if lineage:
-                s += ', %s' % lineage
+                s += ", %s" % lineage
             if first or middle:
-                s += ', '
+                s += ", "
                 s += join([first, middle])
             return s
+
         def write_persons(persons, role):
-#            persons = getattr(entry, role + 's')
+            #            persons = getattr(entry, role + 's')
             if persons:
-                write_field(role, u' and '.join([format_name(person) for person in persons]))
+                write_field(
+                    role,
+                    " and ".join([format_name(person) for person in persons]),
+                )
+
         def write_preamble(preamble):
             if preamble:
-                stream.write(u'@preamble{%s}\n\n' % self.quote(preamble))
+                stream.write("@preamble{%s}\n\n" % self.quote(preamble))
 
         write_preamble(bib_data.get_preamble())
-        for key, entry in bib_data.entries.iteritems():
-            stream.write(u'@%s' % entry.original_type)
-            stream.write(u'{%s' % key)
-#            for role in ('author', 'editor'):
-            for role, persons in entry.persons.iteritems():
+        for key, entry in list(bib_data.entries.items()):
+            stream.write("@%s" % entry.original_type)
+            stream.write("{%s" % key)
+            #            for role in ('author', 'editor'):
+            for role, persons in list(entry.persons.items()):
                 write_persons(persons, role)
-            for type, value in entry.fields.iteritems():
+            for type, value in list(entry.fields.items()):
                 write_field(type, value)
-            stream.write(u'\n}\n\n')
+            stream.write("\n}\n\n")

@@ -25,13 +25,13 @@
 >>> parser = Parser()
 >>> bib_data = parser.parse_stream(StringIO(u'''
 ... @String{SCI = "Science"}
-... 
+...
 ... @String{JFernandez = "Fernandez, Julio M."}
 ... @String{HGaub = "Gaub, Hermann E."}
 ... @String{MGautel = "Gautel, Mathias"}
 ... @String{FOesterhelt = "Oesterhelt, Filipp"}
 ... @String{MRief = "Rief, Matthias"}
-... 
+...
 ... @Article{rief97b,
 ...   author =       MRief #" and "# MGautel #" and "# FOesterhelt
 ...                  #" and "# JFernandez #" and "# HGaub,
@@ -55,7 +55,7 @@ True
 >>> rief97b = bib_data.entries['rief97b']
 >>> authors = rief97b.persons['author']
 >>> for author in authors:
-...     print unicode(author)
+...     print(author)
 Rief, Matthias
 Gautel, Mathias
 Oesterhelt, Filipp
@@ -63,41 +63,44 @@ Fernandez, Julio M.
 Gaub, Hermann E.
 
 # field names are case-insensitive
->>> print rief97b.fields['URL']
+>>> print(rief97b.fields['URL'])
 http://www.sciencemag.org/cgi/content/abstract/276/5315/1109
->>> print rief97b.fields['url']
+>>> print(rief97b.fields['url'])
 http://www.sciencemag.org/cgi/content/abstract/276/5315/1109
 
 """
 
+import re
 from string import ascii_letters, digits
 
-import re
 import pybtex.io
-from pybtex.utils import CaseInsensitiveDict, CaseInsensitiveSet
+from pybtex import textutils
+from pybtex.bibtex.utils import split_name_list
 from pybtex.database import Entry, Person
 from pybtex.database.input import BaseParser
-from pybtex.bibtex.utils import split_name_list
 from pybtex.exceptions import PybtexError
-from pybtex import textutils
 from pybtex.scanner import (
-    Scanner, Pattern, Literal,
-    PrematureEOF, PybtexSyntaxError,
+    Literal,
+    Pattern,
+    PrematureEOF,
+    PybtexSyntaxError,
+    Scanner,
 )
+from pybtex.utils import CaseInsensitiveDict, CaseInsensitiveSet
 
 month_names = {
-    'jan': 'January',
-    'feb': 'February',
-    'mar': 'March',
-    'apr': 'April',
-    'may': 'May',
-    'jun': 'June',
-    'jul': 'July',
-    'aug': 'August',
-    'sep': 'September',
-    'oct': 'October',
-    'nov': 'November',
-    'dec': 'December'
+    "jan": "January",
+    "feb": "February",
+    "mar": "March",
+    "apr": "April",
+    "may": "May",
+    "jun": "June",
+    "jul": "July",
+    "aug": "August",
+    "sep": "September",
+    "oct": "October",
+    "nov": "November",
+    "dec": "December",
 }
 
 
@@ -106,23 +109,29 @@ class SkipEntry(Exception):
 
 
 class UndefinedMacro(PybtexSyntaxError):
-    error_type = 'undefined string'
+    error_type = "undefined string"
+
 
 class BibTeXEntryIterator(Scanner):
-    NAME_CHARS = ascii_letters + u'@!$&*+-./:;<>?[\\]^_`|~\x7f'
-    NAME = Pattern(ur'[{0}][{1}]*'.format(re.escape(NAME_CHARS), re.escape(NAME_CHARS + digits)), 'a valid name')
-    KEY_PAREN = Pattern(ur'[^\s\,]+', 'entry key')
-    KEY_BRACE = Pattern(ur'[^\s\,}]+', 'entry key')
-    NUMBER = Pattern(ur'[{0}]+'.format(digits), 'a number')
-    LBRACE = Literal(u'{')
-    RBRACE = Literal(u'}')
-    LPAREN = Literal(u'(')
-    RPAREN = Literal(u')')
-    QUOTE = Literal(u'"')
-    COMMA = Literal(u',')
-    EQUALS = Literal(u'=')
-    HASH = Literal(u'#')
-    AT = Literal(u'@')
+    NAME_CHARS = ascii_letters + "@!$&*+-./:;<>?[\\]^_`|~\x7f"
+    NAME = Pattern(
+        r"[{0}][{1}]*".format(
+            re.escape(NAME_CHARS), re.escape(NAME_CHARS + digits)
+        ),
+        "a valid name",
+    )
+    KEY_PAREN = Pattern(r"[^\s\,]+", "entry key")
+    KEY_BRACE = Pattern(r"[^\s\,}]+", "entry key")
+    NUMBER = Pattern(r"[{0}]+".format(digits), "a number")
+    LBRACE = Literal("{")
+    RBRACE = Literal("}")
+    LPAREN = Literal("(")
+    RPAREN = Literal(")")
+    QUOTE = Literal('"')
+    COMMA = Literal(",")
+    EQUALS = Literal("=")
+    HASH = Literal("#")
+    AT = Literal("@")
 
     command_start = None
     current_command = None
@@ -131,7 +140,15 @@ class BibTeXEntryIterator(Scanner):
     current_field_name = None
     current_field_value = None
 
-    def __init__(self, text, keyless_entries=False, macros=month_names, handle_error=None, want_entry=None, filename=None):
+    def __init__(
+        self,
+        text,
+        keyless_entries=False,
+        macros=month_names,
+        handle_error=None,
+        want_entry=None,
+        filename=None,
+    ):
         super(BibTeXEntryIterator, self).__init__(text, filename)
         self.keyless_entries = keyless_entries
         self.macros = macros
@@ -147,14 +164,14 @@ class BibTeXEntryIterator(Scanner):
         return self.command_start, self.lineno, self.pos
 
     def get_error_context(self, context_info):
-        error_start, lineno, error_pos  = context_info
+        error_start, lineno, error_pos = context_info
         before_error = self.text[error_start:error_pos]
-        if not before_error.endswith('\n'):
+        if not before_error.endswith("\n"):
             eol = self.NEWLINE.search(self.text, error_pos)
             error_end = eol.end() if eol else self.end_pos
         else:
             error_end = error_pos
-        context = self.text[error_start:error_end].rstrip('\r\n')
+        context = self.text[error_start:error_end].rstrip("\r\n")
         colno = len(before_error.splitlines()[-1])
         return context, lineno, colno
 
@@ -165,7 +182,9 @@ class BibTeXEntryIterator(Scanner):
         return True
 
     def want_current_entry(self):
-        return self.current_entry_key is None or self.want_entry(self.current_entry_key)
+        return self.current_entry_key is None or self.want_entry(
+            self.current_entry_key
+        )
 
     def parse_bibliography(self):
         while True:
@@ -188,24 +207,32 @@ class BibTeXEntryIterator(Scanner):
         name = self.required([self.NAME])
         command = name.value
         body_start = self.required([self.LPAREN, self.LBRACE])
-        body_end = self.RBRACE if body_start.pattern == self.LBRACE else self.RPAREN
+        body_end = (
+            self.RBRACE if body_start.pattern == self.LBRACE else self.RPAREN
+        )
 
         command_lower = command.lower()
-        if command_lower == 'string':
+        if command_lower == "string":
             parse_body = self.parse_string_body
-            make_result = lambda: (command, (self.current_field_name, self.current_value))
-        elif command_lower == 'preamble':
+            make_result = lambda: (
+                command,
+                (self.current_field_name, self.current_value),
+            )
+        elif command_lower == "preamble":
             parse_body = self.parse_preamble_body
             make_result = lambda: (command, (self.current_value,))
-        elif command_lower == 'comment':
+        elif command_lower == "comment":
             raise SkipEntry
         else:
             parse_body = self.parse_entry_body
-            make_result = lambda: (command, (self.current_entry_key, self.current_fields))
+            make_result = lambda: (
+                command,
+                (self.current_entry_key, self.current_fields),
+            )
         try:
             parse_body(body_end)
             self.required([body_end])
-        except PybtexSyntaxError, error:
+        except PybtexSyntaxError as error:
             self.handle_error(error)
         return make_result()
 
@@ -216,11 +243,13 @@ class BibTeXEntryIterator(Scanner):
         self.current_field_name = self.required([self.NAME]).value
         self.required([self.EQUALS])
         self.parse_value()
-        self.macros[self.current_field_name] = ''.join(self.current_value)
+        self.macros[self.current_field_name] = "".join(self.current_value)
 
     def parse_entry_body(self, body_end):
         if not self.keyless_entries:
-            key_pattern = self.KEY_PAREN if body_end == self.RPAREN else self.KEY_BRACE
+            key_pattern = (
+                self.KEY_PAREN if body_end == self.RPAREN else self.KEY_BRACE
+            )
             self.current_entry_key = self.required([key_pattern]).value
         self.parse_entry_fields()
         if not self.want_current_entry():
@@ -232,7 +261,9 @@ class BibTeXEntryIterator(Scanner):
             self.current_value = []
             self.parse_field()
             if self.current_field_name and self.current_value:
-                self.current_fields.append((self.current_field_name, self.current_value))
+                self.current_fields.append(
+                    (self.current_field_name, self.current_value)
+                )
             comma = self.optional([self.COMMA])
             if not comma:
                 return
@@ -261,12 +292,16 @@ class BibTeXEntryIterator(Scanner):
     def parse_value_part(self):
         token = self.required(
             [self.QUOTE, self.LBRACE, self.NUMBER, self.NAME],
-            description='field value',
+            description="field value",
         )
         if token.pattern is self.QUOTE:
-            value_part = self.flatten_string(self.parse_string(string_end=self.QUOTE))
+            value_part = self.flatten_string(
+                self.parse_string(string_end=self.QUOTE)
+            )
         elif token.pattern is self.LBRACE:
-            value_part = self.flatten_string(self.parse_string(string_end=self.RBRACE))
+            value_part = self.flatten_string(
+                self.parse_string(string_end=self.RBRACE)
+            )
         elif token.pattern is self.NUMBER:
             value_part = token.value
         else:
@@ -274,7 +309,7 @@ class BibTeXEntryIterator(Scanner):
         return value_part
 
     def flatten_string(self, parts):
-        return ''.join(part.value for part in parts)[:-1]
+        return "".join(part.value for part in parts)[:-1]
 
     def substitute_macro(self, name):
         try:
@@ -282,7 +317,7 @@ class BibTeXEntryIterator(Scanner):
         except KeyError:
             if self.want_current_entry():
                 self.handle_error(UndefinedMacro(name, self))
-            return ''
+            return ""
 
     def parse_string(self, string_end, level=0):
         special_chars = [self.RBRACE, self.LBRACE]
@@ -300,22 +335,23 @@ class BibTeXEntryIterator(Scanner):
                 for subpart in self.parse_string(self.RBRACE, level + 1):
                     yield subpart
             elif part.pattern is self.RBRACE and level == 0:
-                raise PybtexSyntaxError('unbalanced braces', self)
+                raise PybtexSyntaxError("unbalanced braces", self)
 
 
 class Parser(BaseParser):
-    default_suffix = '.bib'
+    default_suffix = ".bib"
     unicode_io = True
 
     macros = None
 
-    def __init__(self,
-            encoding=None,
-            macros=month_names,
-            person_fields=Person.valid_roles,
-            keyless_entries=False,
-            **kwargs
-        ):
+    def __init__(
+        self,
+        encoding=None,
+        macros=month_names,
+        person_fields=Person.valid_roles,
+        keyless_entries=False,
+        **kwargs,
+    ):
         BaseParser.__init__(self, encoding, **kwargs)
 
         self.macros = CaseInsensitiveDict(macros)
@@ -326,11 +362,13 @@ class Parser(BaseParser):
         entry = Entry(entry_type)
 
         if key is None:
-            key = 'unnamed-%i' % self.unnamed_entry_counter
+            key = "unnamed-%i" % self.unnamed_entry_counter
             self.unnamed_entry_counter += 1
 
         for field_name, field_value_list in fields:
-            field_value = textutils.normalize_whitespace(self.flatten_value_list(field_value_list))
+            field_value = textutils.normalize_whitespace(
+                self.flatten_value_list(field_value_list)
+            )
             if field_name in self.person_fields:
                 for name in split_name_list(field_value):
                     entry.add_person(Person(name), field_name)
@@ -339,14 +377,17 @@ class Parser(BaseParser):
         self.data.add_entry(key, entry)
 
     def process_preamble(self, value_list):
-        value = textutils.normalize_whitespace(self.flatten_value_list(value_list))
+        value = textutils.normalize_whitespace(
+            self.flatten_value_list(value_list)
+        )
         self.data.add_to_preamble(value)
 
     def flatten_value_list(self, value_list):
-        return ''.join(value_list)
+        return "".join(value_list)
 
     def handle_error(self, error):
         from pybtex.errors import report_error
+
         report_error(error)
 
     def parse_stream(self, stream):
@@ -365,9 +406,9 @@ class Parser(BaseParser):
         for entry in entry_iterator:
             entry_type = entry[0]
             entry_type_lower = entry_type.lower()
-            if entry_type_lower == 'string':
+            if entry_type_lower == "string":
                 pass
-            elif entry_type_lower == 'preamble':
+            elif entry_type_lower == "preamble":
                 self.process_preamble(*entry[1])
             else:
                 self.process_entry(entry_type, *entry[1])

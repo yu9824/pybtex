@@ -21,16 +21,17 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import re
-
 from collections import Mapping
 
-from pybtex.exceptions import PybtexError
-from pybtex.utils import (
-    deprecated,
-    OrderedCaseInsensitiveDict, CaseInsensitiveDefaultDict, CaseInsensitiveSet
-)
 from pybtex.bibtex.utils import split_tex_string
 from pybtex.errors import report_error
+from pybtex.exceptions import PybtexError
+from pybtex.utils import (
+    CaseInsensitiveDefaultDict,
+    CaseInsensitiveSet,
+    OrderedCaseInsensitiveDict,
+    deprecated,
+)
 
 
 class BibliographyDataError(PybtexError):
@@ -38,7 +39,9 @@ class BibliographyDataError(PybtexError):
 
 
 class BibliographyData(object):
-    def __init__(self, entries=None, preamble=None, wanted_entries=None, min_crossrefs=2):
+    def __init__(
+        self, entries=None, preamble=None, wanted_entries=None, min_crossrefs=2
+    ):
         self.entries = OrderedCaseInsensitiveDict()
         self.crossref_count = CaseInsensitiveDefaultDict(int)
         self.min_crossrefs = min_crossrefs
@@ -51,8 +54,8 @@ class BibliographyData(object):
             self.citations = CaseInsensitiveSet()
         if entries:
             if isinstance(entries, Mapping):
-                entries = entries.iteritems()
-            for (key, entry) in entries:
+                entries = iter(list(entries.items()))
+            for key, entry in entries:
                 self.add_entry(key, entry)
         if preamble:
             self._preamble.extend(preamble)
@@ -61,31 +64,34 @@ class BibliographyData(object):
         if not isinstance(other, BibliographyData):
             return super(BibliographyData, self) == other
         return (
-            self.entries == other.entries
-            and self._preamble == other._preamble
+            self.entries == other.entries and self._preamble == other._preamble
         )
 
     def __repr__(self):
-        return 'BibliographyData(entries={entries}, preamble={preamble})'.format(
-            entries=repr(self.entries),
-            preamble=repr(self._preamble),
+        return "{}(entries={}, preamble={})".format(
+            self.__class__.__name__,
+            repr(self.entries),
+            repr(self._preamble),
         )
+
+    def __str__(self) -> str:
+        return repr(self)
 
     def add_to_preamble(self, *values):
         self._preamble.extend(values)
 
-    @deprecated('0.17', 'use get_preamble instead')
+    @deprecated("0.17", "use get_preamble instead")
     def preamble(self):
         return self.get_preamble()
 
     def get_preamble(self):
-        return ''.join(self._preamble)
+        return "".join(self._preamble)
 
     def want_entry(self, key):
         return (
             self.wanted_entries is None
             or key in self.wanted_entries
-            or '*' in self.wanted_entries
+            or "*" in self.wanted_entries
         )
 
     def get_canonical_key(self, key):
@@ -98,13 +104,15 @@ class BibliographyData(object):
         if not self.want_entry(key):
             return
         if key in self.entries:
-            report_error(BibliographyDataError('repeated bibliograhpy entry: %s' % key))
+            report_error(
+                BibliographyDataError("repeated bibliograhpy entry: %s" % key)
+            )
             return
         entry.collection = self
         entry.key = self.get_canonical_key(key)
         self.entries[entry.key] = entry
         try:
-            crossref = entry.fields['crossref']
+            crossref = entry.fields["crossref"]
         except KeyError:
             pass
         else:
@@ -156,23 +164,29 @@ class BibliographyData(object):
         for citation in citations:
             try:
                 entry = self.entries[citation]
-                crossref = entry.fields['crossref']
+                crossref = entry.fields["crossref"]
             except KeyError:
                 continue
             try:
                 crossref_entry = self.entries[crossref]
             except KeyError:
-                report_error(BibliographyDataError(
-                    'bad cross-reference: entry "{key}" refers to '
-                    'entry "{crossref}" which does not exist.'.format(
-                        key=citation, crossref=crossref,
+                report_error(
+                    BibliographyDataError(
+                        'bad cross-reference: entry "{key}" refers to '
+                        'entry "{crossref}" which does not exist.'.format(
+                            key=citation,
+                            crossref=crossref,
+                        )
                     )
-                ))
+                )
                 continue
 
             canonical_crossref = crossref_entry.key
             crossref_count[canonical_crossref] += 1
-            if crossref_count[canonical_crossref] >= min_crossrefs and canonical_crossref not in citation_set:
+            if (
+                crossref_count[canonical_crossref] >= min_crossrefs
+                and canonical_crossref not in citation_set
+            ):
                 citation_set.add(canonical_crossref)
                 yield canonical_crossref
 
@@ -204,7 +218,7 @@ class BibliographyData(object):
 
         citation_set = CaseInsensitiveSet()
         for citation in citations:
-            if citation == '*':
+            if citation == "*":
                 for key in self.entries:
                     if key not in citation_set:
                         citation_set.add(key)
@@ -216,11 +230,15 @@ class BibliographyData(object):
 
     def add_extra_citations(self, citations, min_crossrefs):
         expanded_citations = list(self.expand_wildcard_citations(citations))
-        crossrefs = list(self.get_crossreferenced_citations(expanded_citations, min_crossrefs))
+        crossrefs = list(
+            self.get_crossreferenced_citations(
+                expanded_citations, min_crossrefs
+            )
+        )
         return expanded_citations + crossrefs
 
     def lower(self):
-        u"""
+        """
         Return another BibliographyData with all identifiers converted to lowercase.
 
         >>> data = BibliographyData([
@@ -242,7 +260,10 @@ class BibliographyData(object):
 
         """
 
-        entries_lower = ((key.lower(), entry.lower()) for key, entry in self.entries.iteritems())
+        entries_lower = (
+            (key.lower(), entry.lower())
+            for key, entry in list(self.entries.items())
+        )
         return type(self)(
             entries=entries_lower,
             preamble=self._preamble,
@@ -262,12 +283,12 @@ class FieldDict(OrderedCaseInsensitiveDict):
         except KeyError:
             if key in self.parent.persons:
                 persons = self.parent.persons[key]
-                return ' and '.join(unicode(person) for person in persons)
-            elif 'crossref' in self:
+                return " and ".join(str(person) for person in persons)
+            elif "crossref" in self:
                 return self.parent.get_crossref().fields[key]
             else:
                 raise KeyError(key)
-    
+
     def lower(self):
         lower_dict = super(FieldDict, self).lower()
         return type(self)(self.parent, self.iteritems_lower())
@@ -297,20 +318,20 @@ class Entry(object):
         if not isinstance(other, Entry):
             return super(Entry, self) == other
         return (
-                self.type == other.type
-                and self.fields == other.fields
-                and self.persons == other.persons
+            self.type == other.type
+            and self.fields == other.fields
+            and self.persons == other.persons
         )
 
     def __repr__(self):
-        return 'Entry({type_}, fields={fields}, persons={persons})'.format(
+        return "Entry({type_}, fields={fields}, persons={persons})".format(
             type_=repr(self.type),
             fields=repr(self.fields),
             persons=repr(self.persons),
         )
 
     def get_crossref(self):
-        return self.collection.entries[self.fields['crossref']]
+        return self.collection.entries[self.fields["crossref"]]
 
     def add_person(self, person, role):
         self.persons.setdefault(role, []).append(person)
@@ -324,53 +345,55 @@ class Entry(object):
         )
 
 
-
 class Person(object):
     """Represents a person (usually human).
 
     >>> p = Person('Avinash K. Dixit')
-    >>> print p.first()
+    >>> print(p.first())
     ['Avinash']
-    >>> print p.middle()
+    >>> print(p.middle())
     ['K.']
-    >>> print p.prelast()
+    >>> print(p.prelast())
     []
-    >>> print p.last()
+    >>> print(p.last())
     ['Dixit']
-    >>> print p.lineage()
+    >>> print(p.lineage())
     []
-    >>> print unicode(p)
+    >>> print(str(p))
     Dixit, Avinash K.
-    >>> p == Person(unicode(p))
+    >>> p == Person(str(p))
     True
     >>> p = Person('Dixit, Jr, Avinash K. ')
-    >>> print p.first()
+    >>> print(p.first())
     ['Avinash']
-    >>> print p.middle()
+    >>> print(p.middle())
     ['K.']
-    >>> print p.prelast()
+    >>> print(p.prelast())
     []
-    >>> print p.last()
+    >>> print(p.last())
     ['Dixit']
-    >>> print p.lineage()
+    >>> print(p.lineage())
     ['Jr']
-    >>> print unicode(p)
+    >>> print(str(p))
     Dixit, Jr, Avinash K.
-    >>> p == Person(unicode(p))
+    >>> p == Person(str(p))
     True
 
     >>> p = Person('abc')
-    >>> print p.first(), p.middle(), p.prelast(), p.last(), p.lineage()
+    >>> print(p.first(), p.middle(), p.prelast(), p.last(), p.lineage())
     [] [] [] ['abc'] []
     >>> p = Person('Viktorov, Michail~Markovitch')
-    >>> print p.first(), p.middle(), p.prelast(), p.last(), p.lineage()
+    >>> print(p.first(), p.middle(), p.prelast(), p.last(), p.lineage())
     ['Michail'] ['Markovitch'] [] ['Viktorov'] []
     """
-    valid_roles = ['author', 'editor'] 
-    style1_re = re.compile('^(.+),\s*(.+)$')
-    style2_re = re.compile('^(.+),\s*(.+),\s*(.+)$')
 
-    def __init__(self, string="", first="", middle="", prelast="", last="", lineage=""):
+    valid_roles = ["author", "editor"]
+    style1_re = re.compile("^(.+),\s*(.+)$")
+    style2_re = re.compile("^(.+),\s*(.+),\s*(.+)$")
+
+    def __init__(
+        self, string="", first="", middle="", prelast="", last="", lineage=""
+    ):
         self._first = []
         self._middle = []
         self._prelast = []
@@ -393,6 +416,7 @@ class Person(object):
          - First von Last
         (see BibTeX manual for explanation)
         """
+
         def process_first_middle(parts):
             try:
                 self._first.append(parts[0])
@@ -427,58 +451,61 @@ class Person(object):
             pos = len(lst) - rpos
             return lst[:pos], lst[pos:]
 
-        parts = split_tex_string(name, ',')
-        if len(parts) == 3: # von Last, Jr, First
+        parts = split_tex_string(name, ",")
+        if len(parts) == 3:  # von Last, Jr, First
             process_von_last(split_tex_string(parts[0]))
             self._lineage.extend(split_tex_string(parts[1]))
             process_first_middle(split_tex_string(parts[2]))
-        elif len(parts) == 2: # von Last, First
+        elif len(parts) == 2:  # von Last, First
             process_von_last(split_tex_string(parts[0]))
             process_first_middle(split_tex_string(parts[1]))
-        elif len(parts) == 1: # First von Last
+        elif len(parts) == 1:  # First von Last
             parts = split_tex_string(name)
-            first_middle, von_last = split_at(parts, lambda part: part.islower())
+            first_middle, von_last = split_at(
+                parts, lambda part: part.islower()
+            )
             if not von_last and first_middle:
                 last = first_middle.pop()
                 von_last.append(last)
             process_first_middle(first_middle)
             process_von_last(von_last)
         else:
-            raise PybtexError('Invalid name format: %s' % name)
+            raise PybtexError("Invalid name format: %s" % name)
 
     def __eq__(self, other):
         if not isinstance(other, Person):
             return super(Person, self) == other
         return (
-                self._first == other._first
-                and self._middle == other._middle
-                and self._prelast == other._prelast
-                and self._last == other._last
-                and self._lineage == other._lineage
+            self._first == other._first
+            and self._middle == other._middle
+            and self._prelast == other._prelast
+            and self._last == other._last
+            and self._lineage == other._lineage
         )
 
-    def __unicode__(self):
+    def __str__(self):
         # von Last, Jr, First
-        von_last = ' '.join(self._prelast + self._last)
-        jr = ' '.join(self._lineage)
-        first = ' '.join(self._first + self._middle)
-        return ', '.join(part for part in (von_last, jr, first) if part)
+        von_last = " ".join(self._prelast + self._last)
+        jr = " ".join(self._lineage)
+        first = " ".join(self._first + self._middle)
+        return ", ".join(part for part in (von_last, jr, first) if part)
 
-    def __repr__(self):
-        return 'Person({0})'.format(repr(unicode(self)))
+    def __repr__(self) -> str:
+        return "{}('{}')".format(self.__class__.__name__, str(self))
 
     def get_part_as_text(self, type):
-        names = getattr(self, '_' + type)
-        return ' '.join(names)
+        names = getattr(self, "_" + type)
+        return " ".join(names)
 
     def get_part(self, type, abbr=False):
-        names = getattr(self, '_' + type)
+        names = getattr(self, "_" + type)
         if abbr:
             from pybtex.textutils import abbreviate
+
             names = [abbreviate(name) for name in names]
         return names
 
-    #FIXME needs some thinking and cleanup
+    # FIXME needs some thinking and cleanup
     def bibtex_first(self):
         """Return first and middle names together.
         (BibTeX treats all middle names as first)
@@ -486,12 +513,16 @@ class Person(object):
         return self._first + self._middle
 
     def first(self, abbr=False):
-        return self.get_part('first', abbr)
+        return self.get_part("first", abbr)
+
     def middle(self, abbr=False):
-        return self.get_part('middle', abbr)
+        return self.get_part("middle", abbr)
+
     def prelast(self, abbr=False):
-        return self.get_part('prelast', abbr)
+        return self.get_part("prelast", abbr)
+
     def last(self, abbr=False):
-        return self.get_part('last', abbr)
+        return self.get_part("last", abbr)
+
     def lineage(self, abbr=False):
-        return self.get_part('lineage', abbr)
+        return self.get_part("lineage", abbr)

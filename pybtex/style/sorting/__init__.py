@@ -28,8 +28,7 @@ class BaseSortingStyle(Plugin):
 
     def sort(self, entries):
         entry_dict = dict(
-            (self.sorting_key(entry), entry)
-            for entry in entries
+            (self.sorting_key(entry), entry) for entry in entries
         )
         sorted_keys = sorted(entry_dict)
         sorted_entries = [entry_dict[key] for key in sorted_keys]

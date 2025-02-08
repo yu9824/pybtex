@@ -26,14 +26,13 @@ CAUTION: functions should PUSH results, not RETURN
 
 from functools import update_wrapper
 
-
 import pybtex.io
-from pybtex.errors import report_error
-from pybtex.bibtex.exceptions import BibTeXError
-from pybtex.utils import memoize
 from pybtex.bibtex import utils
-from pybtex.database import Person
+from pybtex.bibtex.exceptions import BibTeXError
 from pybtex.bibtex.names import format_name as format_bibtex_name
+from pybtex.database import Person
+from pybtex.errors import report_error
+from pybtex.utils import memoize
 
 
 def print_warning(msg):
@@ -43,12 +42,16 @@ def print_warning(msg):
 class Builtin(object):
     def __init__(self, f):
         self.f = f
+
     def execute(self, interpreter):
         self.f(interpreter)
+
     def __repr__(self):
-        return '<builtin %s>' % self.f.__name__
+        return "<builtin %s>" % self.f.__name__
+
 
 builtins = {}
+
 
 def builtin(name):
     def _builtin(f):
@@ -56,9 +59,11 @@ def builtin(name):
         update_wrapper(b, f)
         builtins[name] = b
         return b
+
     return _builtin
 
-@builtin('>')
+
+@builtin(">")
 def operator_more(i):
     arg1 = i.pop()
     arg2 = i.pop()
@@ -67,7 +72,8 @@ def operator_more(i):
     else:
         i.push(0)
 
-@builtin('<')
+
+@builtin("<")
 def operator_less(i):
     arg1 = i.pop()
     arg2 = i.pop()
@@ -76,7 +82,8 @@ def operator_less(i):
     else:
         i.push(0)
 
-@builtin('=')
+
+@builtin("=")
 def operator_equals(i):
     arg1 = i.pop()
     arg2 = i.pop()
@@ -85,88 +92,100 @@ def operator_equals(i):
     else:
         i.push(0)
 
-@builtin('*')
+
+@builtin("*")
 def operator_asterisk(i):
     arg1 = i.pop()
     arg2 = i.pop()
     i.push(arg2 + arg1)
 
-@builtin(':=')
+
+@builtin(":=")
 def operator_assign(i):
     var = i.pop()
     value = i.pop()
     var.set(value)
 
-@builtin('+')
+
+@builtin("+")
 def operator_plus(i):
     arg1 = i.pop()
     arg2 = i.pop()
     i.push(arg2 + arg1)
 
-@builtin('-')
+
+@builtin("-")
 def operator_minus(i):
     arg1 = i.pop()
     arg2 = i.pop()
     i.push(arg2 - arg1)
 
-@builtin('add.period$')
+
+@builtin("add.period$")
 def add_period(i):
     s = i.pop()
-    if s and not s.rstrip('}')[-1] in '.?!':
-        s += '.'
+    if s and s.rstrip("}")[-1] not in ".?!":
+        s += "."
     i.push(s)
 
-@builtin('call.type$')
+
+@builtin("call.type$")
 def call_type(i):
     entry_type = i.current_entry.type
     try:
         func = i.vars[entry_type]
     except KeyError:
-        print_warning(u'entry type for "{0}" isn\'t style-file defined'.format(
-            i.current_entry_key,
-        ))
+        print_warning(
+            'entry type for "{0}" isn\'t style-file defined'.format(
+                i.current_entry_key,
+            )
+        )
         try:
-            func = i.vars['default.type']
+            func = i.vars["default.type"]
         except KeyError:
             return
     func.execute(i)
 
-@builtin('change.case$')
-def change_case(i):
 
+@builtin("change.case$")
+def change_case(i):
     mode = i.pop()
     string = i.pop()
 
     if not mode:
-        raise BibTeXError('empty mode string passed to change.case$')
+        raise BibTeXError("empty mode string passed to change.case$")
     mode_letter = mode[0].lower()
-    if not mode_letter in ('l', 'u', 't'):
-        raise BibTeXError('incorrect change.case$ mode: %s' % mode)
+    if mode_letter not in ("l", "u", "t"):
+        raise BibTeXError("incorrect change.case$ mode: %s" % mode)
 
     i.push(utils.change_case(string, mode_letter))
 
-@builtin('chr.to.int$')
+
+@builtin("chr.to.int$")
 def chr_to_int(i):
     s = i.pop()
     try:
         value = ord(s)
     except TypeError:
-        raise BibTeXError('%s passed to chr.to.int$', s)
+        raise BibTeXError("%s passed to chr.to.int$", s)
     i.push(value)
 
-@builtin('cite$')
+
+@builtin("cite$")
 def cite(i):
     i.push(i.current_entry_key)
 
-@builtin('duplicate$')
+
+@builtin("duplicate$")
 def duplicate(i):
     tmp = i.pop()
     i.push(tmp)
     i.push(tmp)
 
-@builtin('empty$')
+
+@builtin("empty$")
 def empty(i):
-    #FIXME error checking
+    # FIXME error checking
     s = i.pop()
     if s and not s.isspace():
         i.push(0)
@@ -185,7 +204,7 @@ def _format_name(names, n, format):
     return format_bibtex_name(name, format)
 
 
-@builtin('format.name$')
+@builtin("format.name$")
 def format_name(i):
     format = i.pop()
     n = i.pop()
@@ -193,7 +212,7 @@ def format_name(i):
     i.push(_format_name(names, n, format))
 
 
-@builtin('if$')
+@builtin("if$")
 def if_(i):
     f1 = i.pop()
     f2 = i.pop()
@@ -203,20 +222,23 @@ def if_(i):
     else:
         f1.execute(i)
 
-@builtin('int.to.chr$')
+
+@builtin("int.to.chr$")
 def int_to_chr(i):
     n = i.pop()
     try:
-        char = unichr(n)
+        char = chr(n)
     except ValueError:
-        raise BibTeXError('%i passed to int.to.chr$', n)
+        raise BibTeXError("%i passed to int.to.chr$", n)
     i.push(char)
 
-@builtin('int.to.str$')
+
+@builtin("int.to.str$")
 def int_to_str(i):
     i.push(str(i.pop()))
 
-@builtin('missing$')
+
+@builtin("missing$")
 def missing(i):
     f = i.pop()
     if i.is_missing_field(f):
@@ -224,80 +246,96 @@ def missing(i):
     else:
         i.push(0)
 
-@builtin('newline$')
+
+@builtin("newline$")
 def newline(i):
     i.newline()
 
-@builtin('num.names$')
+
+@builtin("num.names$")
 def num_names(i):
     names = i.pop()
     i.push(len(utils.split_name_list(names)))
 
-@builtin('pop$')
+
+@builtin("pop$")
 def pop(i):
     i.pop()
 
-@builtin('preamble$')
+
+@builtin("preamble$")
 def preamble(i):
     i.push(i.bib_data.get_preamble())
 
-@builtin('purify$')
+
+@builtin("purify$")
 def purify(i):
     s = i.pop()
     i.push(utils.bibtex_purify(s))
 
-@builtin('quote$')
+
+@builtin("quote$")
 def quote(i):
     i.push('"')
 
-@builtin('skip$')
+
+@builtin("skip$")
 def skip(i):
     pass
 
-@builtin('substring$')
+
+@builtin("substring$")
 def substring(i):
     length = i.pop()
     start = i.pop()
     string = i.pop()
     i.push(utils.bibtex_substring(string, start, length))
 
-@builtin('stack$')
+
+@builtin("stack$")
 def stack(i):
     while i.stack:
-        print >>pybtex.io.stdout, i.pop()
+        print(i.pop(), file=pybtex.io.stdout)
 
-@builtin('swap$')
+
+@builtin("swap$")
 def swap(i):
     tmp1 = i.pop()
     tmp2 = i.pop()
     i.push(tmp1)
     i.push(tmp2)
 
-@builtin('text.length$')
+
+@builtin("text.length$")
 def text_length(i):
     s = i.pop()
     i.push(utils.bibtex_len(s))
 
-@builtin('text.prefix$')
+
+@builtin("text.prefix$")
 def text_prefix(i):
     l = i.pop()
     s = i.pop()
     i.push(utils.bibtex_prefix(s, l))
 
-@builtin('top$')
-def top(i):
-    print >>pybtex.io.stdout, i.pop()
 
-@builtin('type$')
+@builtin("top$")
+def top(i):
+    print(i.pop(), file=pybtex.io.stdout)
+
+
+@builtin("type$")
 def type_(i):
     i.push(i.current_entry.type)
 
-@builtin('warning$')
+
+@builtin("warning$")
 def warning(i):
     msg = i.pop()
     print_warning(msg)
 
-@builtin('while$')
+
+@builtin("while$")
 def while_(i):
     f = i.pop()
     p = i.pop()
@@ -307,12 +345,14 @@ def while_(i):
             break
         f.execute(i)
 
-@builtin('width$')
+
+@builtin("width$")
 def width(i):
     s = i.pop()
     i.push(utils.bibtex_width(s))
 
-@builtin('write$')
+
+@builtin("write$")
 def write(i):
     s = i.pop()
     i.output(s)

@@ -21,14 +21,12 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import sys
 import optparse
+import sys
 
-from pybtex.__version__ import version
-
-from pybtex import errors
-from pybtex.textutils import capfirst, add_period
-from pybtex.plugin import find_plugin, enumerate_plugin_names
+from pybtex import __version__, errors
+from pybtex.plugin import enumerate_plugin_names, find_plugin
+from pybtex.textutils import add_period, capfirst
 
 
 def check_plugin(option, option_string, value):
@@ -36,8 +34,8 @@ def check_plugin(option, option_string, value):
 
 
 class PybtexOption(optparse.Option):
-    ATTRS = optparse.Option.ATTRS + ['plugin_group']
-    TYPES = optparse.Option.TYPES + ('load_plugin',)
+    ATTRS = optparse.Option.ATTRS + ["plugin_group"]
+    TYPES = optparse.Option.TYPES + ("load_plugin",)
     TYPE_CHECKER = dict(optparse.Option.TYPE_CHECKER, load_plugin=check_plugin)
     STANDARD_OPTIONS = {}
 
@@ -56,106 +54,129 @@ def standard_option(name):
 
 
 make_standard_option(
-    '--strict', dest='strict',
-    help='turn warnings into errors',
-    action='callback',
-    callback=lambda option, opt, value, parser: errors.set_strict_mode(True)
+    "--strict",
+    dest="strict",
+    help="turn warnings into errors",
+    action="callback",
+    callback=lambda option, opt, value, parser: errors.set_strict_mode(True),
 )
 
 make_standard_option(
-    '-f', '--bibliography-format', dest='bib_format',
-    help='bibliograpy format (%plugin_choices)',
-    type='load_plugin',
-    plugin_group='pybtex.database.input',
-    metavar='FORMAT',
+    "-f",
+    "--bibliography-format",
+    dest="bib_format",
+    help="bibliograpy format (%plugin_choices)",
+    type="load_plugin",
+    plugin_group="pybtex.database.input",
+    metavar="FORMAT",
 )
 
 make_standard_option(
-    '-b', '--output-backend', dest='output_backend',
-    help='output backend (%plugin_choices)',
-    type='load_plugin',
-    plugin_group='pybtex.backends',
-    metavar='BACKEND',
+    "-b",
+    "--output-backend",
+    dest="output_backend",
+    help="output backend (%plugin_choices)",
+    type="load_plugin",
+    plugin_group="pybtex.backends",
+    metavar="BACKEND",
 )
 
 make_standard_option(
-    '--min-crossrefs',
-    type='int', dest='min_crossrefs',
-    help='include item after NUMBER crossrefs; default 2',
-    metavar='NUMBER',
+    "--min-crossrefs",
+    type="int",
+    dest="min_crossrefs",
+    help="include item after NUMBER crossrefs; default 2",
+    metavar="NUMBER",
 )
 
 make_standard_option(
-    '--keyless-bibtex-entries',
-    action='store_true', dest='keyless_entries',
-    help='allow BibTeX entries without keys and generate unnamed-<number> keys for them'
+    "--keyless-bibtex-entries",
+    action="store_true",
+    dest="keyless_entries",
+    help="allow BibTeX entries without keys and generate unnamed-<number> keys for them",
 )
 
 make_standard_option(
-    '-s', '--style',
-    type='string', dest='style', help='bibliography formatting style',
+    "-s",
+    "--style",
+    type="string",
+    dest="style",
+    help="bibliography formatting style",
 )
 
 make_standard_option(
-    '--label-style', dest='label_style',
-    help='label formatting style (%plugin_choices)',
-    type='load_plugin',
-    plugin_group='pybtex.style.labels',
-    metavar='STYLE',
+    "--label-style",
+    dest="label_style",
+    help="label formatting style (%plugin_choices)",
+    type="load_plugin",
+    plugin_group="pybtex.style.labels",
+    metavar="STYLE",
 )
 
 make_standard_option(
-    '--name-style', dest='name_style',
-    help='name formatting style (%plugin_choices)',
-    type='load_plugin',
-    plugin_group='pybtex.style.names',
-    metavar='STYLE',
+    "--name-style",
+    dest="name_style",
+    help="name formatting style (%plugin_choices)",
+    type="load_plugin",
+    plugin_group="pybtex.style.names",
+    metavar="STYLE",
 )
 
 make_standard_option(
-    '--sorting-style', dest='sorting_style',
-    help='sorting style (%plugin_choices)',
-    type='load_plugin',
-    plugin_group='pybtex.style.sorting',
-    metavar='STYLE',
+    "--sorting-style",
+    dest="sorting_style",
+    help="sorting style (%plugin_choices)",
+    type="load_plugin",
+    plugin_group="pybtex.style.sorting",
+    metavar="STYLE",
 )
 
 make_standard_option(
-    '--abbreviate-names',
-    action='store_true', dest='abbreviate_names',
-    help='use abbreviated name formatting style',
+    "--abbreviate-names",
+    action="store_true",
+    dest="abbreviate_names",
+    help="use abbreviated name formatting style",
 )
 
 make_standard_option(
-    '-e', '--encoding',
-    action='store', type='string', dest='encoding',
-    help='default encoding',
-    metavar='ENCODING',
+    "-e",
+    "--encoding",
+    action="store",
+    type="string",
+    dest="encoding",
+    help="default encoding",
+    metavar="ENCODING",
 )
 
 make_standard_option(
-    '--input-encoding',
-    action='store', type='string', dest='input_encoding',
-    metavar='ENCODING',
+    "--input-encoding",
+    action="store",
+    type="string",
+    dest="input_encoding",
+    metavar="ENCODING",
 )
 
 make_standard_option(
-    '--output-encoding',
-    action='store', type='string', dest='output_encoding',
-    metavar='ENCODING',
+    "--output-encoding",
+    action="store",
+    type="string",
+    dest="output_encoding",
+    metavar="ENCODING",
 )
 
 
 BaseHelpFormatter = optparse.IndentedHelpFormatter
+
+
 class PybtexHelpFormatter(BaseHelpFormatter):
     def get_plugin_choices(self, plugin_group):
-        return ', '.join(sorted(enumerate_plugin_names(plugin_group)))
+        return ", ".join(sorted(enumerate_plugin_names(plugin_group)))
 
     def expand_default(self, option):
         result = BaseHelpFormatter.expand_default(self, option)
         if option.plugin_group:
             plugin_choices = self.get_plugin_choices(option.plugin_group)
-            result = result.replace('%plugin_choices', plugin_choices)
+            result = result.replace("%plugin_choices", plugin_choices)
         return result
 
 
@@ -165,18 +186,19 @@ class CommandLine(object):
     legacy_options = ()
     prog = None
     args = None
-    description = ''
+    description = ""
     num_args = 0
 
     def __init__(self):
         self.opt_parser = self.make_option_parser()
 
     def __call__(self):
-        from pybtex.exceptions import PybtexError
         import pybtex.io
+        from pybtex.exceptions import PybtexError
+
         try:
             self.main()
-        except PybtexError, error:
+        except PybtexError as error:
             errors.print_error(error)
             sys.exit(1)
 
@@ -185,9 +207,9 @@ class CommandLine(object):
             prog=self.prog,
             option_class=PybtexOption,
             formatter=PybtexHelpFormatter(),
-            usage='%prog ' + self.args,
+            usage="%prog " + self.args,
             description=capfirst(add_period(self.description)),
-            version='%%prog-%s' % version
+            version="%%prog-%s" % __version__,
         )
         for option_group, option_list in self.options:
             if option_group is None:
@@ -208,7 +230,7 @@ class CommandLine(object):
     def recognize_legacy_optons(self, args):
         """Grok some legacy long options starting with a single `-'."""
         return [
-            '-' + arg if arg.split('=', 1)[0] in self.legacy_options else arg
+            "-" + arg if arg.split("=", 1)[0] in self.legacy_options else arg
             for arg in args
         ]
 

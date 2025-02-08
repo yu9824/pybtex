@@ -22,22 +22,19 @@
 
 """Sample Pybtex plugins."""
 
-
 import imp
 
-from pybtex.utils import OrderedCaseInsensitiveDict
-
-from pybtex.database.output import BaseWriter
+from pybtex.database import BibliographyData, Entry, Person
 from pybtex.database.input import BaseParser
-from pybtex.database import BibliographyData
-from pybtex.database import Entry, Person
+from pybtex.database.output import BaseWriter
+from pybtex.utils import OrderedCaseInsensitiveDict
 
 
 class PythonWriter(BaseWriter):
     """Bibliography output plugin which formats the data as Python code."""
 
     def write_stream(self, bib_data, stream):
-        print >>stream, repr(bib_data)
+        print(repr(bib_data), file=stream)
 
 
 class PythonParser(BaseParser):
@@ -45,10 +42,10 @@ class PythonParser(BaseParser):
 
     def parse_stream(self, stream):
         context = {
-            'BibliographyData': BibliographyData,
-            'OrderedCaseInsensitiveDict': OrderedCaseInsensitiveDict,
-            'Entry': Entry,
-            'Person': Person,
+            "BibliographyData": BibliographyData,
+            "OrderedCaseInsensitiveDict": OrderedCaseInsensitiveDict,
+            "Entry": Entry,
+            "Person": Person,
         }
         code = stream.read()
         self.data = eval(code, context)

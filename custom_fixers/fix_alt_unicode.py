@@ -10,5 +10,5 @@ class FixAltUnicode(fixer_base.BaseFix):
 
     def transform(self, node, results):
         new = node.clone()
-        new.value = '__str__'
+        new.value = "__str__"
         return new

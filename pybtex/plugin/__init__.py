@@ -44,26 +44,24 @@ _DEFAULT_PLUGINS = {
 
 
 class PluginGroupNotFound(PybtexError):
-
     def __init__(self, group_name):
-        message = u'plugin group {group_name} not found'.format(
+        message = "plugin group {group_name} not found".format(
             group_name=group_name,
         )
         super(PluginGroupNotFound, self).__init__(message)
 
 
 class PluginNotFound(PybtexError):
-
     def __init__(self, plugin_group, name):
-        if not name.startswith('.'):
-            message = u'plugin {plugin_group}.{name} not found'.format(
+        if not name.startswith("."):
+            message = "plugin {plugin_group}.{name} not found".format(
                 plugin_group=plugin_group,
                 name=name,
             )
         else:
-            assert plugin_group.endswith('.suffixes')
+            assert plugin_group.endswith(".suffixes")
             message = (
-                u'plugin {plugin_group} for suffix {suffix} not found'.format(
+                "plugin {plugin_group} for suffix {suffix} not found".format(
                     plugin_group=plugin_group,
                     suffix=name,
                 )
@@ -73,7 +71,7 @@ class PluginNotFound(PybtexError):
 
 
 def _load_entry_point(group, name, use_aliases=False):
-    groups = [group, group + '.aliases'] if use_aliases else [group]
+    groups = [group, group + ".aliases"] if use_aliases else [group]
     for search_group in groups:
         for entry_point in pkg_resources.iter_entry_points(search_group, name):
             return entry_point.load()
@@ -105,19 +103,20 @@ def find_plugin(plugin_group, name=None, filename=None):
         return _load_entry_point(plugin_group, name, use_aliases=True)
     elif filename:
         suffix = os.path.splitext(filename)[1]
-        return _load_entry_point(plugin_group + '.suffixes', suffix)
+        return _load_entry_point(plugin_group + ".suffixes", suffix)
     else:
         return _load_entry_point(plugin_group, _DEFAULT_PLUGINS[plugin_group])
 
 
 def enumerate_plugin_names(plugin_group):
     """Enumerate all plugin names for the given *plugin_group*."""
-    return (entry_point.name
-            for entry_point in pkg_resources.iter_entry_points(plugin_group))
+    return (
+        entry_point.name
+        for entry_point in pkg_resources.iter_entry_points(plugin_group)
+    )
 
 
 class _FakeEntryPoint(pkg_resources.EntryPoint):
-
     def __init__(self, name, klass):
         self.name = name
         self.klass = klass
@@ -126,9 +125,10 @@ class _FakeEntryPoint(pkg_resources.EntryPoint):
         return "%s = :%s" % (self.name, self.klass.__name__)
 
     def __repr__(self):
-        return (
-            "_FakeEntryPoint(name=%r, klass=%s)"
-            % (self.name, self.klass.__name__))
+        return "_FakeEntryPoint(name=%r, klass=%s)" % (
+            self.name,
+            self.klass.__name__,
+        )
 
     def load(self, require=True, env=None, installer=None):
         return self.klass
@@ -163,7 +163,7 @@ def register_plugin(plugin_group, name, klass, force=False):
     """
     if plugin_group.endswith(".suffixes"):
         base_group, _ = plugin_group.rsplit(".", 1)
-        if not name.startswith('.'):
+        if not name.startswith("."):
             raise ValueError("a suffix must start with a period")
     elif plugin_group.endswith(".aliases"):
         base_group, _ = plugin_group.rsplit(".", 1)
@@ -172,7 +172,7 @@ def register_plugin(plugin_group, name, klass, force=False):
     if base_group not in _DEFAULT_PLUGINS:
         raise PluginGroupNotFound(base_group)
 
-    dist = pkg_resources.get_distribution('pybtex')
+    dist = pkg_resources.get_distribution("pybtex")
     ep_map = pkg_resources.get_entry_map(dist)
     if plugin_group not in ep_map:
         ep_map[plugin_group] = {}

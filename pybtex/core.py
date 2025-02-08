@@ -19,14 +19,14 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""pybtex' core datatypes
-"""
+"""pybtex' core datatypes"""
 
 import warnings
+
 warnings.warn(
-    'pybtex.core is deprecated and will be removed. '
-    'Entry and Person classes are now in pybtex.database.',
-    DeprecationWarning
+    "pybtex.core is deprecated and will be removed. "
+    "Entry and Person classes are now in pybtex.database.",
+    DeprecationWarning,
 )
 
 from pybtex.database import Entry, Person

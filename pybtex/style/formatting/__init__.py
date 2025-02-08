@@ -27,7 +27,7 @@ from pybtex.plugin import Plugin, find_plugin
 
 @node
 def toplevel(children, data):
-    return join(sep=Symbol('newblock')) [children].format_data(data)
+    return join(sep=Symbol("newblock"))[children].format_data(data)
 
 
 class BaseStyle(Plugin):
@@ -35,10 +35,24 @@ class BaseStyle(Plugin):
     default_label_style = None
     default_sorting_style = None
 
-    def __init__(self, label_style=None, name_style=None, sorting_style=None, abbreviate_names=False, min_crossrefs=2, **kwargs):
-        self.name_style = find_plugin('pybtex.style.names', name_style or self.default_name_style)()
-        self.label_style = find_plugin('pybtex.style.labels', label_style or self.default_label_style)()
-        self.sorting_style = find_plugin('pybtex.style.sorting', sorting_style or self.default_sorting_style)()
+    def __init__(
+        self,
+        label_style=None,
+        name_style=None,
+        sorting_style=None,
+        abbreviate_names=False,
+        min_crossrefs=2,
+        **kwargs,
+    ):
+        self.name_style = find_plugin(
+            "pybtex.style.names", name_style or self.default_name_style
+        )()
+        self.label_style = find_plugin(
+            "pybtex.style.labels", label_style or self.default_label_style
+        )()
+        self.sorting_style = find_plugin(
+            "pybtex.style.sorting", sorting_style or self.default_sorting_style
+        )()
         self.format_name = self.name_style.format
         self.format_labels = self.label_style.format_labels
         self.sort = self.sorting_style.sort
@@ -49,9 +63,11 @@ class BaseStyle(Plugin):
         sorted_entries = self.sort(entries)
         labels = self.format_labels(sorted_entries)
         for label, entry in zip(labels, sorted_entries):
-            for persons in entry.persons.itervalues():
+            for persons in list(entry.persons.values()):
                 for person in persons:
-                    person.text = self.format_name(person, self.abbreviate_names)
+                    person.text = self.format_name(
+                        person, self.abbreviate_names
+                    )
 
             f = getattr(self, "format_" + entry.type)
             text = f(entry)
@@ -59,9 +75,11 @@ class BaseStyle(Plugin):
 
     def format_bibliography(self, bib_data, citations=None):
         if citations is None:
-            citations = bib_data.entries.keys()
+            citations = list(bib_data.entries.keys())
         citations = bib_data.add_extra_citations(citations, self.min_crossrefs)
         entries = [bib_data.entries[key] for key in citations]
         formatted_entries = self.format_entries(entries)
-        formatted_bibliography = FormattedBibliography(formatted_entries, style=self, preamble=bib_data.get_preamble())
+        formatted_bibliography = FormattedBibliography(
+            formatted_entries, style=self, preamble=bib_data.get_preamble()
+        )
         return formatted_bibliography

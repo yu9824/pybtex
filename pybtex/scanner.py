@@ -19,8 +19,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Base parser class
-"""
+"""Base parser class"""
 
 import re
 
@@ -48,7 +47,7 @@ class Pattern(object):
 class Literal(Pattern):
     def __init__(self, literal):
         pattern = re.compile(re.escape(literal))
-        description = u"'{0}'".format(literal)
+        description = "'{0}'".format(literal)
         super(Literal, self).__init__(pattern, description)
 
 
@@ -56,8 +55,8 @@ class Scanner(object):
     text = None
     lineno = 1
     pos = 0
-    WHITESPACE = Pattern(ur'\s+', 'whitespace')
-    NEWLINE = Pattern(ur'[\r\n]', 'newline')
+    WHITESPACE = Pattern(r"\s+", "whitespace")
+    NEWLINE = Pattern(r"[\r\n]", "newline")
 
     def __init__(self, text, filename=None):
         self.text = text
@@ -75,7 +74,7 @@ class Scanner(object):
         if winning_pattern:
             value = self.text[self.pos : end]
             self.pos = end
-            #print '>>', value
+            # print '>>', value
             self.update_lineno(value)
             return Token(value, winning_pattern)
 
@@ -104,17 +103,19 @@ class Scanner(object):
             if match:
                 value = match.group()
                 self.pos = match.end()
-                #print '->', value
+                # print '->', value
                 return Token(value, pattern)
 
     def optional(self, patterns, allow_eof=False):
         return self.get_token(patterns, allow_eof=allow_eof)
 
     def required(self, patterns, description=None, allow_eof=False):
-        token =  self.get_token(patterns, allow_eof=allow_eof)
+        token = self.get_token(patterns, allow_eof=allow_eof)
         if token is None:
             if not description:
-                description = ' or '.join(pattern.description for pattern in patterns)
+                description = " or ".join(
+                    pattern.description for pattern in patterns
+                )
             raise TokenRequired(description, self)
         else:
             return token
@@ -123,13 +124,13 @@ class Scanner(object):
         return self.lineno, self.pos
 
     def get_error_context(self, context_info):
-        error_lineno, error_pos  = context_info
+        error_lineno, error_pos = context_info
         if error_lineno is not None:
             error_lineno0 = error_lineno - 1
             lines = self.text.splitlines(True)
-            before_error = ''.join(lines[:error_lineno0])
+            before_error = "".join(lines[:error_lineno0])
             colno = error_pos - len(before_error)
-            context = lines[error_lineno0].rstrip('\r\n')
+            context = lines[error_lineno0].rstrip("\r\n")
         else:
             colno = None
             context = None
@@ -137,18 +138,24 @@ class Scanner(object):
 
 
 class PybtexSyntaxError(PybtexError):
-    error_type = 'syntax error'
+    error_type = "syntax error"
 
     def __init__(self, message, parser):
-        super(PybtexSyntaxError, self).__init__(message, filename=parser.filename)
+        super(PybtexSyntaxError, self).__init__(
+            message, filename=parser.filename
+        )
         self.lineno = parser.lineno
         self.parser = parser
         self.error_context_info = parser.get_error_context_info()
 
-    def __unicode__(self):
-        base_message = super(PybtexSyntaxError, self).__unicode__()
-        pos = u' in line {0}'.format(self.lineno) if self.lineno is not None else ''
-        return u'{error_type}{pos}: {message}'.format(
+    def __str__(self):
+        base_message = super(PybtexSyntaxError, self).__str__()
+        pos = (
+            " in line {0}".format(self.lineno)
+            if self.lineno is not None
+            else ""
+        )
+        return "{error_type}{pos}: {message}".format(
             error_type=self.error_type,
             pos=pos,
             message=base_message,
@@ -157,21 +164,23 @@ class PybtexSyntaxError(PybtexError):
 
 class PrematureEOF(PybtexSyntaxError):
     def __init__(self, parser):
-        message = 'premature end of file'
+        message = "premature end of file"
         super(PrematureEOF, self).__init__(message, parser)
 
 
 class TokenRequired(PybtexSyntaxError):
     def __init__(self, description, parser):
-        message = u'{0} expected'.format(description)
+        message = "{0} expected".format(description)
         super(TokenRequired, self).__init__(message, parser)
 
     def get_context(self):
-        context, lineno, colno = self.parser.get_error_context(self.error_context_info)
+        context, lineno, colno = self.parser.get_error_context(
+            self.error_context_info
+        )
         if context is None:
-            return ''
+            return ""
         if colno == 0:
-            marker = '^^'
+            marker = "^^"
         else:
-            marker = ' ' * (colno - 1) + '^^^'
-        return '\n'.join((context, marker))
+            marker = " " * (colno - 1) + "^^^"
+        return "\n".join((context, marker))

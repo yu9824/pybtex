@@ -23,29 +23,25 @@ from pybtex.backends import BaseBackend
 
 
 class Backend(BaseBackend):
-    default_suffix = '.bbl'
-    symbols = {
-        'ndash': u'--',
-        'newblock': u'\n\\newblock ',
-        'nbsp': u'~'
-    }
-    
+    default_suffix = ".bbl"
+    symbols = {"ndash": "--", "newblock": "\n\\newblock ", "nbsp": "~"}
+
     def format_tag(self, tag_name, text):
-        return ur'\%s{%s}' % (tag_name, text)
+        return r"\%s{%s}" % (tag_name, text)
 
     def format_href(self, url, text):
-        return ur'\href{%s}{%s}' % (url, text)
-    
+        return r"\href{%s}{%s}" % (url, text)
+
     def write_prologue(self):
         if self.formatted_bibliography.preamble:
-            self.output(self.formatted_bibliography.preamble + u'\n')
+            self.output(self.formatted_bibliography.preamble + "\n")
 
         longest_label = self.formatted_bibliography.get_longest_label()
-        self.output(u'\\begin{thebibliography}{%s}' % longest_label)
+        self.output("\\begin{thebibliography}{%s}" % longest_label)
 
     def write_epilogue(self):
-        self.output(u'\n\n\\end{thebibliography}\n')
+        self.output("\n\n\\end{thebibliography}\n")
 
     def write_entry(self, key, label, text):
-        self.output(u'\n\n\\bibitem[%s]{%s}\n' % (label, key))
+        self.output("\n\n\\bibitem[%s]{%s}\n" % (label, key))
         self.output(text)
