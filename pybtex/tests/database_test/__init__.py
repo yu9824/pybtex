@@ -78,14 +78,15 @@ class DatabaseIOTest(TestCase):
         from pybtex.database import BibliographyData, Entry, Person
         from pybtex.utils import OrderedCaseInsensitiveDict
 
-        data_repr = repr(self.reference_data)
-        data = eval(
-            data_repr,
-            {
-                "OrderedCaseInsensitiveDict": OrderedCaseInsensitiveDict,
-                "BibliographyData": BibliographyData,
-                "Entry": Entry,
-                "Person": Person,
-            },
+        self.assertEqual(
+            eval(
+                repr(self.reference_data),
+                {
+                    "OrderedCaseInsensitiveDict": OrderedCaseInsensitiveDict,
+                    "BibliographyData": BibliographyData,
+                    "Entry": Entry,
+                    "Person": Person,
+                },
+            ),
+            self.reference_data,
         )
-        self.assertEqual(data, self.reference_data)

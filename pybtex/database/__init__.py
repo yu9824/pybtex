@@ -68,12 +68,14 @@ class BibliographyData(object):
         )
 
     def __repr__(self):
-        return (
-            "BibliographyData(entries={entries}, preamble={preamble})".format(
-                entries=repr(self.entries),
-                preamble=repr(self._preamble),
-            )
+        return "{}(entries={}, preamble={})".format(
+            self.__class__.__name__,
+            repr(self.entries),
+            repr(self._preamble),
         )
+
+    def __str__(self) -> str:
+        return repr(self)
 
     def add_to_preamble(self, *values):
         self._preamble.extend(values)
@@ -488,8 +490,8 @@ class Person(object):
         first = " ".join(self._first + self._middle)
         return ", ".join(part for part in (von_last, jr, first) if part)
 
-    def __repr__(self):
-        return "Person({0})".format(self)
+    def __repr__(self) -> str:
+        return "{}('{}')".format(self.__class__.__name__, str(self))
 
     def get_part_as_text(self, type):
         names = getattr(self, "_" + type)

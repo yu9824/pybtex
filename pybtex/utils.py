@@ -152,7 +152,7 @@ class CaseInsensitiveDict(MutableMapping):
         from copy import deepcopy
 
         return CaseInsensitiveDict(
-            (key, deepcopy(value, memo)) for key, value in list(self.items())
+            (key, deepcopy(value, memo)) for key, value in self.items()
         )
 
     def __repr__(self):
@@ -164,7 +164,7 @@ class CaseInsensitiveDict(MutableMapping):
         )
 
     def items_lower(self):
-        return ((key.lower(), value) for key, value in list(self.items()))
+        return ((key.lower(), value) for key, value in self.items())
 
     def iteritems(self):
         return self.items()
@@ -299,7 +299,7 @@ class OrderedCaseInsensitiveDict(CaseInsensitiveDict):
         from copy import deepcopy
 
         return OrderedCaseInsensitiveDict(
-            (key, deepcopy(value, memo)) for key, value in list(self.items())
+            (key, deepcopy(value, memo)) for key, value in self.items()
         )
 
     def iterkeys(self):

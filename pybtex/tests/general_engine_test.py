@@ -5,8 +5,7 @@ from contextlib import contextmanager
 from shutil import rmtree
 from tempfile import mkdtemp
 
-from pybtex import io
-from pybtex import errors
+from pybtex import errors, io
 from pybtex.tests import diff
 
 
@@ -27,7 +26,7 @@ def copy_resource(package, resource):
     data = pkgutil.get_data(package, resource).decode(
         io.get_default_encoding()
     )
-    with io.open_unicode(filename, "w") as data_file:
+    with open(filename, "w") as data_file:
         data_file.write(data)
 
 
@@ -37,7 +36,7 @@ def copy_files(filenames):
 
 
 def write_aux(aux_name, bib_name, bst_name):
-    with io.open_unicode(aux_name, "w") as aux_file:
+    with open(aux_name, "w") as aux_file:
         aux_file.write("\\citation{*}\n")
         aux_file.write("\\bibstyle{{{0}}}\n".format(bst_name))
         aux_file.write("\\bibdata{{{0}}}\n".format(bib_name))
@@ -64,7 +63,9 @@ def check_make_bibliography(engine, filenames):
         with errors.capture() as captured_errors:  # FIXME check error messages
             engine.make_bibliography(filenames_by_ext[".aux"])
         result_name = posixpath.splitext(filenames_by_ext[".aux"])[0] + ".bbl"
-        with io.open_unicode(result_name) as result_file:
+        with open(
+            result_name, mode="r", encoding=io.get_default_encoding()
+        ) as result_file:
             result = result_file.read()
         correct_result_name = "{0}_{1}.{2}.bbl".format(
             bib_name, bst_name, engine_name
